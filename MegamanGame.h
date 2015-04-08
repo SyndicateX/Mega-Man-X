@@ -10,6 +10,9 @@
 #include "ball.h"
 #include "megaman.h"
 #include "paddle.h"
+#include "bullet.h"
+#include "bulletChargedSmall.h"
+#include <vector>
 
 //=============================================================================
 // This class is the core of the game
@@ -18,14 +21,18 @@ class MegamanGame : public Game
 {
 private:
     // game items
-    TextureManager backdropTexture; // backdrop texture
-    TextureManager ballTexture;     // ball texture
-	TextureManager paddleTexture;   // paddle texture
-    TextureManager megamanTexture;  // megaman texture
-    Ball    ball;                   // ball
-	Paddle	paddle;					// paddle
-    Megaman	megaman;                // megaman
-    Image   backdrop;               // backdrop image
+    TextureManager backdropTexture;		 // backdrop texture
+    TextureManager ballTexture;			 // ball texture
+	TextureManager paddleTexture;		// paddle texture
+    TextureManager megamanTexture;		// megaman texture
+	TextureManager bulletTexture;		// bullet texture
+	TextureManager bulletChargedSmallTexture;	//bullet charged small texture
+    Ball    ball;						// ball
+	Paddle	paddle;						// paddle
+    Megaman	megaman;					// megaman
+	std::vector<Bullet>	bullet;			// bullet
+	BulletChargedSmall bulletChargedSmall;				// bullet charged small
+    Image   backdrop;					// backdrop image
 
 public:
     // Constructor

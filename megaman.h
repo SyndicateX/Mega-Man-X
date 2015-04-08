@@ -9,7 +9,7 @@
 
 namespace megamanNS
 {
-    const int WIDTH = 50;                  // image width
+    const int WIDTH = 75;                  // image width
     const int HEIGHT = 100;                  // image height
     const int X = GAME_WIDTH/4 - WIDTH;     // location on screen
     const int Y = GAME_HEIGHT - HEIGHT * 2;
@@ -25,7 +25,7 @@ public:
     Megaman();
 
     // inherited member functions
-    void update(float frameTime, State state, Direction direction);
+    void update(float frameTime);
 
 	//In case megaman collides with a wall
 	void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight);

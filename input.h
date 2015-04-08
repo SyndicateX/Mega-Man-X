@@ -86,7 +86,16 @@ private:
     short thumbstickDeadzone;
     short triggerDeadzone;
 
+	bool upKeyisUp_;
+	bool spaceKeyisUp_;
+	bool enterKeyisUp_;
+
 public:
+	bool isUpKeyUp() { return upKeyisUp_; }
+	bool isSpaceKeyUp() { return spaceKeyisUp_; }
+	bool isEnterKeyUp() { return enterKeyisUp_; }
+	//void setSpaceKeyStatus(bool state) { spaceKeyisUp_ = state; }
+
     // Constructor
     Input();
 
@@ -109,11 +118,11 @@ public:
     void keyIn(WPARAM);
 
     // Returns true if the specified VIRTUAL KEY is down, otherwise false.
-    bool isKeyDown(UCHAR vkey) const;
+	bool isKeyDown(UCHAR vkey);// const;
 
     // Return true if the specified VIRTUAL KEY has been pressed in the most recent frame.
     // Key presses are erased at the end of each frame.
-    bool wasKeyPressed(UCHAR vkey) const;
+	bool wasKeyPressed(UCHAR vkey);// const;
 
     // Return true if any key was pressed in the most recent frame.
     // Key presses are erased at the end of each frame.

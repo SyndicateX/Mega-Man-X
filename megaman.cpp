@@ -12,6 +12,8 @@ Megaman::Megaman() : Entity()
 	spriteData.y = megamanNS::Y;
 	spriteData.rect.bottom = megamanNS::HEIGHT;   // rectangle to select parts of an image
 	spriteData.rect.right = megamanNS::WIDTH;
+	spriteData.direction = RIGHT;				  // megaman always faces right at the start of any level
+	spriteData.state = STANDING;					
 	velocity.x = 0;						        // velocity X
 	velocity.y = 0;							    // velocity Y
 	frameDelay = 0.07;
@@ -31,11 +33,11 @@ Megaman::Megaman() : Entity()
 // typically called once per frame
 // frameTime is used to regulate the speed of movement and animation
 //=============================================================================
-void Megaman::update(float frameTime, State state, Direction direction)
+void Megaman::update(float frameTime)
 {
 	Entity::update(frameTime);
 
-	if (direction == LEFT)
+	if (spriteData.direction == LEFT)
 	{
 		spriteData.flipHorizontal = true;
 	}
@@ -44,7 +46,7 @@ void Megaman::update(float frameTime, State state, Direction direction)
 		spriteData.flipHorizontal = false;
 	}
 
-	if (state == CROUCHING)
+	if (spriteData.state == CROUCHING)
 	{
 		edge.top = (-megamanNS::HEIGHT / 2) / 3;            // set collision edges for crouching megaman
 	}
@@ -53,19 +55,24 @@ void Megaman::update(float frameTime, State state, Direction direction)
 		edge.top = -megamanNS::HEIGHT / 2;				// reset collision edges
 	}
 
-	if (state == JUMPING && standingOnSurface_)//spriteData.y + spriteData.height == GAME_HEIGHT)
+	if (spriteData.state == JUMPING && standingOnSurface_) // && !floorCollision_)//spriteData.y + spriteData.height == GAME_HEIGHT)
 	{
 		velocity.y = -230;								// Determines the height of megaman's jump -- needs adjusting
 		spriteData.y += frameTime * velocity.y;         // move along Y
 		standingOnSurface_ = false;
 	}
+	else if (spriteData.state != JUMPING && velocity.y < 0)
+	{
+		velocity.y = 0;
+	}
+
 
 	if (spriteData.y + spriteData.height == GAME_HEIGHT) //Bottom edge counts as a floor right now
 	{
 		floorCollision_ = true;
 	}
 
-	// Bounce off walls
+	// Stay within boundaries
 	if (spriteData.x > GAME_WIDTH - megamanNS::WIDTH)		// if hit right screen edge
 		spriteData.x = GAME_WIDTH - megamanNS::WIDTH;		// position at right screen edge
 	else if (spriteData.x < 0)							// else if hit left screen edge
@@ -84,8 +91,17 @@ void Megaman::update(float frameTime, State state, Direction direction)
 	{
 		spriteData.y += frameTime * velocity.y * 3;     // Determines speed and height of megaman's jump -- needs adjusting
 		velocity.y += frameTime * GRAVITY;              // gravity
-		setCurrentFrame(27);
-		//setFrames(5, 5);
+
+		//if (velocity.y < -200)
+		//{
+		//	setCurrentFrame(26);
+		//}
+		//else if (velocity.y > 20)
+		//{
+		//	setCurrentFrame(28);
+		//}
+		//else
+		setCurrentFrame(27); 
 	}
 
 	floorCollision_ = false;

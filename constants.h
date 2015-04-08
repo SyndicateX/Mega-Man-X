@@ -10,10 +10,12 @@
 //                  Constants
 //=============================================================================
 // graphic images
-const char BACKDROP_IMAGE[] = "pictures\\backdrop.png";
-const char BALL_IMAGE[]     = "pictures\\ball.png";
-const char PADDLE_IMAGE[]   = "pictures\\paddle.png";
-const char MEGAMAN_IMAGE[]	= "pictures\\mmx_x4_x_sheet.png";
+const char BACKDROP_IMAGE[]				= "pictures\\backdrop.png";
+const char BALL_IMAGE[]					= "pictures\\ball.png";
+const char BULLET_IMAGE[]				= "pictures\\ball.png";
+const char BULLET_CHARGED_SMALL_IMAGE[] = "pictures\\ball2.png";
+const char PADDLE_IMAGE[]				= "pictures\\paddle.png";
+const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 
 // window
 const char CLASS_NAME[] = "Gravity";
@@ -31,6 +33,8 @@ const float MIN_FRAME_TIME = 1.0f/FRAME_RATE;   // minimum desired time for 1 fr
 const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calculations
 const float GRAVITY = 500.0f;                   // acceleration of gravity pixels/sec
 
+const int MAX_BULLETS = 4;
+
 // audio files required by audio.cpp
 // WAVE_BANK must be location of .xwb file.
 const char WAVE_BANK[]  = "";
@@ -46,10 +50,11 @@ const UCHAR CONSOLE_KEY  = '`';         // ` key
 const UCHAR ESC_KEY      = VK_ESCAPE;   // escape key
 const UCHAR ALT_KEY      = VK_MENU;     // Alt key
 const UCHAR ENTER_KEY    = VK_RETURN;   // Enter key
-const UCHAR LEFT_KEY    = VK_LEFT;      // left arrow
-const UCHAR RIGHT_KEY   = VK_RIGHT;     // right arrow
-const UCHAR DOWN_KEY	= VK_DOWN;		// down arrow
-const UCHAR UP_KEY		= VK_UP;		// up arrow
+const UCHAR LEFT_KEY     = VK_LEFT;     // left arrow
+const UCHAR RIGHT_KEY    = VK_RIGHT;    // right arrow
+const UCHAR DOWN_KEY	 = VK_DOWN;		// down arrow
+const UCHAR UP_KEY		 = VK_UP;		// up arrow
+const UCHAR SPACE_KEY	 = VK_SPACE;	// space key
 
 enum State
 {
@@ -57,6 +62,8 @@ enum State
 	WALKING,
 	CROUCHING,
 	JUMPING,
+	SHOOTING,
+	DASHING
 };
 
 enum Direction

@@ -98,6 +98,12 @@ class Image
     // Return colorFilter.
     virtual COLOR_ARGB getColorFilter() {return colorFilter;}
 
+	// Return direction.
+	virtual Direction getDirection() {return spriteData.direction;}
+
+	// Return state of action.
+	virtual State getState() { return spriteData.state; }
+
     ////////////////////////////////////////
     //           Set functions            //
     ////////////////////////////////////////
@@ -149,6 +155,16 @@ class Image
     // Set TextureManager
     virtual void setTextureManager(TextureManager *textureM)
     { textureManager = textureM; }
+
+	// Set direction
+	virtual void setDirection(Direction newDirection)   
+	{ spriteData.direction = newDirection; }
+
+	// Set state of action
+	virtual void setState(State newState)
+	{
+		spriteData.state = newState;
+	}
 
     ////////////////////////////////////////
     //         Other functions            //

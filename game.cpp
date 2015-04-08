@@ -1,4 +1,3 @@
-
 #include "game.h"
 
 // The primary class should inherit from Game class

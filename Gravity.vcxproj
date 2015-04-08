@@ -88,6 +88,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ball.cpp" />
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="bulletChargedSmall.cpp" />
     <ClCompile Include="MegamanGame.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game.cpp" />
@@ -98,10 +100,13 @@
     <ClCompile Include="paddle.cpp" />
     <ClCompile Include="sprites.cpp" />
     <ClCompile Include="textureManager.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="bulletChargedSmall.h" />
     <ClInclude Include="MegamanGame.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="entity.h" />
@@ -115,6 +120,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="sprites.h" />
     <ClInclude Include="textureManager.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Gravity.rc" />
