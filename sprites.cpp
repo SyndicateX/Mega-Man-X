@@ -13,7 +13,8 @@ SpriteCoordinates::SpriteCoordinates()
 //=============================================================================
 // constructor
 //=============================================================================
-SpriteCoordinates::SpriteCoordinates(std::string fileName)
+//SpriteCoordinates::SpriteCoordinates(std::string fileName)
+void SpriteCoordinates::populateVector(std::string fileName)
 {
 	//Finds <X>, <Y>, <Width>, and <Length> in an XML file converted into a txt file containing all the sprite information
 	std::ifstream in;

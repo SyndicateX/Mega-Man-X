@@ -343,11 +343,11 @@
 
 <X>508</X>
 
-<Y>385</Y>
+<Y>383</Y>
 
 <Width>77</Width>
 
-<Height>99</Height>
+<Height>101</Height>
 
 </Coordinates>
 
@@ -361,11 +361,11 @@
 
 <X>603</X>
 
-<Y>387</Y>
+<Y>383</Y>
 
 <Width>77</Width>
 
-<Height>97</Height>
+<Height>101</Height>
 
 </Coordinates>
 
@@ -379,11 +379,11 @@
 
 <X>697</X>
 
-<Y>387</Y>
+<Y>383</Y>
 
 <Width>77</Width>
 
-<Height>97</Height>
+<Height>101</Height>
 
 </Coordinates>
 
@@ -397,11 +397,11 @@
 
 <X>790</X>
 
-<Y>387</Y>
+<Y>383</Y>
 
 <Width>77</Width>
 
-<Height>97</Height>
+<Height>101</Height>
 
 </Coordinates>
 
@@ -703,11 +703,11 @@
 
 <X>693</X>
 
-<Y>656</Y>
+<Y>652</Y>
 
 <Width>88</Width>
 
-<Height>96</Height>
+<Height>101</Height>
 
 </Coordinates>
 
@@ -721,11 +721,11 @@
 
 <X>823</X>
 
-<Y>656</Y>
+<Y>652</Y>
 
 <Width>90</Width>
 
-<Height>96</Height>
+<Height>101</Height>
 
 </Coordinates>
 

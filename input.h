@@ -89,11 +89,14 @@ private:
 	bool upKeyisUp_;
 	bool spaceKeyisUp_;
 	bool enterKeyisUp_;
+	bool canJump_;
 
 public:
 	bool isUpKeyUp() { return upKeyisUp_; }
 	bool isSpaceKeyUp() { return spaceKeyisUp_; }
 	bool isEnterKeyUp() { return enterKeyisUp_; }
+	bool canJump() { return canJump_; }
+	void setCanJump(bool jumpStatus) { canJump_ = jumpStatus; }
 	//void setSpaceKeyStatus(bool state) { spaceKeyisUp_ = state; }
 
     // Constructor

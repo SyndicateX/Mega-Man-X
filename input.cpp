@@ -31,6 +31,7 @@ Input::Input()
 	upKeyisUp_ = true;
 	spaceKeyisUp_ = true;
 	enterKeyisUp_ = true;
+	canJump_ = true;
 
     for(int i=0; i<MAX_CONTROLLERS; i++)
     {

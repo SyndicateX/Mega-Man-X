@@ -92,6 +92,7 @@ struct SpriteData
     bool        flipVertical;   // true to flip sprite vertically
 	Direction	direction;	// left or right 
 	State		state;		// state of action - idle, walking, jumping, firing, etc... 
+	ShotState	shotState;
 };
 
 class Graphics

@@ -182,7 +182,7 @@ class Entity : public Image
     virtual bool initialize(Game *gamePtr, int width, int height, int ncols,
                             TextureManager *textureM);
 
-	virtual bool initialize(SpriteCoordinates spriteCoords);
+	virtual bool initializeCoords(SpriteCoordinates spriteCoords);
 
     // Activate Entity.
     virtual void activate();

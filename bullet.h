@@ -12,7 +12,7 @@ namespace bulletNS
 	const int HEIGHT = 12;                  // image height
 	const int X = GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = GAME_HEIGHT / 2 - HEIGHT / 2;
-	const float SPEED = 750;                // pixels per second
+	const float SPEED = 800;                // pixels per second
 	const float ENERGY_LOSS = 100;          // energy loss on bounce (pixels/sec)
 	const float MIN_VY = 1;                 // minumum Y velocity
 	const float MASS = 1.0f;

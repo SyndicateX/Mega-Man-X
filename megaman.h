@@ -15,6 +15,46 @@ namespace megamanNS
     const int Y = GAME_HEIGHT - HEIGHT * 2;
     const float SPEED = 300;                // pixels per second
 	const float MASS = 1.0e6f;
+
+	const int IDLE_MEGAMAN_START_FRAME = 17;
+	const int IDLE_MEGAMAN_END_FRAME = 17;
+	const float IDLE_MEGAMAN_ANIMATION_DELAY = 0.55f;
+
+	const int WALKING_MEGAMAN_START_FRAME = 54;
+	const int WALKING_MEGAMAN_END_FRAME = 67;
+	const float WALKING_MEGAMAN_ANIMATION_DELAY = 0.06f;
+
+	const int JUMPING_MEGAMAN_START_FRAME = 26;
+	const int JUMPING_MEGAMAN_END_FRAME = 26;
+	const float JUMPING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int JUMP_PEAK_MEGAMAN_START_FRAME = 27;
+	const int JUMP_PEAK_MEGAMAN_END_FRAME = 27;
+	const float JUMP_PEAK_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int FALLING_MEGAMAN_START_FRAME = 28;
+	const int FALLING_MEGAMAN_END_FRAME = 28;
+	const float FALLING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int SHOOTING_MEGAMAN_START_FRAME = 39;
+	const int SHOOTING_MEGAMAN_END_FRAME = 40;
+	const float SHOOTING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int SHOOTING_JUMP_MEGAMAN_START_FRAME = 84;
+	const int SHOOTING_JUMP_MEGAMAN_END_FRAME = 84;
+	const float SHOOTING_JUMP_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int SHOOTING_JUMP_PEAK_MEGAMAN_START_FRAME = 86;
+	const int SHOOTING_JUMP_PEAK_MEGAMAN_END_FRAME = 86;
+	const float SHOOTING_JUMP_PEAK_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int SHOOTING_FALLING_MEGAMAN_START_FRAME = 88;
+	const int SHOOTING_FALLING_MEGAMAN_END_FRAME = 88;
+	const float SHOOTING_FALLING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int DASHING_MEGAMAN_START_FRAME = 68;
+	const int DASHING_MEGAMAN_END_FRAME = 71;
+	const float DASHING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 }
 
 // inherits from Entity class
@@ -25,13 +65,30 @@ public:
     Megaman();
 
     // inherited member functions
-    void update(float frameTime);
+	virtual bool initialize(Game *gamePtr, int width, int height, int ncols,
+		TextureManager *textureM);
+	void update(float frameTime);
+	virtual void draw();
 
 	//In case megaman collides with a wall
 	void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight);
+
+	bool canWallJump() { return wallJump_; }
 private:
+	Image megamanIdle;
+	Image megamanWalking;
+	Image megamanJumping;
+	Image megamanJumpPeak;
+	Image megamanFalling;
+	Image megamanShooting;
+	Image megamanShootingJump;
+	Image megamanShootingJumpPeak;
+	Image megamanShootingFalling;
+	Image megamanDashing;
+	SpriteCoordinates megamanSpriteCoordinates;// ("xcoords.txt");
 	bool standingOnSurface_ = true;
 	bool floorCollision_ = true;
+	bool wallJump_ = false;
 };
 #endif
 

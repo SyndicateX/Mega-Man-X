@@ -66,6 +66,12 @@ enum State
 	DASHING
 };
 
+enum ShotState
+{
+	NONE,
+	SHOOT
+};
+
 enum Direction
 {
 	LEFT,

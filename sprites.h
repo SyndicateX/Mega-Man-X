@@ -9,7 +9,8 @@ public:
 	//           Constructors             //
 	////////////////////////////////////////
 	SpriteCoordinates();
-	SpriteCoordinates(std::string fileName);		//Saves sprite coordinates to coords_ (private variable)
+	//SpriteCoordinates(std::string fileName);		//Saves sprite coordinates to coords_ (private variable)
+	void populateVector(std::string fileName);
 
 	////////////////////////////////////////
 	//           Get functions            //

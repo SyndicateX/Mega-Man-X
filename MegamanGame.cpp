@@ -68,9 +68,10 @@ void MegamanGame::initialize(HWND hwnd)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
 
 	// megaman sprite initialize
-	SpriteCoordinates megamanSpriteCoordinates("xcoords.txt");
-	if (!megaman.initialize(megamanSpriteCoordinates))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
+	//SpriteCoordinates megamanSpriteCoordinates;
+	//megamanSpriteCoordinates.populateVector("xcoords.txt");
+	//if (!megaman.initializeCoords(megamanSpriteCoordinates))
+	//	throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
 	
 	// bullet charged small
 	if (!bulletChargedSmall.initialize(this, bulletChargedSmallNS::WIDTH, bulletChargedSmallNS::HEIGHT, 0, &bulletChargedSmallTexture))
@@ -97,6 +98,7 @@ void MegamanGame::update()
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&currentTime);
 	static LARGE_INTEGER dashTime = currentTime;
+	static int chargeTime = 0;
 
 	static bool dashComplete = false;
 
@@ -105,11 +107,6 @@ void MegamanGame::update()
 	{
 		megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime);
 		megaman.setDirection(LEFT);
-		megaman.setFrames(54, 67);
-		if (megaman.getState() == SHOOTING)
-		{
-			megaman.setCurrentFrame(megaman.getCurrentFrame() + 50);
-		}
 		megaman.setState(WALKING);
 	}
 	//******************************* WALKING RIGHT *******************************
@@ -118,14 +115,14 @@ void MegamanGame::update()
 		megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime);
 		megaman.setState(WALKING);
 		megaman.setDirection(RIGHT);
-		megaman.setFrames(54, 67);
 	}
 	//********************************** IDLE ************************************
 	else
 	{
-		if (megaman.getState() == SHOOTING && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .25)
+		if (megaman.getState() == SHOOTING && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
+		//if (megaman.getShotState() != NONE && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
 		{
-			megaman.setCurrentFrame(39);
+			// This holds the shooting sprite momentarily after a shot is fired (when megaman is standing idle)
 		}
 		else if (megaman.getState() == DASHING && (currentTime.QuadPart - dashTime.QuadPart) / (double)(frequency.QuadPart) <= 0.65 && megaman.getCurrentFrame() != 73)
 		{
@@ -141,17 +138,16 @@ void MegamanGame::update()
 		}
 		else
 		{
+			megaman.setShotState(NONE);
 			megaman.setState(STANDING);
-			megaman.setCurrentFrame(17);
-			megaman.setFrames(17, 17);
 		}
 	}
 	
 	//**************************** Shooting Animation + Bullet Creation ****************************
-	static int ct = 0;
-	//..................................
-	//.......... SINGLE SHOT ...........
-	//..................................
+
+	//...................................................
+	//.................... SINGLE SHOT ..................
+	//...................................................
 	if (input->isEnterKeyUp() && input->wasKeyPressed(ENTER_KEY)) 
 	//if (input->isKeyDown(ENTER_KEY) || input->getGamepadX(0))			
 	{
@@ -160,7 +156,7 @@ void MegamanGame::update()
 		else
 		{
 			megaman.setState(SHOOTING);
-			megaman.setCurrentFrame(39);
+			megaman.setShotState(SHOOT);
 			if (bullet.size() < MAX_BULLETS)				// 4 bullets on screen max (maybe more?)
 			{
 				bullet.push_back(Bullet());
@@ -183,20 +179,20 @@ void MegamanGame::update()
 			}
 			lastShootTime = currentTime;
 		}
-		ct = 0;
+		chargeTime = 0;
 	}
-	//..................................
-	//......... CHARGED SHOT ...........
-	//..................................
+	//......................................................
+	//................... CHARGED SHOT .....................
+	//......................................................
 	if (input->isKeyDown(ENTER_KEY) || input->getGamepadX(0))
 	{
-		if (ct < 40)
-			ct++;
+		if (chargeTime < 40)
+			chargeTime++;
 	}
-	if (ct >= 40 && input->isEnterKeyUp())
+	if (chargeTime >= 40 && input->isEnterKeyUp())
 	{
 		megaman.setState(SHOOTING);
-		megaman.setCurrentFrame(35);
+		megaman.setShotState(SHOOT);
 		if (megaman.getDirection() == RIGHT)
 		{
 			bulletChargedSmall.setDirection(RIGHT);
@@ -210,14 +206,15 @@ void MegamanGame::update()
 			bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 		}
 		lastShootTime = currentTime;
-		ct = 0;
+		chargeTime = 0;
 	}
 
-	//********************************* DASHING **********************************
+	//************************************* DASHING *************************************
 	if (input->isSpaceKeyUp    ())
 		dashTime = currentTime;
 	if (input->isKeyDown(SPACE_KEY) || input->getGamepadB(0))// && !megaman.getState() == JUMPING)
 	{
+		dashComplete = false;
 		megaman.setState(DASHING);
 		if (megaman.getDirection() == LEFT)
 		{
@@ -230,15 +227,15 @@ void MegamanGame::update()
 
 		if ((currentTime.QuadPart - dashTime.QuadPart) / (double)(frequency.QuadPart) < 0.65)
 		{
-			if (megaman.getCurrentFrame() == 71)	// Freeze on last frame while dashing
-			{
-				megaman.setCurrentFrame(71);
-				megaman.setFrames(71, 71);
-			}
-			else
-			{
-				megaman.setFrames(68, 71);
-			}
+			//if (megaman.getCurrentFrame() == 71)	// Freeze on last frame while dashing
+			//{
+			//	//megaman.setCurrentFrame(71);
+			//	//megaman.setFrames(71, 71);
+			//}
+			//else
+			//{
+			//	//megaman.setFrames(68, 71);
+			//}
 		}
 		else
 		{
@@ -249,14 +246,13 @@ void MegamanGame::update()
 	}
 
 	//************************************ JUMPING ***************************************
-	if (input->isKeyDown(UP_KEY) || input->getGamepadA(0))
+	if (input->canJump() && input->isKeyDown(UP_KEY) || input->getGamepadA(0))
 	{
-		megaman.setCurrentFrame(27);
 		megaman.setState(JUMPING);
 	}
 
-	//*********************************** UPDATE DATA **********************************
-	for (int i = 0; i < bullet.size(); i++)			//Update bullet data -- is this the best place for this?
+	//*********************************** UPDATE DATA ************************************
+	for (int i = 0; i < bullet.size(); i++)			// Update bullet data -- is this the best place for this?
 	{
 		if (bullet[i].getDirection() == RIGHT)
 		{

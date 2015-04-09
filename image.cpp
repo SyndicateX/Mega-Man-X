@@ -187,6 +187,10 @@ void Image::setCurrentFrame(int c)
 //=============================================================================
 inline void Image::setRect() 
 {
+	if (spriteData.state == WALKING)
+	{
+		int x = 0;
+	}
 	if (fileCoords)
 	{
 		spriteData.rect.left = spriteCoords_[currentFrame][0];											//x

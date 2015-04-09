@@ -12,7 +12,7 @@ namespace bulletChargedSmallNS
 	const int HEIGHT = 30;                  // image height
 	const int X = 0;						// GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = 0;						// GAME_HEIGHT / 2 - HEIGHT / 2;
-	const float SPEED = 750;                // pixels per second
+	const float SPEED = 800;                // pixels per second
 	const float MASS = 1.0f;
 }
 
