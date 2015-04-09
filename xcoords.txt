@@ -1261,11 +1261,11 @@
 
 <X>299</X>
 
-<Y>1206</Y>
+<Y>1185</Y>
 
 <Width>101</Width>
 
-<Height>79</Height>
+<Height>101</Height>
 
 </Coordinates>
 
@@ -1279,11 +1279,11 @@
 
 <X>414</X>
 
-<Y>1217</Y>
+<Y>1185</Y>
 
 <Width>116</Width>
 
-<Height>68</Height>
+<Height>101</Height>
 
 </Coordinates>
 
@@ -1297,11 +1297,11 @@
 
 <X>541</X>
 
-<Y>1217</Y>
+<Y>1185</Y>
 
 <Width>126</Width>
 
-<Height>68</Height>
+<Height>101</Height>
 
 </Coordinates>
 

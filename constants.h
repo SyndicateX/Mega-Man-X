@@ -21,8 +21,8 @@ const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CLASS_NAME[] = "Gravity";
 const char GAME_TITLE[] = "Gravity";
 const bool FULLSCREEN = false;              // windowed or fullscreen
-const UINT GAME_WIDTH =  640;               // width of game in pixels
-const UINT GAME_HEIGHT = 480;               // height of game in pixels
+const UINT GAME_WIDTH =  1000;               // width of game in pixels
+const UINT GAME_HEIGHT = 800;               // height of game in pixels
  
 // game
 const bool VSYNC = true;                    // true locks display to vertical sync rate
@@ -63,7 +63,8 @@ enum State
 	CROUCHING,
 	JUMPING,
 	SHOOTING,
-	DASHING
+	DASHING,
+	WALL_SLIDING
 };
 
 enum ShotState

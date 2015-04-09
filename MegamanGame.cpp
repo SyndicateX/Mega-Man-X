@@ -100,42 +100,61 @@ void MegamanGame::update()
 	static LARGE_INTEGER dashTime = currentTime;
 	static int chargeTime = 0;
 
-	static bool dashComplete = false;
+	static bool isDashing = false;
+	static bool directionChange = false;
 
-	//******************************** WALKING LEFT ********************************
+	//******************************** PRESSED LEFT *******************************
 	if (input->isKeyDown(LEFT_KEY) || input->getGamepadDPadLeft(0))
 	{
-		megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime);
+		if (megaman.getDirection() == RIGHT)
+		{
+			directionChange = true;
+			isDashing = false;
+		}
+		else
+		{
+			directionChange = false;
+		}
+		if (!isDashing)
+		{
+			megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime);
+		}
+		if (isDashing && megaman.getState() == JUMPING)
+		{
+			megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime  * 2.5);
+		}
 		megaman.setDirection(LEFT);
 		megaman.setState(WALKING);
 	}
-	//******************************* WALKING RIGHT *******************************
+	//******************************* PRESSED RIGHT *******************************
 	else if (input->isKeyDown(RIGHT_KEY) || input->getGamepadDPadRight(0))
-	{
-		megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime);
+	{ 
+		if (megaman.getDirection() == LEFT)
+		{
+			directionChange = true;
+			isDashing = false;
+		}
+		else
+		{
+			directionChange = false;
+		}
+		if (!isDashing)
+		{
+			megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime);
+		}
+		if (isDashing && megaman.getState() == JUMPING)
+		{
+			megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime * 2.5);
+		}
 		megaman.setState(WALKING);
 		megaman.setDirection(RIGHT);
 	}
-	//********************************** IDLE ************************************
+	//********************************** IDLE *************************************
 	else
 	{
 		if (megaman.getState() == SHOOTING && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
 		//if (megaman.getShotState() != NONE && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
-		{
-			// This holds the shooting sprite momentarily after a shot is fired (when megaman is standing idle)
-		}
-		else if (megaman.getState() == DASHING && (currentTime.QuadPart - dashTime.QuadPart) / (double)(frequency.QuadPart) <= 0.65 && megaman.getCurrentFrame() != 73)
-		{
-			if (megaman.getDirection() == RIGHT)
-			{
-				megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime);
-			}
-			else
-			{
-				megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime);
-			}
-			megaman.setFrames(72, 73);
-		}
+		{}
 		else
 		{
 			megaman.setShotState(NONE);
@@ -163,6 +182,14 @@ void MegamanGame::update()
 
 				if (!bullet[bullet.size() - 1].initialize(this, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
 					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
+
+				if (input->canWallJump())
+				{
+					if (megaman.getDirection() == RIGHT)
+						megaman.setDirection(LEFT);
+					else
+						megaman.setDirection(RIGHT);
+				}
 
 				if (megaman.getDirection() == RIGHT)
 				{
@@ -210,43 +237,42 @@ void MegamanGame::update()
 	}
 
 	//************************************* DASHING *************************************
-	if (input->isSpaceKeyUp    ())
-		dashTime = currentTime;
-	if (input->isKeyDown(SPACE_KEY) || input->getGamepadB(0))// && !megaman.getState() == JUMPING)
+    if (input->canDash() && (input->isKeyDown(SPACE_KEY) || input->getGamepadB(0)))// && !megaman.getState() == JUMPING)
 	{
-		dashComplete = false;
+		isDashing = true;
 		megaman.setState(DASHING);
 		if (megaman.getDirection() == LEFT)
 		{
-			megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime);
+			megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime * 2.5);
 		}
 		else
 		{
-			megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime);
+			megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime * 2.5);
 		}
 
-		if ((currentTime.QuadPart - dashTime.QuadPart) / (double)(frequency.QuadPart) < 0.65)
-		{
-			//if (megaman.getCurrentFrame() == 71)	// Freeze on last frame while dashing
-			//{
-			//	//megaman.setCurrentFrame(71);
-			//	//megaman.setFrames(71, 71);
-			//}
-			//else
-			//{
-			//	//megaman.setFrames(68, 71);
-			//}
-		}
+		if ((currentTime.QuadPart - dashTime.QuadPart) / (double)(frequency.QuadPart) < 0.42)
+		{}
 		else
 		{
-            dashComplete = true; 
-			input->clearKeyPress(SPACE_KEY);
+			input->setCanDash(false);			// Megaman cannot dash again until this is reset after user releases dash key
 			dashTime = currentTime;
+			isDashing = false;
 		}
 	}
 
+	if (input->isSpaceKeyUp())
+	{
+		isDashing = false;
+		input->setCanDash(false);
+		dashTime = currentTime; // Reset dash timer if megaman is not dashing
+	}
+	if (directionChange)
+	{
+		input->setCanDash(false);
+	}
+
 	//************************************ JUMPING ***************************************
-	if (input->canJump() && input->isKeyDown(UP_KEY) || input->getGamepadA(0))
+	if ((input->canJump() || input->canWallJump()) && input->isKeyDown(UP_KEY) || input->getGamepadA(0))
 	{
 		megaman.setState(JUMPING);
 	}

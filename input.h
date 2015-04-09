@@ -90,13 +90,19 @@ private:
 	bool spaceKeyisUp_;
 	bool enterKeyisUp_;
 	bool canJump_;
+	bool canDash_;
+	bool canWallJump_;
 
 public:
 	bool isUpKeyUp() { return upKeyisUp_; }
 	bool isSpaceKeyUp() { return spaceKeyisUp_; }
 	bool isEnterKeyUp() { return enterKeyisUp_; }
 	bool canJump() { return canJump_; }
+	bool canWallJump() { return canWallJump_; }
+	bool canDash() { return canDash_; }
 	void setCanJump(bool jumpStatus) { canJump_ = jumpStatus; }
+	void setCanDash(bool dashStatus) { canDash_ = dashStatus; }
+	void setCanWallJump(bool wallJumpStatus) { canWallJump_ = wallJumpStatus; }
 	//void setSpaceKeyStatus(bool state) { spaceKeyisUp_ = state; }
 
     // Constructor

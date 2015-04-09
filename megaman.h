@@ -52,9 +52,13 @@ namespace megamanNS
 	const int SHOOTING_FALLING_MEGAMAN_END_FRAME = 88;
 	const float SHOOTING_FALLING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
-	const int DASHING_MEGAMAN_START_FRAME = 68;
+	const int DASHING_MEGAMAN_START_FRAME = 71;
 	const int DASHING_MEGAMAN_END_FRAME = 71;
 	const float DASHING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int WALL_SLIDING_MEGAMAN_START_FRAME = 158;
+	const int WALL_SLIDING_MEGAMAN_END_FRAME = 158;
+	const float WALL_SLIDING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 }
 
 // inherits from Entity class
@@ -85,6 +89,7 @@ private:
 	Image megamanShootingJumpPeak;
 	Image megamanShootingFalling;
 	Image megamanDashing;
+	Image megamanWallSliding;
 	SpriteCoordinates megamanSpriteCoordinates;// ("xcoords.txt");
 	bool standingOnSurface_ = true;
 	bool floorCollision_ = true;
