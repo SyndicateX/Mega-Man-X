@@ -101,8 +101,8 @@ public:
 	bool canWallJump() { return canWallJump_; }
 	bool canDash() { return canDash_; }
 	void setCanJump(bool jumpStatus) { canJump_ = jumpStatus; }
-	void setCanDash(bool dashStatus) { canDash_ = dashStatus; }
 	void setCanWallJump(bool wallJumpStatus) { canWallJump_ = wallJumpStatus; }
+	void setCanDash(bool dashStatus) { canDash_ = dashStatus; }
 	//void setSpaceKeyStatus(bool state) { spaceKeyisUp_ = state; }
 
     // Constructor

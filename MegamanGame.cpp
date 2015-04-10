@@ -183,23 +183,21 @@ void MegamanGame::update()
 				if (!bullet[bullet.size() - 1].initialize(this, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
 					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
 
+				bullet[bullet.size() - 1].setDirection(megaman.getDirection());
 				if (input->canWallJump())
 				{
-					if (megaman.getDirection() == RIGHT)
-						megaman.setDirection(LEFT);
+					if (bullet[bullet.size() - 1].getDirection() == RIGHT)
+						bullet[bullet.size() - 1].setDirection(LEFT);
 					else
-						megaman.setDirection(RIGHT);
+						bullet[bullet.size() - 1].setDirection(RIGHT);
 				}
-
-				if (megaman.getDirection() == RIGHT)
+				if (bullet[bullet.size() - 1].getDirection() == RIGHT)
 				{
-					bullet[bullet.size() - 1].setDirection(RIGHT);
 					bullet[bullet.size() - 1].setX(megaman.getX() + megaman.getWidth());
 					bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 10);
 				}
 				else
 				{
-					bullet[bullet.size() - 1].setDirection(LEFT);
 					bullet[bullet.size() - 1].setX(megaman.getX());
 					bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 10);
 				}
@@ -272,8 +270,11 @@ void MegamanGame::update()
 	}
 
 	//************************************ JUMPING ***************************************
-	if ((input->canJump() || input->canWallJump()) && input->isKeyDown(UP_KEY) || input->getGamepadA(0))
+	if ((input->canJump() || (input->canJump() && input->canWallJump())) && (input->isKeyDown(UP_KEY) || input->getGamepadA(0)))
+	//if ((input->canJump() || input->canWallJump()) && input->isKeyDown(UP_KEY) || input->getGamepadA(0))
 	{
+		if (input->canWallJump())
+			megaman.setDoWallJump(true);
 		megaman.setState(JUMPING);
 	}
 
@@ -328,6 +329,9 @@ void MegamanGame::collisions()
 		if (bullet[i].collidesWith(paddle, cv))
 			bullet.erase(bullet.begin() + i);
 	}
+
+	//if (bulletChargedSmall.collidesWith(paddle, cv))
+	//	bulletChargedSmall.damage(1);
 
 	//if (ball.collidesWith(paddle, cv))
 	//	ball.bounce(cv, paddle);

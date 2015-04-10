@@ -78,6 +78,7 @@ public:
 	void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight);
 
 	bool canWallJump() { return wallJump_; }
+	void setDoWallJump(bool doWallJump) { doWallJump_ = doWallJump; }
 private:
 	Image megamanIdle;
 	Image megamanWalking;
@@ -94,6 +95,7 @@ private:
 	bool standingOnSurface_ = true;
 	bool floorCollision_ = true;
 	bool wallJump_ = false;
+	bool doWallJump_ = false;
 };
 #endif
 

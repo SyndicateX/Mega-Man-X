@@ -216,6 +216,7 @@ void Megaman::update(float frameTime)
 
 	// *********************************************************************************
 	// **************************    MEGAMAN IN FREE-FALL    ***************************
+	// ************************   AND WALL JUMPING MECHANICS   *************************
 	// *********************************************************************************
 			//In case megaman is mid-jump						//In case megaman steps off a surface
 	if (spriteData.y + spriteData.height < GAME_HEIGHT && !standingOnSurface_ || !floorCollision_ && velocity.y >= 0)	//If in the air -- fall
@@ -228,26 +229,23 @@ void Megaman::update(float frameTime)
 		{
 			spriteData.y += frameTime * velocity.y * 3;     // Determines speed and height of megaman's jump -- needs adjusting
 			velocity.y += frameTime * GRAVITY;              // gravity
+			spriteData.state = JUMPING;
 		}
-		spriteData.state = JUMPING;
-		if (velocity.y > 0 && input->canWallJump() && (input->wasKeyPressed(UP_KEY) || input->getGamepadA(0)))
+		if (doWallJump_) // If megaman jumped off a wall
 		{
 			wallJumped = true;
-			velocity.y = -230;								// Determines the height of megaman's jump -- needs adjusting
-			spriteData.y += frameTime * velocity.y;         // move along Y
+			velocity.y = -230;								
+			spriteData.y += frameTime * velocity.y;         
 			standingOnSurface_ = false;
 			if (spriteData.direction == LEFT)
 			{
-				velocity.x = 175;
-				spriteData.flipHorizontal = false;
-				//spriteData.x = spriteData.x + megamanNS::SPEED*frameTime * 5;
+				velocity.x = 175;		//Megaman is forced away from wall after jumping off it
 			}
 			else
 			{
 				velocity.x = -175;
-				spriteData.flipHorizontal = true;
-				//spriteData.x = spriteData.x - megamanNS::SPEED*frameTime * 5;
 			}
+			doWallJump_ = false;
 		}
 	}
 	if (velocity.y >= 0)
@@ -267,13 +265,13 @@ void Megaman::update(float frameTime)
 		input->setCanDash(false);	// Megaman cannot dash in the air
 	}
 
-	if (velocity.y > 0)								////
-	{												////
-		input->setCanJump(false);					//// This prevents megaman from jumping multiple times
-	}												////
-	if (input->isUpKeyUp() && standingOnSurface_)	//// when the user holds down the jump button
-	{												////
-		input->setCanJump(true);					////
+	if (velocity.y > 0)														////
+	{																		////
+		input->setCanJump(false);											//// This prevents megaman from jumping multiple times
+	}																		//// when the user holds down the jump button
+	if (input->isUpKeyUp() && (standingOnSurface_ || input->canWallJump()))	//// 
+	{																		////
+		input->setCanJump(true);											////
 	}
 	
 	// ........................................................
@@ -339,9 +337,12 @@ void Megaman::draw()
 	{
 		megamanWalking.draw(spriteData);
 	}
+	else if (spriteData.state == WALL_SLIDING)
+	{
+		megamanWallSliding.draw(spriteData);
+	}
 	else if (spriteData.state == JUMPING)
 	{
-		//if (spriteData.state2 != SHOOTING)
 		if (spriteData.shotState == NONE)
 		{
 			if (velocity.y < -40)
@@ -374,10 +375,10 @@ void Megaman::draw()
 	{
 		megamanIdle.draw(spriteData);
 	}
-	else if (spriteData.state == WALL_SLIDING)
-	{
-		megamanWallSliding.draw(spriteData);
-	}
+	//else if (spriteData.state == WALL_SLIDING)
+	//{
+	//	megamanWallSliding.draw(spriteData);
+	//}
 	else
 	{
 		Image::draw();
