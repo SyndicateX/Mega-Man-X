@@ -163,79 +163,90 @@ void MegamanGame::update()
 	}
 	
 	//**************************** Shooting Animation + Bullet Creation ****************************
-
-	//...................................................
-	//.................... SINGLE SHOT ..................
-	//...................................................
-	if (input->isEnterKeyUp() && input->wasKeyPressed(ENTER_KEY)) 
-	//if (input->isKeyDown(ENTER_KEY) || input->getGamepadX(0))			
+	static bool justShot = false;
+	if (megaman.canShoot() && (input->isKeyDown(ENTER_KEY) || input->getGamepadX(0))) 
 	{
-		if ((currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .05)
-		{}
-		else
+		if (!justShot)						// Single shot scenario. Activated when the shooting button is first pressed 
+		{
+			if ((currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .05)	
+			{}
+			else
+			{
+				megaman.setState(SHOOTING);
+				megaman.setShotState(SHOOT);
+				if (bullet.size() < MAX_BULLETS)				// 4 bullets on screen max (maybe more?)
+				{
+					bullet.push_back(Bullet());
+
+					if (!bullet[bullet.size() - 1].initialize(this, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
+						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
+
+					bullet[bullet.size() - 1].setDirection(megaman.getDirection());
+					if (megaman.canWallJump())
+					{
+						if (bullet[bullet.size() - 1].getDirection() == RIGHT)
+							bullet[bullet.size() - 1].setDirection(LEFT);
+						else
+							bullet[bullet.size() - 1].setDirection(RIGHT);
+					}
+					if (bullet[bullet.size() - 1].getDirection() == RIGHT)
+					{
+						bullet[bullet.size() - 1].setX(megaman.getX() + megaman.getWidth());
+						bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 10);
+					}
+					else
+					{
+						bullet[bullet.size() - 1].setX(megaman.getX());
+						bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 10);
+					}
+				}
+				lastShootTime = currentTime;
+				justShot = true;
+			}
+		}
+		else							// If button is held down more than a frame, charge timer increments
+		{
+			if (chargeTime < 40)
+				chargeTime++;
+		}
+	}
+
+	if ((!(input->isKeyDown(ENTER_KEY)) && (!(input->getGamepadX(0))) && justShot))
+	{
+		megaman.setCanShoot(true);
+
+		if (chargeTime >= 40 && !(input->isKeyDown(ENTER_KEY)))				// If the charge timer reaches its target, mega man fires a charged shot
 		{
 			megaman.setState(SHOOTING);
 			megaman.setShotState(SHOOT);
-			if (bullet.size() < MAX_BULLETS)				// 4 bullets on screen max (maybe more?)
+			bulletChargedSmall.setDirection(megaman.getDirection());
+			if (megaman.canWallJump())
 			{
-				bullet.push_back(Bullet());
-
-				if (!bullet[bullet.size() - 1].initialize(this, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
-					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
-
-				bullet[bullet.size() - 1].setDirection(megaman.getDirection());
-				if (input->canWallJump())
-				{
-					if (bullet[bullet.size() - 1].getDirection() == RIGHT)
-						bullet[bullet.size() - 1].setDirection(LEFT);
-					else
-						bullet[bullet.size() - 1].setDirection(RIGHT);
-				}
-				if (bullet[bullet.size() - 1].getDirection() == RIGHT)
-				{
-					bullet[bullet.size() - 1].setX(megaman.getX() + megaman.getWidth());
-					bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 10);
-				}
+				if (bulletChargedSmall.getDirection() == RIGHT)
+					bulletChargedSmall.setDirection(LEFT);
 				else
-				{
-					bullet[bullet.size() - 1].setX(megaman.getX());
-					bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 10);
-				}
+					bulletChargedSmall.setDirection(RIGHT);
+			}
+			if (bulletChargedSmall.getDirection() == RIGHT)
+			{
+				bulletChargedSmall.setDirection(RIGHT);
+				bulletChargedSmall.setX(megaman.getX() + megaman.getWidth());
+				bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
+			}
+			else
+			{
+				bulletChargedSmall.setDirection(LEFT);
+				bulletChargedSmall.setX(megaman.getX());
+				bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 			}
 			lastShootTime = currentTime;
 		}
-		chargeTime = 0;
-	}
-	//......................................................
-	//................... CHARGED SHOT .....................
-	//......................................................
-	if (input->isKeyDown(ENTER_KEY) || input->getGamepadX(0))
-	{
-		if (chargeTime < 40)
-			chargeTime++;
-	}
-	if (chargeTime >= 40 && input->isEnterKeyUp())
-	{
-		megaman.setState(SHOOTING);
-		megaman.setShotState(SHOOT);
-		if (megaman.getDirection() == RIGHT)
-		{
-			bulletChargedSmall.setDirection(RIGHT);
-			bulletChargedSmall.setX(megaman.getX() + megaman.getWidth());
-			bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
-		}
-		else
-		{
-			bulletChargedSmall.setDirection(LEFT);
-			bulletChargedSmall.setX(megaman.getX());
-			bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
-		}
-		lastShootTime = currentTime;
-		chargeTime = 0;
+		chargeTime = 0;		// reset charge time
+		justShot = false;	// allows another small shot to be fired
 	}
 
 	//************************************* DASHING *************************************
-    if (input->canDash() && (input->isKeyDown(SPACE_KEY) || input->getGamepadB(0)))// && !megaman.getState() == JUMPING)
+	if (megaman.canDash() && (input->isKeyDown(SPACE_KEY) || input->getGamepadB(0)))// && !megaman.getState() == JUMPING)
 	{
 		isDashing = true;
 		megaman.setState(DASHING);
@@ -251,29 +262,28 @@ void MegamanGame::update()
 		if ((currentTime.QuadPart - dashTime.QuadPart) / (double)(frequency.QuadPart) < 0.42)
 		{}
 		else
-		{
-			input->setCanDash(false);			// Megaman cannot dash again until this is reset after user releases dash key
+		{		
+			megaman.setCanDash(false);		// Megaman cannot dash again until this is reset after user releases dash key
 			dashTime = currentTime;
 			isDashing = false;
 		}
 	}
 
-	if (input->isSpaceKeyUp())
+	if ((!(input->isKeyDown(SPACE_KEY)) && !(input->getGamepadB(0))))
 	{
 		isDashing = false;
-		input->setCanDash(false);
+		megaman.setCanDash(false);
 		dashTime = currentTime; // Reset dash timer if megaman is not dashing
 	}
 	if (directionChange)
 	{
-		input->setCanDash(false);
+		megaman.setCanDash(false);
 	}
 
 	//************************************ JUMPING ***************************************
-	if ((input->canJump() || (input->canJump() && input->canWallJump())) && (input->isKeyDown(UP_KEY) || input->getGamepadA(0)))
-	//if ((input->canJump() || input->canWallJump()) && input->isKeyDown(UP_KEY) || input->getGamepadA(0))
+	if ((megaman.canJump() || (megaman.canJump() && megaman.canWallJump())) && (input->isKeyDown(UP_KEY) || input->getGamepadA(0)))
 	{
-		if (input->canWallJump())
+		if (megaman.canWallJump())
 			megaman.setDoWallJump(true);
 		megaman.setState(JUMPING);
 	}

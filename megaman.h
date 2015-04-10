@@ -77,8 +77,16 @@ public:
 	//In case megaman collides with a wall
 	void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight);
 
-	bool canWallJump() { return wallJump_; }
+	//bool canWallJump() { return wallJump_; }
 	void setDoWallJump(bool doWallJump) { doWallJump_ = doWallJump; }
+	bool canDash() { return canDash_; }
+	void setCanDash(bool dashStatus) { canDash_ = dashStatus; }
+	bool canJump() { return canJump_; }
+	void setCanJump(bool jumpStatus) { canJump_ = jumpStatus; }
+	bool canWallJump() { return canWallJump_; }
+	void setCanWallJump(bool wallJumpStatus) { canWallJump_ = wallJumpStatus; }
+	bool canShoot() { return canShoot_; }
+	void setCanShoot(bool shootStatus) { canShoot_ = shootStatus; }
 private:
 	Image megamanIdle;
 	Image megamanWalking;
@@ -96,6 +104,10 @@ private:
 	bool floorCollision_ = true;
 	bool wallJump_ = false;
 	bool doWallJump_ = false;
+	bool canDash_ = false;
+	bool canJump_ = false;
+	bool canWallJump_ = false;
+	bool canShoot_ = true;
 };
 #endif
 

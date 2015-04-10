@@ -28,12 +28,6 @@ Input::Input()
     mouseX1Button = false;              // true if X1 mouse button is down
     mouseX2Button = false;              // true if X2 mouse button is down
 
-	upKeyisUp_ = true;
-	spaceKeyisUp_ = true;
-	enterKeyisUp_ = true;
-	canJump_ = true;
-	canDash_ = false;
-
     for(int i=0; i<MAX_CONTROLLERS; i++)
     {
         controllers[i].vibrateTimeLeft = 0;
@@ -107,21 +101,6 @@ void Input::keyUp(WPARAM wParam)
     // make sure key code is within buffer range
 	if (wParam < inputNS::KEYS_ARRAY_LEN)
 	{
-		if (wParam == UP_KEY)
-		{
-			upKeyisUp_ = true;
-			clearKeyPress(UP_KEY);
-		}
-		if (wParam == SPACE_KEY)
-		{
-			spaceKeyisUp_ = true;
-			clearKeyPress(SPACE_KEY);
-		}
-		if (wParam == ENTER_KEY)
-		{
-			enterKeyisUp_ = true;
-			clearKeyPress(ENTER_KEY);
-		}
 		// update state table
 		keysDown[wParam] = false;
 	}
@@ -161,22 +140,6 @@ bool Input::isKeyDown(UCHAR vkey)// const
 {
 	if (vkey < inputNS::KEYS_ARRAY_LEN)
 	{
-		if (keysDown[vkey])
-		{
-			if (vkey == UP_KEY)
-			{
-				upKeyisUp_ = false;
-			}
-			if (vkey == SPACE_KEY)
-			{
-				spaceKeyisUp_ = false;
-			}
-			if (vkey == ENTER_KEY)
-			{
-				enterKeyisUp_ = false;
-			}
-			return true;
-		}
 		return keysDown[vkey];
 	}
     else
@@ -191,22 +154,6 @@ bool Input::wasKeyPressed(UCHAR vkey)// const
 {
 	if (vkey < inputNS::KEYS_ARRAY_LEN)
 	{
-		if (keysPressed[vkey])
-		{
-			if (vkey == UP_KEY)
-			{
-				upKeyisUp_ = false;
-			}
-			if (vkey == SPACE_KEY)
-			{
-				spaceKeyisUp_ = false;
-			}
-			if (vkey == ENTER_KEY)
-			{
-				enterKeyisUp_ = false;
-			}
-			return true;
-		}
 		return keysPressed[vkey];
 	}
     else
