@@ -16,6 +16,7 @@ const char BULLET_IMAGE[]				= "pictures\\ball.png";
 const char BULLET_CHARGED_SMALL_IMAGE[] = "pictures\\ball2.png";
 const char PADDLE_IMAGE[]				= "pictures\\paddle.png";
 const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
+const char CHARGING_SPRITES_IMAGE[]		= "pictures\\x4Buster.png";
 
 // window
 const char CLASS_NAME[] = "Gravity";

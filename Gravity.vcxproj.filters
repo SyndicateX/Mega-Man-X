@@ -60,6 +60,9 @@
     <ClCompile Include="bulletChargedSmall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="chargingSprites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bulletChargedSmall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="chargingSprites.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

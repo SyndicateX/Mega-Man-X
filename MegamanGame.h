@@ -12,6 +12,7 @@
 #include "paddle.h"
 #include "bullet.h"
 #include "bulletChargedSmall.h"
+#include "chargingSprites.h"
 #include <vector>
 
 //=============================================================================
@@ -27,9 +28,11 @@ private:
     TextureManager megamanTexture;		// megaman texture
 	TextureManager bulletTexture;		// bullet texture
 	TextureManager bulletChargedSmallTexture;	//bullet charged small texture
+	TextureManager chargingSpritesTexture;
     Ball    ball;						// ball
 	Paddle	paddle;						// paddle
     Megaman	megaman;					// megaman
+	chargingSprites chargingSprites;	// charging Sprites
 	std::vector<Bullet>	bullet;			// bullet
 	BulletChargedSmall bulletChargedSmall;				// bullet charged small
     Image   backdrop;					// backdrop image

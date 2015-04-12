@@ -36,6 +36,10 @@ void MegamanGame::initialize(HWND hwnd)
     if (!megamanTexture.initialize(graphics,MEGAMAN_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
 
+	// megaman charging sprites texture
+	if (!chargingSpritesTexture.initialize(graphics, CHARGING_SPRITES_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
+
 	// bullet texture
 	if (!bulletTexture.initialize(graphics, BULLET_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet texture"));
@@ -66,6 +70,10 @@ void MegamanGame::initialize(HWND hwnd)
     // megaman
 	if (!megaman.initialize(this, megamanNS::WIDTH, megamanNS::HEIGHT, 0, &megamanTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
+
+	// megaman charging sprites
+	if (!chargingSprites.initialize(this, chargingSpritesNS::WIDTH, chargingSpritesNS::HEIGHT, 0, &chargingSpritesTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing charging sprites"));
 
 	// megaman sprite initialize
 	//SpriteCoordinates megamanSpriteCoordinates;
@@ -208,6 +216,12 @@ void MegamanGame::update()
 		{
 			if (chargeTime < 40)
 				chargeTime++;
+			if (chargeTime >= 40)
+			{
+				chargingSprites.setCharge1(true);
+				chargingSprites.setX(megaman.getX() - 65);
+				chargingSprites.setY(megaman.getY() - 55);
+			}
 		}
 	}
 
@@ -217,6 +231,7 @@ void MegamanGame::update()
 
 		if (chargeTime >= 40 && !(input->isKeyDown(ENTER_KEY)))				// If the charge timer reaches its target, mega man fires a charged shot
 		{
+			chargingSprites.setCharge1(false);
 			megaman.setState(SHOOTING);
 			megaman.setShotState(SHOOT);
 			bulletChargedSmall.setDirection(megaman.getDirection());
@@ -315,6 +330,7 @@ void MegamanGame::update()
 		bulletChargedSmall.setX(bulletChargedSmall.getX() - bulletChargedSmallNS::SPEED*frameTime);
 	}
 
+	chargingSprites.update(frameTime);
 	bulletChargedSmall.update(frameTime);			//Update the rest
 	paddle.update(frameTime);						
     megaman.update(frameTime);
@@ -362,6 +378,7 @@ void MegamanGame::render()
     //ball.draw();                            // add the ball to the scene
 	paddle.draw();							// add the paddle to the scene
     megaman.draw();							// add megaman to the scene
+	chargingSprites.draw();
 	bulletChargedSmall.draw();
 	for (int i = 0; i < bullet.size(); i++)
 	{
@@ -380,6 +397,7 @@ void MegamanGame::releaseAll()
 	bulletTexture.onLostDevice();			// bullet texture
 	bulletChargedSmallTexture.onLostDevice();			// bullet texture
 	paddleTexture.onLostDevice();
+	chargingSpritesTexture.onLostDevice();
    // ballTexture.onLostDevice();             // ball texture
     backdropTexture.onLostDevice();         // backdrop texture
 
@@ -397,6 +415,7 @@ void MegamanGame::resetAll()
    // ballTexture.onResetDevice();
 	paddleTexture.onResetDevice();
     megamanTexture.onResetDevice();
+	chargingSpritesTexture.onResetDevice();
 	bulletTexture.onResetDevice();
 	bulletChargedSmallTexture.onResetDevice();
 
