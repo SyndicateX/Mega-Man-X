@@ -1,9 +1,3 @@
-// Programming 2D Games
-// Copyright (c) 2011 by: 
-// Charles Kelly
-// entity.cpp v1.9
-// Last modification: Apr-12-2013
-
 #include "entity.h"
 
 //=============================================================================

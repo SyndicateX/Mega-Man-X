@@ -1,4 +1,3 @@
-
 #ifndef paddle_h             // Prevent multiple definitions if this 
 #define paddle_h             // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN

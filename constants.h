@@ -1,4 +1,3 @@
-
 #pragma once
 #ifndef _CONSTANTS_H            // Prevent multiple definitions if this 
 #define _CONSTANTS_H            // file is included in more than one place
@@ -11,7 +10,6 @@
 //=============================================================================
 // graphic images
 const char BACKDROP_IMAGE[]				= "pictures\\backdrop.png";
-const char BALL_IMAGE[]					= "pictures\\ball.png";
 const char BULLET_IMAGE[]				= "pictures\\ball.png";
 const char BULLET_CHARGED_SMALL_IMAGE[] = "pictures\\ball2.png";
 const char PADDLE_IMAGE[]				= "pictures\\paddle.png";

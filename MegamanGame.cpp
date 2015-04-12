@@ -1,4 +1,3 @@
-
 #include "MegamanGame.h"
 #include "sprites.h"
 #include "Timer.h"
@@ -28,10 +27,6 @@ void MegamanGame::initialize(HWND hwnd)
     if (!backdropTexture.initialize(graphics,BACKDROP_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
-    //// ball texture
-    //if (!ballTexture.initialize(graphics,BALL_IMAGE))
-    //    throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ball texture"));
-
     // megaman texture
     if (!megamanTexture.initialize(graphics,MEGAMAN_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
@@ -55,13 +50,6 @@ void MegamanGame::initialize(HWND hwnd)
     // backdrop
     if (!backdrop.initialize(graphics,0,0,0,&backdropTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
-
-    // ball
-    //if (!ball.initialize(this,ballNS::WIDTH,ballNS::HEIGHT,0,&ballTexture))
-    //    throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ball"));
-    //ball.setX(GAME_WIDTH/4 - ballNS::WIDTH);
-    //ball.setY(GAME_HEIGHT/2 - ballNS::HEIGHT);
-    //ball.setVelocity(VECTOR2(ballNS::SPEED,-ballNS::SPEED)); // VECTOR2(X, Y)
 
 	// paddle
 	if (!paddle.initialize(this, paddleNS::WIDTH, paddleNS::HEIGHT, 0, &paddleTexture))
@@ -160,9 +148,10 @@ void MegamanGame::update()
 	//********************************** IDLE *************************************
 	else
 	{
-		if (megaman.getState() == SHOOTING && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
-		//if (megaman.getShotState() != NONE && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
-		{}
+		if (megaman.getShotState() != NONE && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
+		{
+			megaman.setState(SHOOTING);		// Holds megamn shooting animation for a few frames after shooting
+		}
 		else
 		{
 			megaman.setShotState(NONE);
@@ -359,9 +348,6 @@ void MegamanGame::collisions()
 	//if (bulletChargedSmall.collidesWith(paddle, cv))
 	//	bulletChargedSmall.damage(1);
 
-	//if (ball.collidesWith(paddle, cv))
-	//	ball.bounce(cv, paddle);
-
 	VECTOR2 cs;
 	if (megaman.collidesWith(paddle, cs))
 		megaman.stop(paddleNS::X, paddleNS::Y, paddleNS::WIDTH, paddleNS::HEIGHT);
@@ -398,7 +384,6 @@ void MegamanGame::releaseAll()
 	bulletChargedSmallTexture.onLostDevice();			// bullet texture
 	paddleTexture.onLostDevice();
 	chargingSpritesTexture.onLostDevice();
-   // ballTexture.onLostDevice();             // ball texture
     backdropTexture.onLostDevice();         // backdrop texture
 
     Game::releaseAll();
@@ -412,7 +397,6 @@ void MegamanGame::releaseAll()
 void MegamanGame::resetAll()
 {
     backdropTexture.onResetDevice();
-   // ballTexture.onResetDevice();
 	paddleTexture.onResetDevice();
     megamanTexture.onResetDevice();
 	chargingSpritesTexture.onResetDevice();

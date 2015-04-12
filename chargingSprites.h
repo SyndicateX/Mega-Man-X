@@ -1,4 +1,3 @@
-
 #ifndef chargingSprites_h             // Prevent multiple definitions if this 
 #define chargingSprites_h             // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN

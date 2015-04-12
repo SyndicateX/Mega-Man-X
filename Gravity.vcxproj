@@ -87,7 +87,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ball.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="bulletChargedSmall.cpp" />
     <ClCompile Include="chargingSprites.cpp" />
@@ -101,11 +100,9 @@
     <ClCompile Include="paddle.cpp" />
     <ClCompile Include="sprites.cpp" />
     <ClCompile Include="textureManager.cpp" />
-    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ball.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="bulletChargedSmall.h" />
     <ClInclude Include="chargingSprites.h" />
@@ -122,7 +119,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="sprites.h" />
     <ClInclude Include="textureManager.h" />
-    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MegaMan.rc" />

@@ -1,4 +1,3 @@
-
 #ifndef _INPUT_H                // Prevent multiple definitions if this 
 #define _INPUT_H                // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN

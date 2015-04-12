@@ -1,4 +1,3 @@
-
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

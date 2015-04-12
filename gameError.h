@@ -1,5 +1,3 @@
-
-
 #ifndef _GAMEERROR_H            // Prevent multiple definitions if this 
 #define _GAMEERROR_H            // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN
