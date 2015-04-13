@@ -160,7 +160,6 @@ void Megaman::update(float frameTime)
 	}
 
 	if (canWallJump_)
-	//if (input->canWallJump())
 	{
 		spriteData.state = WALL_SLIDING;
 	}
@@ -289,7 +288,7 @@ void Megaman::update(float frameTime)
 		megamanDashing.update(frameTime);
 	}
 
-	if (canWallJump_)
+	if (canWallJump_ && !standingOnSurface_)
 	{
 		spriteData.state = WALL_SLIDING;
 		megamanWallSliding.update(frameTime);
