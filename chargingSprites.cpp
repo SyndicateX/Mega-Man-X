@@ -29,7 +29,7 @@ chargingSprites::chargingSprites() : Entity()
 }
 
 //=============================================================================
-// Initialize Mario.
+// Initialize Mega Man.
 // Post: returns true if successful, false if failed
 //=============================================================================
 bool chargingSprites::initialize(Game *gamePtr, int width, int height, int ncols,

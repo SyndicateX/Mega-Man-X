@@ -31,6 +31,7 @@ private:
 	std::vector<Bullet>	bullet;			// bullet
 	BulletChargedSmall bulletChargedSmall;				// bullet charged small
     Image   backdrop;					// backdrop image
+	float   mapX, mapY;
 
 public:
     // Constructor
@@ -40,6 +41,7 @@ public:
     // Initialize the game
     void initialize(HWND hwnd);
     void update();      // must override pure virtual from Game
+	void moveMegaman(double moveRate); // handles megaman's and the map's movements after input
     void ai();          // "
     void collisions();  // "
     void render();      // "

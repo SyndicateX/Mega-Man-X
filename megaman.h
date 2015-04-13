@@ -10,7 +10,7 @@ namespace megamanNS
 {
     const int WIDTH = 75;                  // image width
     const int HEIGHT = 100;                  // image height
-    const int X = GAME_WIDTH/4 - WIDTH;     // location on screen
+    const int X = GAME_WIDTH/2 - WIDTH;     // location on screen
     const int Y = GAME_HEIGHT - HEIGHT * 2;
     const float SPEED = 300;                // pixels per second
 	const float MASS = 1.0e6f;
@@ -58,10 +58,6 @@ namespace megamanNS
 	const int WALL_SLIDING_MEGAMAN_START_FRAME = 158;
 	const int WALL_SLIDING_MEGAMAN_END_FRAME = 158;
 	const float WALL_SLIDING_MEGAMAN_ANIMATION_DELAY = 0.07f;
-
-	const int CHARGE1_MEGAMAN_START_FRAME = 5;
-	const int CHARGE1_MEGAMAN_END_FRAME = 10;
-	const float CHARGE1_MEGAMAN_ANIMATION_DELAY = 0.07f;
 }
 
 // inherits from Entity class
@@ -90,8 +86,7 @@ public:
 	void setCanWallJump(bool wallJumpStatus) { canWallJump_ = wallJumpStatus; }
 	bool canShoot() { return canShoot_; }
 	void setCanShoot(bool shootStatus) { canShoot_ = shootStatus; }
-	bool isCharged1() { return charge1_; }
-	void setCharge1(bool chargeStatus) { charge1_ = chargeStatus; }
+
 private:
 	Image megamanIdle;
 	Image megamanWalking;
@@ -104,9 +99,7 @@ private:
 	Image megamanShootingFalling;
 	Image megamanDashing;
 	Image megamanWallSliding;
-	Image megamanCharge1;
 	SpriteCoordinates megamanSpriteCoordinates;
-	SpriteCoordinates megamanShootingSpriteCoordinates;
 	bool standingOnSurface_ = true;
 	bool floorCollision_ = true;
 	bool wallJump_ = false;

@@ -6,7 +6,10 @@
 // Constructor
 //=============================================================================
 MegamanGame::MegamanGame()
-{}
+{
+	mapX = 0;
+	mapY = 0;
+}
 
 //=============================================================================
 // Destructor
@@ -62,12 +65,6 @@ void MegamanGame::initialize(HWND hwnd)
 	// megaman charging sprites
 	if (!chargingSprites.initialize(this, chargingSpritesNS::WIDTH, chargingSpritesNS::HEIGHT, 0, &chargingSpritesTexture))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing charging sprites"));
-
-	// megaman sprite initialize
-	//SpriteCoordinates megamanSpriteCoordinates;
-	//megamanSpriteCoordinates.populateVector("xcoords.txt");
-	//if (!megaman.initializeCoords(megamanSpriteCoordinates))
-	//	throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
 	
 	// bullet charged small
 	if (!bulletChargedSmall.initialize(this, bulletChargedSmallNS::WIDTH, bulletChargedSmallNS::HEIGHT, 0, &bulletChargedSmallTexture))
@@ -95,7 +92,6 @@ void MegamanGame::update()
 	QueryPerformanceCounter(&currentTime);
 	static LARGE_INTEGER dashTime = currentTime;
 	static int chargeTime = 0;
-
 	static bool isDashing = false;
 	static bool directionChange = false;
 
@@ -113,11 +109,11 @@ void MegamanGame::update()
 		}
 		if (!isDashing)
 		{
-			megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime);
+			moveMegaman(1);
 		}
 		if (isDashing && megaman.getState() == JUMPING)
 		{
-			megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime  * 2.5);
+			moveMegaman(2.5);
 		}
 		megaman.setDirection(LEFT);
 		megaman.setState(WALKING);
@@ -136,11 +132,11 @@ void MegamanGame::update()
 		}
 		if (!isDashing)
 		{
-			megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime);
+			moveMegaman(1);
 		}
 		if (isDashing && megaman.getState() == JUMPING)
 		{
-			megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime * 2.5);
+			moveMegaman(2.5);
 		}
 		megaman.setState(WALKING);
 		megaman.setDirection(RIGHT);
@@ -158,7 +154,6 @@ void MegamanGame::update()
 			megaman.setState(STANDING);
 		}
 	}
-	
 	//**************************** Shooting Animation + Bullet Creation ****************************
 	static bool justShot = false;
 	if (megaman.canShoot() && (input->isKeyDown(ENTER_KEY) || input->getGamepadX(0))) 
@@ -254,14 +249,7 @@ void MegamanGame::update()
 	{
 		isDashing = true;
 		megaman.setState(DASHING);
-		if (megaman.getDirection() == LEFT)
-		{
-			megaman.setX(megaman.getX() - megamanNS::SPEED*frameTime * 2.5);
-		}
-		else
-		{
-			megaman.setX(megaman.getX() + megamanNS::SPEED*frameTime * 2.5);
-		}
+		moveMegaman(2.5);
 
 		if ((currentTime.QuadPart - dashTime.QuadPart) / (double)(frequency.QuadPart) < 0.42)
 		{}
@@ -288,7 +276,9 @@ void MegamanGame::update()
 	if ((megaman.canJump() || (megaman.canJump() && megaman.canWallJump())) && (input->isKeyDown(UP_KEY) || input->getGamepadA(0)))
 	{
 		if (megaman.canWallJump())
+		{
 			megaman.setDoWallJump(true);
+		}
 		megaman.setState(JUMPING);
 	}
 
@@ -326,6 +316,29 @@ void MegamanGame::update()
 }
 
 //=============================================================================
+// Handle Mega Man and map movements
+//=============================================================================
+void MegamanGame::moveMegaman(double moveRate)
+{
+	if (megaman.getDirection() == LEFT)
+	{
+		if (mapX > 0 && megaman.getX() < GAME_WIDTH / 2)
+			mapX -= megamanNS::SPEED * frameTime * moveRate;
+		else
+			megaman.setX(megaman.getX() - megamanNS::SPEED * frameTime * moveRate);
+	}
+	else
+	{
+		if (mapX < MAP_WIDTH && megaman.getX() >= GAME_WIDTH / 2)
+			mapX += megamanNS::SPEED * frameTime * moveRate;
+		else if (mapX >= MAP_WIDTH && megaman.getX() <= GAME_WIDTH)
+			megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
+		else
+			megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
+	}
+}
+
+//=============================================================================
 // Artificial Intelligence
 //=============================================================================
 void MegamanGame::ai()
@@ -337,8 +350,6 @@ void MegamanGame::ai()
 void MegamanGame::collisions()
 {
     VECTOR2 cv;
-    //if(ball.collidesWith(megaman, cv))
-    //    ball.bounce(cv, megaman);
 	for (int i = 0; i < bullet.size(); i++)
 	{
 		if (bullet[i].collidesWith(paddle, cv))
@@ -346,11 +357,10 @@ void MegamanGame::collisions()
 	}
 
 	//if (bulletChargedSmall.collidesWith(paddle, cv))
-	//	bulletChargedSmall.damage(1);
+	//	Destroy? Move out of bounds? Reset parameters?
 
-	VECTOR2 cs;
-	if (megaman.collidesWith(paddle, cs))
-		megaman.stop(paddleNS::X, paddleNS::Y, paddleNS::WIDTH, paddleNS::HEIGHT);
+	if (megaman.collidesWith(paddle, cv))
+		megaman.stop(paddle.getX(), paddle.getY(), paddleNS::WIDTH, paddleNS::HEIGHT);
 }
 
 //=============================================================================
@@ -360,8 +370,26 @@ void MegamanGame::render()
 {
     graphics->spriteBegin();                // begin drawing sprites
 
+	if (mapX > 0 && mapX < MAP_WIDTH)
+	{
+		paddle.setX(paddleNS::X - mapX);
+		//paddle.setY(paddleNS::Y - mapY);
+		backdrop.setX(-mapX);
+		//backdrop.setY(-mapY);
+	}
+	else
+	{
+		if (mapX <= 0)
+		{
+			mapX = 0;
+		}
+		else
+		{
+			mapX = MAP_WIDTH;
+		}
+	}
+
     backdrop.draw();                        // add the backdrop to the scene
-    //ball.draw();                            // add the ball to the scene
 	paddle.draw();							// add the paddle to the scene
     megaman.draw();							// add megaman to the scene
 	chargingSprites.draw();

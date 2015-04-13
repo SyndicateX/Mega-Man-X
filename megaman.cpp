@@ -25,11 +25,10 @@ Megaman::Megaman() : Entity()
 	edge.right = megamanNS::WIDTH / 2;
 	collisionType = entityNS::ROTATED_BOX;
 	mass = megamanNS::MASS;
-
 }
 
 //=============================================================================
-// Initialize Mario.
+// Initialize Mega Man.
 // Post: returns true if successful, false if failed
 //=============================================================================
 bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
@@ -38,11 +37,6 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	// megaman sprite initialize
 	megamanSpriteCoordinates.populateVector("xcoords.txt");
 	if (!initializeCoords(megamanSpriteCoordinates))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
-
-	// megaman shooting sprite initialize
-	megamanShootingSpriteCoordinates.populateVector("xshootcoords.txt");
-	if (!initializeCoords(megamanShootingSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
 	
 	//Idle
@@ -142,15 +136,6 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanWallSliding.setCurrentFrame(megamanNS::WALL_SLIDING_MEGAMAN_START_FRAME);
 	megamanWallSliding.setFrameDelay(megamanNS::WALL_SLIDING_MEGAMAN_ANIMATION_DELAY);
 
-	megamanCharge1.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
-		megamanNS::HEIGHT, 0, textureM);
-	if (!megamanCharge1.initialize(megamanShootingSpriteCoordinates))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
-	megamanCharge1.setFrames(megamanNS::CHARGE1_MEGAMAN_START_FRAME, megamanNS::CHARGE1_MEGAMAN_END_FRAME);
-	megamanCharge1.setCurrentFrame(megamanNS::CHARGE1_MEGAMAN_START_FRAME);
-	megamanCharge1.setFrameDelay(megamanNS::CHARGE1_MEGAMAN_ANIMATION_DELAY);
-
-
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
 //=============================================================================
@@ -198,7 +183,7 @@ void Megaman::update(float frameTime)
 		floorCollision_ = true;
 	}
 
-	// Stay within boundaries
+	// Keep Mega Man within boundaries
 	if (spriteData.x > GAME_WIDTH - megamanNS::WIDTH)		// if hit right screen edge
 		spriteData.x = GAME_WIDTH - megamanNS::WIDTH;		// position at right screen edge
 	else if (spriteData.x < 0)							// else if hit left screen edge
@@ -228,31 +213,30 @@ void Megaman::update(float frameTime)
 		}
 	}
 
-	// *********************************************************************************
-	// **************************    MEGAMAN IN FREE-FALL    ***************************
-	// ************************   AND WALL JUMPING MECHANICS   *************************
-	// *********************************************************************************
-			//In case megaman is mid-jump						//In case megaman steps off a surface
+	// --------------------------------------------------------------------------------
+	// --------------------------    MEGAMAN IN FREE-FALL    --------------------------
+	// ------------------------   AND WALL JUMPING MECHANICS   ------------------------
+	// --------------------------------------------------------------------------------
+			//In case Mega Man is mid-jump						//In case megaman steps off a surface
 	if (spriteData.y + spriteData.height < GAME_HEIGHT && !standingOnSurface_ || !floorCollision_ && velocity.y >= 0)	//If in the air -- fall
 	{
 		if (spriteData.state == WALL_SLIDING)
 		{
-			velocity.y = 70;
-			//spriteData.y += 3;			//if sliding down wall, fall at constant rate (3 pixels per frame)
+			velocity.y = 70;		//if sliding down wall, fall at constant rate 
 		}
-		spriteData.y += frameTime * velocity.y * 3;     // Determines speed and height of megaman's jump -- needs adjusting
+		spriteData.y += frameTime * velocity.y * 3;     // Determines speed and height of Mega Man's jump -- needs adjusting
 		velocity.y += frameTime * GRAVITY;              // gravity
 		spriteData.state = JUMPING;
+		standingOnSurface_ = false;
 
-		if (doWallJump_) // If megaman jumped off a wall
+		if (doWallJump_) // If Mega Man jumped off a wall
 		{
 			wallJumped = true;
 			velocity.y = -230;								
 			spriteData.y += frameTime * velocity.y;         
-			standingOnSurface_ = false;
 			if (spriteData.direction == LEFT)
 			{
-				velocity.x = 120;		//Megaman is forced away from wall after jumping off it
+				velocity.x = 120;		//Mega Man is forced away from wall after jumping off it
 			}
 			else
 			{
@@ -260,7 +244,11 @@ void Megaman::update(float frameTime)
 			}
 			doWallJump_ = false;
 		}
-		canDash_ = false;			// Megaman cannot dash in the air
+		canDash_ = false;			// Mega Man cannot dash in the air
+		if (velocity.y >= 0)
+		{
+			canJump_ = false;
+		}
 	}
 	if (velocity.y >= 0)
 	{
@@ -278,6 +266,7 @@ void Megaman::update(float frameTime)
 	{
 		canDash_ = false;
 	}
+
 	if (velocity.y > 0)														////
 	{																		////
 		canJump_ = false;													//// Prevents mega man from jumping multiple times
@@ -287,9 +276,9 @@ void Megaman::update(float frameTime)
 		canJump_ = true;													////
 	}
 	
-	// ........................................................
-	// .................... UPDATE DRAWINGS ...................
-	// ........................................................
+	// ---------------------------------------------------------
+	// -------------------- UPDATE DRAWINGS --------------------
+	// ---------------------------------------------------------
 	if (spriteData.state == STANDING && standingOnSurface_)
 	{
 		megamanIdle.update(frameTime);
@@ -310,8 +299,13 @@ void Megaman::update(float frameTime)
 	canWallJump_ = false;
 }
 
+//=============================================================================
+// stop
+// Collision detection between Mega Man and solid surfaces
+//=============================================================================
 void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 {
+	// Case: Above surface
 	if (((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y + spriteData.height <= wallY + 10) && velocity.y >= 0)
 	{
 		standingOnSurface_ = true;
@@ -319,6 +313,7 @@ void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 		velocity.y = 0; 										 // stop y acceleration
 		floorCollision_ = true;
 	}
+	// Case: Below surface
 	else if ((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y >= wallY + wallHeight - 10)
 	{
 		spriteData.y = wallY + wallHeight;
@@ -326,6 +321,7 @@ void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 		standingOnSurface_ = false;
 		floorCollision_ = false;
 	}
+	// Case: Left of surface
 	else if (spriteData.x + spriteData.width >= wallX && spriteData.x + spriteData.width < wallX + wallLength)
 	{
 		spriteData.x = wallX - spriteData.width;
@@ -334,6 +330,7 @@ void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 			canWallJump_ = true;
 		}
 	}
+	// Case: Right of surface
 	else if (spriteData.x < wallX + wallLength && spriteData.x + spriteData.width > wallX)
 	{
 		spriteData.x = wallX + wallLength;
@@ -344,6 +341,10 @@ void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 	}
 }
 
+//=============================================================================
+// draw
+// Drawing all of Mega Man's different states
+//=============================================================================
 void Megaman::draw()
 {
 	if (spriteData.state == WALKING)
@@ -375,8 +376,7 @@ void Megaman::draw()
 				megamanShootingFalling.draw(spriteData);
 		}
 	}
-	//else if (spriteData.state2 == SHOOTING && spriteData.state == STANDING)
-	else if (spriteData.shotState == SHOOT)// && spriteData.state == STANDING)
+	else if (spriteData.shotState == SHOOT)
 	{
 		megamanShooting.draw(spriteData);
 	}
@@ -391,11 +391,6 @@ void Megaman::draw()
 	else
 	{
 		Image::draw();
-	}
-
-	if (charge1_ == true)
-	{
-		megamanCharge1.draw(spriteData);
 	}
 }
 
