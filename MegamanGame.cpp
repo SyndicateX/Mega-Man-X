@@ -92,8 +92,12 @@ void MegamanGame::update()
 	QueryPerformanceCounter(&currentTime);
 	static LARGE_INTEGER dashTime = currentTime;
 	static int chargeTime = 0;
-	static bool isDashing = false;
 	static bool directionChange = false;
+
+	if (megaman.isDashing() && megaman.getState() == JUMPING)
+	{
+		megaman.setIsDashJumping(true);
+	}
 
 	//******************************** PRESSED LEFT *******************************
 	if (input->isKeyDown(LEFT_KEY) || input->getGamepadDPadLeft(0))
@@ -101,20 +105,22 @@ void MegamanGame::update()
 		if (megaman.getDirection() == RIGHT)
 		{
 			directionChange = true;
-			isDashing = false;
+			megaman.setIsDashing(false);
 		}
 		else
 		{
 			directionChange = false;
 		}
-		if (!isDashing)
-		{
-			moveMegaman(WALK_SPEED);
-		}
-		if (isDashing && megaman.getState() == JUMPING)
+
+		if (megaman.isDashJumping())
 		{
 			moveMegaman(DASH_SPEED);
 		}
+		else if (!megaman.isDashing())
+		{
+			moveMegaman(WALK_SPEED);
+		}
+
 		megaman.setDirection(LEFT);
 		megaman.setState(WALKING);
 	}
@@ -124,20 +130,22 @@ void MegamanGame::update()
 		if (megaman.getDirection() == LEFT)
 		{
 			directionChange = true;
-			isDashing = false;
+			megaman.setIsDashing(false);
 		}
 		else
 		{
 			directionChange = false;
 		}
-		if (!isDashing)
-		{
-			moveMegaman(WALK_SPEED);
-		}
-		if (isDashing && megaman.getState() == JUMPING)
+
+		if (megaman.isDashJumping())
 		{
 			moveMegaman(DASH_SPEED);
 		}
+		else if (!megaman.isDashing())
+		{
+			moveMegaman(WALK_SPEED);
+		}
+
 		megaman.setState(WALKING);
 		megaman.setDirection(RIGHT);
 	}	
@@ -183,11 +191,13 @@ void MegamanGame::update()
 					}
 					if (bullet[bullet.size() - 1].getDirection() == RIGHT)
 					{
+						bullet[bullet.size() - 1].flipHorizontal(false);
 						bullet[bullet.size() - 1].setX(megaman.getX() + megaman.getWidth());
 						bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 10);
 					}
 					else
 					{
+						bullet[bullet.size() - 1].flipHorizontal(true);
 						bullet[bullet.size() - 1].setX(megaman.getX());
 						bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 10);
 					}
@@ -228,12 +238,14 @@ void MegamanGame::update()
 			}
 			if (bulletChargedSmall.getDirection() == RIGHT)
 			{
+				bulletChargedSmall.flipHorizontal(false);
 				bulletChargedSmall.setDirection(RIGHT);
 				bulletChargedSmall.setX(megaman.getX() + megaman.getWidth());
 				bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 			}
 			else
 			{
+				bulletChargedSmall.flipHorizontal(true);
 				bulletChargedSmall.setDirection(LEFT);
 				bulletChargedSmall.setX(megaman.getX());
 				bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
@@ -247,28 +259,29 @@ void MegamanGame::update()
 	//************************************* DASHING *************************************
 	if (megaman.canDash() && (input->isKeyDown(SPACE_KEY) || input->getGamepadB(0)))// && !megaman.getState() == JUMPING)
 	{
-		isDashing = true;
+		megaman.setIsDashing(true);
 		megaman.setState(DASHING);
-		moveMegaman(2.5);
+		moveMegaman(DASH_SPEED);
 
 		if ((currentTime.QuadPart - dashTime.QuadPart) / (double)(frequency.QuadPart) < 0.42)
-		{}
+		{ }
 		else
 		{		
 			megaman.setCanDash(false);		// Megaman cannot dash again until this is reset after user releases dash key
 			dashTime = currentTime;
-			isDashing = false;
+			megaman.setIsDashing(false);
 		}
 	}
 
 	if ((!(input->isKeyDown(SPACE_KEY)) && !(input->getGamepadB(0))))
 	{
-		isDashing = false;
+		megaman.setIsDashing(false);
 		megaman.setCanDash(false);
 		dashTime = currentTime; // Reset dash timer if megaman is not dashing
 	}
 	if (directionChange)
 	{
+		megaman.setIsDashing(false);
 		megaman.setCanDash(false);
 	}
 
@@ -308,6 +321,7 @@ void MegamanGame::update()
 	{
 		bulletChargedSmall.setX(bulletChargedSmall.getX() - bulletChargedSmallNS::SPEED*frameTime);
 	}
+
 
 	chargingSprites.update(frameTime);
 	bulletChargedSmall.update(frameTime);			//Update the rest
@@ -370,7 +384,7 @@ void MegamanGame::render()
 {
     graphics->spriteBegin();                // begin drawing sprites
 
-	if (mapX > 0 && mapX < MAP_WIDTH)
+	if (mapX > 0 && mapX < MAP_WIDTH && megaman.getX())
 	{
 		paddle.setX(paddleNS::X - mapX);
 		//paddle.setY(paddleNS::Y - mapY);

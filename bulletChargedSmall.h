@@ -7,11 +7,11 @@
 
 namespace bulletChargedSmallNS
 {
-	const int WIDTH = 30;                   // image width
-	const int HEIGHT = 30;                  // image height
+	const int WIDTH = 58;                   // image width
+	const int HEIGHT = 35;                  // image height
 	const int X = 0;						// GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = 0;						// GAME_HEIGHT / 2 - HEIGHT / 2;
-	const float SPEED = 1000;               // pixels per second
+	const float SPEED = 1200;               // pixels per second
 	const float MASS = 1.0f;
 }
 
