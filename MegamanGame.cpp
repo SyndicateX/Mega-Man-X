@@ -109,11 +109,11 @@ void MegamanGame::update()
 		}
 		if (!isDashing)
 		{
-			moveMegaman(1);
+			moveMegaman(WALK_SPEED);
 		}
 		if (isDashing && megaman.getState() == JUMPING)
 		{
-			moveMegaman(2.5);
+			moveMegaman(DASH_SPEED);
 		}
 		megaman.setDirection(LEFT);
 		megaman.setState(WALKING);
@@ -132,15 +132,15 @@ void MegamanGame::update()
 		}
 		if (!isDashing)
 		{
-			moveMegaman(1);
+			moveMegaman(WALK_SPEED);
 		}
 		if (isDashing && megaman.getState() == JUMPING)
 		{
-			moveMegaman(2.5);
+			moveMegaman(DASH_SPEED);
 		}
 		megaman.setState(WALKING);
 		megaman.setDirection(RIGHT);
-	}
+	}	
 	//********************************** IDLE *************************************
 	else
 	{
@@ -359,7 +359,7 @@ void MegamanGame::collisions()
 	//if (bulletChargedSmall.collidesWith(paddle, cv))
 	//	Destroy? Move out of bounds? Reset parameters?
 
-	if (megaman.collidesWith(paddle, cv))
+	if (megaman.collidesWith(paddle, cv)) // 
 		megaman.stop(paddle.getX(), paddle.getY(), paddleNS::WIDTH, paddleNS::HEIGHT);
 }
 

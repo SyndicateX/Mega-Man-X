@@ -18,11 +18,11 @@ const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CHARGING_SPRITES_IMAGE[]		= "pictures\\x4Buster.png";
 
 // window
-const char CLASS_NAME[] = "Gravity";
-const char GAME_TITLE[] = "Gravity";
+const char CLASS_NAME[] = "Mega Man X";
+const char GAME_TITLE[] = "Mega Man X";
 const bool FULLSCREEN = false;              // windowed or fullscreen
-const UINT GAME_WIDTH =  1024;              // width of game in pixels
-const UINT GAME_HEIGHT = 768;               // height of game in pixels
+const UINT GAME_WIDTH =  1000;              // width of game in pixels
+const UINT GAME_HEIGHT = 600;               // height of game in pixels
  
 // game
 const bool VSYNC = true;                    // true locks display to vertical sync rate
@@ -34,7 +34,9 @@ const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calcul
 const float GRAVITY = 500.0f;                   // acceleration of gravity pixels/sec
 const UINT MAP_WIDTH = 1000;
 
-const int MAX_BULLETS = 4;
+const double WALK_SPEED = 1;
+const double DASH_SPEED = 2.5;
+const int MAX_BULLETS = 3;
 
 // audio files required by audio.cpp
 // WAVE_BANK must be location of .xwb file.
