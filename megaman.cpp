@@ -194,21 +194,23 @@ void Megaman::update(float frameTime)
 		standingOnSurface_ = true;
 	}
 
-	if (velocity.x != 0)
+
+	if (velocity.x < 0)
 	{
-		if (velocity.x < 10 && velocity.x > -10)
+		spriteData.x += frameTime * velocity.x * 3;
+		velocity.x += frameTime * GRAVITY;            
+		if (velocity.x > 0)
 		{
 			velocity.x = 0;
 		}
+	}
+	if (velocity.x > 0)
+	{
+		spriteData.x -= frameTime * velocity.x * 3;
+		velocity.x -= frameTime * GRAVITY;
 		if (velocity.x < 0)
 		{
-			spriteData.x += frameTime * velocity.x * 3;
-			velocity.x += frameTime * GRAVITY;              
-		}
-		if (velocity.x > 0)
-		{
-			spriteData.x -= frameTime * velocity.x * 3;
-			velocity.x -= frameTime * GRAVITY;          
+			velocity.x = 0;
 		}
 	}
 
