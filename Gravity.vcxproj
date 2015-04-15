@@ -97,7 +97,6 @@
     <ClCompile Include="image.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="megaman.cpp" />
-    <ClCompile Include="paddle.cpp" />
     <ClCompile Include="sprites.cpp" />
     <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="winmain.cpp" />
@@ -115,7 +114,6 @@
     <ClInclude Include="image.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="megaman.h" />
-    <ClInclude Include="paddle.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="sprites.h" />
     <ClInclude Include="textureManager.h" />

@@ -36,9 +36,6 @@
     <ClCompile Include="textureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="paddle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="megaman.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -81,9 +78,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gameError.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="paddle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="megaman.h">

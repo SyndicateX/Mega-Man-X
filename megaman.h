@@ -10,8 +10,8 @@ namespace megamanNS
 {
     const int WIDTH = 75;                  // image width
     const int HEIGHT = 100;                  // image height
-    const int X = GAME_WIDTH/2 - WIDTH;     // location on screen
-    const int Y = GAME_HEIGHT - HEIGHT * 2;
+    const int X = GAME_WIDTH/2 - WIDTH * 3;     // location on screen
+    const int Y = GAME_HEIGHT / 2;
     const float SPEED = 300;                // pixels per second
 	const float MASS = 1.0e6f;
 
@@ -118,7 +118,7 @@ private:
 	bool canShoot_ = true;
 	bool isDashJumping_ = false;
 
-	bool charge1_ = false;
+	//bool charge1_ = false;
 };
 #endif
 

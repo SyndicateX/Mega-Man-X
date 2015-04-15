@@ -10,10 +10,10 @@
 //=============================================================================
 // graphic images
 //const char BACKDROP_IMAGE[]			= "pictures\\backdrop.png";
+const char TILE_TEXTURES[]				= "pictures\\paddle.png"; // tiles
 const char BACKDROP_IMAGE[]				= "pictures\\082.png";
 const char BULLET_IMAGE[]				= "pictures\\ballx.png";
 const char BULLET_CHARGED_SMALL_IMAGE[] = "pictures\\ball2x.png";
-const char PADDLE_IMAGE[]				= "pictures\\paddle.png";
 const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CHARGING_SPRITES_IMAGE[]		= "pictures\\x4Buster.png";
 
@@ -34,6 +34,8 @@ const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calcul
 const float GRAVITY = 500.0f;                   // acceleration of gravity pixels/sec
 const UINT MAP_WIDTH = 2000;
 const int JUMP_VELOCITY = -180;
+const UINT  TILE_MAP_WIDTH = 100;           // width of tile map in tiles
+const UINT  TILE_MAP_HEIGHT = 20;           // height of tile map in tiles
 
 const double WALK_SPEED = 1;
 const double DASH_SPEED = 2.5;
