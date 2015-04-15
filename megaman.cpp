@@ -15,11 +15,11 @@ Megaman::Megaman() : Entity()
 	spriteData.state = STANDING;					
 	velocity.x = 0;						        // velocity X
 	velocity.y = 0;							    // velocity Y
-	frameDelay = 1.0;// 0.07;
-	startFrame = 0;                             // first frame of animation
-	endFrame = 0;                           // last frame of animation
+	frameDelay = 1.0;
+	startFrame = 0;								// first frame of animation
+	endFrame = 0;								// last frame of animation
 	currentFrame = startFrame;
-	edge.top = -megamanNS::HEIGHT / 2;              // set collision edges
+	edge.top = -megamanNS::HEIGHT / 2;			// set collision edges
 	edge.bottom = megamanNS::HEIGHT / 2;
 	edge.left = -megamanNS::WIDTH / 2;
 	edge.right = megamanNS::WIDTH / 2;
@@ -166,7 +166,7 @@ void Megaman::update(float frameTime)
 
 	if (spriteData.state == JUMPING && (standingOnSurface_ ))//|| input->canWallJump())) // && !floorCollision_)//spriteData.y + spriteData.height == GAME_HEIGHT)
 	{
-		velocity.y = -230;								// Determines the height of megaman's jump -- needs adjusting
+		velocity.y = JUMP_VELOCITY;								// Determines the height of megaman's jump -- needs adjusting
 		spriteData.y += frameTime * velocity.y;         // move along Y
 		standingOnSurface_ = false;
 	}
@@ -192,23 +192,27 @@ void Megaman::update(float frameTime)
 		spriteData.y = GAME_HEIGHT - spriteData.height;	 // position at the bottom edge
 		velocity.y = 0;									 // stop y acceleration
 		standingOnSurface_ = true;
+		isDashJumping_ = false;
+		isDashing_ = false;
 	}
 
-	if (velocity.x != 0)
+
+	if (velocity.x < 0)
 	{
-		if (velocity.x < 10 && velocity.x > -10)
+		spriteData.x += frameTime * velocity.x * 3;
+		velocity.x += frameTime * GRAVITY;            
+		if (velocity.x > 0)
 		{
 			velocity.x = 0;
 		}
+	}
+	if (velocity.x > 0)
+	{
+		spriteData.x -= frameTime * velocity.x * 3;
+		velocity.x -= frameTime * GRAVITY;
 		if (velocity.x < 0)
 		{
-			spriteData.x += frameTime * velocity.x * 3;
-			velocity.x += frameTime * GRAVITY;              
-		}
-		if (velocity.x > 0)
-		{
-			spriteData.x -= frameTime * velocity.x * 3;
-			velocity.x -= frameTime * GRAVITY;          
+			velocity.x = 0;
 		}
 	}
 
@@ -221,9 +225,9 @@ void Megaman::update(float frameTime)
 	{
 		if (spriteData.state == WALL_SLIDING)
 		{
-			velocity.y = 70;		//if sliding down wall, fall at constant rate 
+			velocity.y = 45;		//if sliding down wall, fall at constant rate 
 		}
-		spriteData.y += frameTime * velocity.y * 3;     // Determines speed and height of Mega Man's jump -- needs adjusting
+		spriteData.y += frameTime * velocity.y * 5;     // Determines speed and height of Mega Man's jump -- needs adjusting
 		velocity.y += frameTime * GRAVITY;              // gravity
 		spriteData.state = JUMPING;
 		standingOnSurface_ = false;
@@ -231,14 +235,16 @@ void Megaman::update(float frameTime)
 		if (doWallJump_) // If Mega Man jumped off a wall
 		{
 			wallJumped = true;
-			velocity.y = -230;								
+			velocity.y = JUMP_VELOCITY;
 			spriteData.y += frameTime * velocity.y;         
 			if (spriteData.direction == LEFT)
 			{
+				//spriteData.x += 100;
 				velocity.x = 120;		//Mega Man is forced away from wall after jumping off it
 			}
 			else
 			{
+				//spriteData.x -= 100;
 				velocity.x = -120;
 			}
 			doWallJump_ = false;
@@ -292,6 +298,8 @@ void Megaman::update(float frameTime)
 	{
 		spriteData.state = WALL_SLIDING;
 		megamanWallSliding.update(frameTime);
+		isDashJumping_ = false;
+		isDashing_ = false;
 	}
 
 	floorCollision_ = false;
@@ -304,24 +312,29 @@ void Megaman::update(float frameTime)
 //=============================================================================
 void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 {
-	// Case: Above surface
-	if (((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y + spriteData.height <= wallY + 10) && velocity.y >= 0)
-	{
-		standingOnSurface_ = true;
-		spriteData.y = wallY - spriteData.height;		 // position at the top of the wall
-		velocity.y = 0; 										 // stop y acceleration
-		floorCollision_ = true;
-	}
 	// Case: Below surface
-	else if ((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y >= wallY + wallHeight - 10)
+	if ((spriteData.x + spriteData.width / 2 > wallX) && (spriteData.x + spriteData.width / 2 < wallX + wallLength) && spriteData.y >= wallY + wallHeight - 20)
 	{
 		spriteData.y = wallY + wallHeight;
 		velocity.y = 1;
 		standingOnSurface_ = false;
 		floorCollision_ = false;
+		canWallJump_ = false;
+	}
+
+	// Case: Above surface
+	else if (((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y + spriteData.height <= wallY + 20) && velocity.y >= 0)
+	{
+ 		standingOnSurface_ = true;
+		spriteData.y = wallY - spriteData.height;		 // position at the top of the wall
+		velocity.y = 0; 										 // stop y acceleration
+		floorCollision_ = true;
+		isDashJumping_ = false;
+		isDashing_ = false;
+		canWallJump_ = false;
 	}
 	// Case: Left of surface
-	else if (spriteData.x + spriteData.width >= wallX && spriteData.x + spriteData.width < wallX + wallLength)
+	else if (spriteData.x + spriteData.width >= wallX && spriteData.x + spriteData.width < wallX + wallLength && spriteData.y < wallY + wallHeight)
 	{
 		spriteData.x = wallX - spriteData.width;
 		if (velocity.y > 0)
@@ -330,7 +343,7 @@ void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 		}
 	}
 	// Case: Right of surface
-	else if (spriteData.x < wallX + wallLength && spriteData.x + spriteData.width > wallX)
+	else if (spriteData.x < wallX + wallLength && spriteData.x + spriteData.width > wallX  && spriteData.y < wallY + wallHeight)
 	{
 		spriteData.x = wallX + wallLength;
 		if (velocity.y > 0)
@@ -338,6 +351,15 @@ void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 			canWallJump_ = true;
 		}
 	}
+	////////// Case: Below surface
+	////////else if ((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y >= wallY + wallHeight - 10)
+	////////{
+	////////	spriteData.y = wallY + wallHeight;
+	////////	velocity.y = 1;
+	////////	standingOnSurface_ = false;
+	////////	floorCollision_ = false;
+	////////	canWallJump_ = false;
+	////////}
 }
 
 //=============================================================================

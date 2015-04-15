@@ -10,8 +10,8 @@ namespace megamanNS
 {
     const int WIDTH = 75;                  // image width
     const int HEIGHT = 100;                  // image height
-    const int X = GAME_WIDTH/2 - WIDTH;     // location on screen
-    const int Y = GAME_HEIGHT - HEIGHT * 2;
+    const int X = GAME_WIDTH/2 - WIDTH * 3;     // location on screen
+    const int Y = GAME_HEIGHT / 2;
     const float SPEED = 300;                // pixels per second
 	const float MASS = 1.0e6f;
 
@@ -73,19 +73,26 @@ public:
 	void update(float frameTime);
 	virtual void draw();
 
-	//In case megaman collides with a wall
+	// In case megaman collides with a wall
 	void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight);
 
-	//bool canWallJump() { return wallJump_; }
+	// Set Functions
 	void setDoWallJump(bool doWallJump) { doWallJump_ = doWallJump; }
-	bool canDash() { return canDash_; }
 	void setCanDash(bool dashStatus) { canDash_ = dashStatus; }
-	bool canJump() { return canJump_; }
+	void setIsDashing(bool dashStatus) { isDashing_ = dashStatus; }
 	void setCanJump(bool jumpStatus) { canJump_ = jumpStatus; }
-	bool canWallJump() { return canWallJump_; }
 	void setCanWallJump(bool wallJumpStatus) { canWallJump_ = wallJumpStatus; }
-	bool canShoot() { return canShoot_; }
 	void setCanShoot(bool shootStatus) { canShoot_ = shootStatus; }
+	void setIsDashJumping(bool dashJumpStatus) { isDashJumping_ = dashJumpStatus; }
+
+	// Get Functions
+	bool canDash() { return canDash_; }
+	bool isDashing() { return isDashing_; }
+	bool canJump() { return canJump_; }
+	bool canWallJump() { return canWallJump_; }
+	bool canShoot() { return canShoot_; }
+	bool isDashJumping() { return isDashJumping_; }
+
 
 private:
 	Image megamanIdle;
@@ -105,11 +112,13 @@ private:
 	bool wallJump_ = false;
 	bool doWallJump_ = false;
 	bool canDash_ = false;
+	bool isDashing_ = false;
 	bool canJump_ = false;
 	bool canWallJump_ = false;
 	bool canShoot_ = true;
+	bool isDashJumping_ = false;
 
-	bool charge1_ = false;
+	//bool charge1_ = false;
 };
 #endif
 
