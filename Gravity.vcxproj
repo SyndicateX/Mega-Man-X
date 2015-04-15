@@ -90,7 +90,6 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="bulletChargedSmall.cpp" />
     <ClCompile Include="chargingSprites.cpp" />
-    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="MegamanGame.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game.cpp" />
@@ -106,7 +105,6 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="bulletChargedSmall.h" />
     <ClInclude Include="chargingSprites.h" />
-    <ClInclude Include="enemy.h" />
     <ClInclude Include="MegamanGame.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="entity.h" />

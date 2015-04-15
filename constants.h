@@ -10,7 +10,7 @@
 //=============================================================================
 // graphic images
 //const char BACKDROP_IMAGE[]			= "pictures\\backdrop.png";
-const char TILE_TEXTURES[]				= "pictures\\paddle.png"; // tiles
+const char TILE_TEXTURES[]				= "pictures\\brick001.png"; // tiles
 const char BACKDROP_IMAGE[]				= "pictures\\082.png";
 const char BULLET_IMAGE[]				= "pictures\\ballx.png";
 const char BULLET_CHARGED_SMALL_IMAGE[] = "pictures\\ball2x.png";
