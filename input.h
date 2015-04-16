@@ -34,8 +34,8 @@ namespace inputNS
 }
 
 const short GAMEPAD_THUMBSTICK_DEADZONE = (short)(0.20f * 0X7FFF);    // default to 20% of range as deadzone
-const short GAMEPAD_TRIGGER_DEADZONE = 20;                      // trigger range 0-255
-const DWORD MAX_CONTROLLERS = 4;                                // Maximum number of controllers supported by XInput
+const short GAMEPAD_TRIGGER_DEADZONE = 20;							// trigger range 0-255
+const DWORD MAX_CONTROLLERS = 4;									// Maximum number of controllers supported by XInput
 
 // Bit corresponding to gamepad button in state.Gamepad.wButtons
 const DWORD GAMEPAD_DPAD_UP        = 0x0001;

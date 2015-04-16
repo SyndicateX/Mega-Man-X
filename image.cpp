@@ -19,7 +19,7 @@ Image::Image()
     spriteData.texture = NULL;      // the sprite texture (picture)
     spriteData.flipHorizontal = false;
     spriteData.flipVertical = false;
-    cols = 1;
+	cols = 1;
     textureManager = NULL;
     startFrame = 0;
     endFrame = 0;
@@ -197,7 +197,7 @@ inline void Image::setRect()
 	{
 		spriteData.rect.left = (currentFrame)* spriteData.width + (1 * currentFrame);
 		spriteData.rect.right = spriteData.rect.left + spriteData.width;
-		spriteData.rect.top = cols * spriteData.height;
+		spriteData.rect.top = (cols) * spriteData.height;
 		spriteData.rect.bottom = spriteData.rect.top + spriteData.height;
 	}
 }

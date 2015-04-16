@@ -33,6 +33,10 @@ void MegamanGame::initialize(HWND hwnd)
     if (!backdropTexture.initialize(graphics,BACKDROP_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
+	// enemy texture
+	if (!mechaSonicTexture.initialize(graphics, ENEMY001))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
+
 	// map textures
 	if (!tileTextures.initialize(graphics, TILE_TEXTURES))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing tile textures"));
@@ -66,6 +70,10 @@ void MegamanGame::initialize(HWND hwnd)
     // megaman
 	if (!megaman.initialize(this, megamanNS::WIDTH, megamanNS::HEIGHT, 0, &megamanTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
+
+	// enemy
+	if (!mechaSonic.initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &mechaSonicTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
 
 	// megaman charging sprites
 	if (!chargingSprites.initialize(this, chargingSpritesNS::WIDTH, chargingSpritesNS::HEIGHT, 0, &chargingSpritesTexture))
@@ -390,7 +398,9 @@ void MegamanGame::moveMegaman(double moveRate)
 // Artificial Intelligence
 //=============================================================================
 void MegamanGame::ai()
-{}
+{
+	mechaSonic.update(frameTime);
+}
 
 //=============================================================================
 // Handle collisions
@@ -411,6 +421,8 @@ void MegamanGame::collisions()
 		if (megaman.collidesWith(floor[i], cv)) // 
 			megaman.stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
 	}
+	if (megaman.collidesWith(mechaSonic, cv))
+		megaman.stop(mechaSonic.getX(), mechaSonic.getY(),mechaSonic.getWidth(), mechaSonic.getHeight());
 }
 
 //=============================================================================
@@ -442,7 +454,7 @@ void MegamanGame::render()
 	for (int row = 0; row<MH; row++)       // for each row of map
 	{
 		tile.setY((float)(row*TEXTURE_SIZE)); // set tile Y
-		for (int col = 0; col<MAP_WIDTH; col++)    // for each column of map
+		for (int col = 0; col<MW; col++)    // for each column of map
 		{
 			if (tileMap[row][col] >= 0)          // if tile present
 			{
@@ -456,7 +468,7 @@ void MegamanGame::render()
 			}
 		}
 	}
-
+	mechaSonic.draw();						// add enemy to the scene
     megaman.draw();							// add megaman to the scene
 	chargingSprites.draw();					// add megaman charging sprites to the scene
 	bulletChargedSmall.draw();				// add small charged bullet to the scene
@@ -473,6 +485,8 @@ void MegamanGame::render()
 //=============================================================================
 void MegamanGame::releaseAll()
 {
+	mechaSonicTexture.onLostDevice();
+
     megamanTexture.onLostDevice();            // megaman texture
 	bulletTexture.onLostDevice();			// bullet texture
 	bulletChargedSmallTexture.onLostDevice();			// bullet texture
@@ -490,6 +504,8 @@ void MegamanGame::releaseAll()
 //=============================================================================
 void MegamanGame::resetAll()
 {
+	mechaSonicTexture.onResetDevice();
+
     backdropTexture.onResetDevice();
 	tileTextures.onResetDevice();
     megamanTexture.onResetDevice();
