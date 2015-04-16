@@ -16,6 +16,7 @@ const char BULLET_IMAGE[]				= "pictures\\ballx.png";
 const char BULLET_CHARGED_SMALL_IMAGE[] = "pictures\\ball2x.png";
 const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CHARGING_SPRITES_IMAGE[]		= "pictures\\x4Buster.png";
+const char ENEMY001[]					= "pictures\\Mecha_Sonic.Forte.32.png";
 
 // window
 const char CLASS_NAME[] = "Mega Man X";
