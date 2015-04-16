@@ -13,7 +13,7 @@
 const char TILE_TEXTURES[]				= "pictures\\brick001.png"; // tiles
 const char BACKDROP_IMAGE[]				= "pictures\\082.png";
 const char BULLET_IMAGE[]				= "pictures\\ballx.png";
-const char BULLET_CHARGED_SMALL_IMAGE[] = "pictures\\ball2x.png";
+const char BULLET_CHARGED_SMALL_IMAGE[] = "pictures\\ball2xx.png";
 const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CHARGING_SPRITES_IMAGE[]		= "pictures\\BusterBuster.png";
 const char ENEMY001[]					= "pictures\\Mecha_Sonic.Forte.32.png";
@@ -36,11 +36,9 @@ const float GRAVITY = 500.0f;                   // acceleration of gravity pixel
 const UINT MAP_WIDTH = 2000;
 const int JUMP_VELOCITY = -180;
 const int TERMINAL_VELOCITY = -JUMP_VELOCITY;
-//const UINT  TILE_MAP_WIDTH = 15;           // width of tile map in tiles
-//const UINT  TILE_MAP_HEIGHT = 8;           // height of tile map in tiles
 
 const double WALK_SPEED = 1;
-const double DASH_SPEED = 2.5;
+const double DASH_SPEED = 2.2;
 const int MAX_BULLETS = 3;
 
 // audio files required by audio.cpp
@@ -75,10 +73,12 @@ enum State
 	WALL_SLIDING
 };
 
-enum ShotState
+enum ShotType
 {
 	NONE,
-	SHOOT
+	REGULAR_SHOT,
+	SMALL_CHARGE,
+	MEDIUM_CHARGE
 };
 
 enum Direction

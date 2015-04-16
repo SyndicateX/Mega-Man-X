@@ -373,7 +373,7 @@ void Megaman::draw()
 	}
 	else if (spriteData.state == JUMPING)
 	{
-		if (spriteData.shotState == NONE)
+		if (spriteData.shotType == NONE)
 		{
 			if (velocity.y < -40)
 				megamanJumping.draw(spriteData);
@@ -392,7 +392,7 @@ void Megaman::draw()
 				megamanShootingFalling.draw(spriteData);
 		}
 	}
-	else if (spriteData.shotState == SHOOT)
+	else if (spriteData.shotType != NONE)
 	{
 		megamanShooting.draw(spriteData);
 	}

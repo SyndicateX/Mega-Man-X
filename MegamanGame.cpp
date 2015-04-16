@@ -54,7 +54,7 @@ void MegamanGame::initialize(HWND hwnd)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet texture"));
 
 	// bullet charged small texture
-	if (!bulletChargedSmallTexture.initialize(graphics, BULLET_CHARGED_SMALL_IMAGE))
+	if (!chargedBulletTexture.initialize(graphics, BULLET_CHARGED_SMALL_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet texture"));
 
     // backdrop
@@ -80,7 +80,7 @@ void MegamanGame::initialize(HWND hwnd)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing charging sprites"));
 	
 	// bullet charged small
-	if (!bulletChargedSmall.initialize(this, bulletChargedSmallNS::WIDTH, bulletChargedSmallNS::HEIGHT, 0, &bulletChargedSmallTexture))
+	if (!chargedBullet.initialize(this, chargedBulletNS::WIDTH, chargedBulletNS::HEIGHT, 0, &chargedBulletTexture))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
 
 	// floors
@@ -187,13 +187,13 @@ void MegamanGame::update()
 	//********************************** IDLE *************************************
 	else
 	{
-		if (megaman.getShotState() != NONE && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
+		if (megaman.getShotType() != NONE && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
 		{
 			megaman.setState(SHOOTING);		// Holds megamn shooting animation for a few frames after shooting
 		}
 		else
 		{
-			megaman.setShotState(NONE);
+			megaman.setShotType(NONE);
 			megaman.setState(STANDING);
 		}
 	}
@@ -208,7 +208,7 @@ void MegamanGame::update()
 			else
 			{
 				megaman.setState(SHOOTING);
-				megaman.setShotState(SHOOT);
+				megaman.setShotType(REGULAR_SHOT);
 				if (bullet.size() < MAX_BULLETS)				// 4 bullets on screen max (maybe more?)
 				{
 					bullet.push_back(Bullet());
@@ -243,7 +243,7 @@ void MegamanGame::update()
 		}
 		else							// If button is held down more than a frame, charge timer increments
 		{
-			if (chargeTime < 40)
+			if (chargeTime < 80)
 				chargeTime++;
 			if (chargeTime >= 40)
 			{
@@ -258,35 +258,46 @@ void MegamanGame::update()
 	{
 		megaman.setCanShoot(true);
 
-		if (chargeTime >= 40 && !(input->isKeyDown(ENTER_KEY)))				// If the charge timer reaches its target, mega man fires a charged shot
+		if (chargeTime >= 80 && !(input->isKeyDown(ENTER_KEY))) // If the charge timer reaches its target, mega man fires a medium charged shot
+		{
+			megaman.setShotType(MEDIUM_CHARGE);
+			chargedBullet.setShotType(MEDIUM_CHARGE);
+		}
+		else if (chargeTime >= 40 && chargeTime < 80 && !(input->isKeyDown(ENTER_KEY)))	// If the charge timer reaches its target, mega man fires a small charged shot
+		{
+			megaman.setShotType(SMALL_CHARGE);
+			chargedBullet.setShotType(SMALL_CHARGE);
+		}
+
+		if (chargeTime >= 40 && !(input->isKeyDown(ENTER_KEY)))
 		{
 			chargingSprites.setCharge1(false);
 			megaman.setState(SHOOTING);
-			megaman.setShotState(SHOOT);
-			bulletChargedSmall.setDirection(megaman.getDirection());
+			chargedBullet.setDirection(megaman.getDirection());
 			if (megaman.canWallJump())
 			{
-				if (bulletChargedSmall.getDirection() == RIGHT)
-					bulletChargedSmall.setDirection(LEFT);
+				if (chargedBullet.getDirection() == RIGHT)
+					chargedBullet.setDirection(LEFT);
 				else
-					bulletChargedSmall.setDirection(RIGHT);
+					chargedBullet.setDirection(RIGHT);
 			}
-			if (bulletChargedSmall.getDirection() == RIGHT)
+			if (chargedBullet.getDirection() == RIGHT)
 			{
-				bulletChargedSmall.flipHorizontal(false);
-				bulletChargedSmall.setDirection(RIGHT);
-				bulletChargedSmall.setX(megaman.getX() + megaman.getWidth());
-				bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
+				chargedBullet.flipHorizontal(false);
+				chargedBullet.setDirection(RIGHT);
+				chargedBullet.setX(megaman.getX() + megaman.getWidth());
+				chargedBullet.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 			}
 			else
 			{
-				bulletChargedSmall.flipHorizontal(true);
-				bulletChargedSmall.setDirection(LEFT);
-				bulletChargedSmall.setX(megaman.getX());
-				bulletChargedSmall.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
+				chargedBullet.flipHorizontal(true);
+				chargedBullet.setDirection(LEFT);
+				chargedBullet.setX(megaman.getX());
+				chargedBullet.setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 			}
 			lastShootTime = currentTime;
 		}
+
 		chargeTime = 0;		// reset charge time
 		justShot = false;	// allows another small shot to be fired
 	}
@@ -348,18 +359,18 @@ void MegamanGame::update()
 		}
 	}
 
-	if (bulletChargedSmall.getDirection() == RIGHT)
+	if (chargedBullet.getDirection() == RIGHT)
 	{
-		bulletChargedSmall.setX(bulletChargedSmall.getX() + bulletChargedSmallNS::SPEED*frameTime);
+		chargedBullet.setX(chargedBullet.getX() + chargedBulletNS::SPEED*frameTime);
 	}
 	else
 	{
-		bulletChargedSmall.setX(bulletChargedSmall.getX() - bulletChargedSmallNS::SPEED*frameTime);
+		chargedBullet.setX(chargedBullet.getX() - chargedBulletNS::SPEED*frameTime);
 	}
 
 
 	chargingSprites.update(frameTime);
-	bulletChargedSmall.update(frameTime);			//Update the rest					
+	chargedBullet.update(frameTime);			//Update the rest					
     megaman.update(frameTime);
 }
 
@@ -408,7 +419,7 @@ void MegamanGame::ai()
 void MegamanGame::collisions()
 {
     VECTOR2 cv;
-	//if (bulletChargedSmall.collidesWith(paddle, cv))
+	//if (chargedBullet.collidesWith(paddle, cv))
 	//	Destroy? Move out of bounds? Reset parameters?
 
 	for (int i = 0; i < floor.size(); i++)
@@ -471,7 +482,7 @@ void MegamanGame::render()
 	mechaSonic.draw();						// add enemy to the scene
     megaman.draw();							// add megaman to the scene
 	chargingSprites.draw();					// add megaman charging sprites to the scene
-	bulletChargedSmall.draw();				// add small charged bullet to the scene
+	chargedBullet.draw();				// add small charged bullet to the scene
 	for (int i = 0; i < bullet.size(); i++)
 	{
 		bullet[i].draw();					// add regular uncharged bullet to the scene
@@ -489,7 +500,7 @@ void MegamanGame::releaseAll()
 
     megamanTexture.onLostDevice();            // megaman texture
 	bulletTexture.onLostDevice();			// bullet texture
-	bulletChargedSmallTexture.onLostDevice();			// bullet texture
+	chargedBulletTexture.onLostDevice();			// bullet texture
 	chargingSpritesTexture.onLostDevice();
     backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
@@ -511,7 +522,7 @@ void MegamanGame::resetAll()
     megamanTexture.onResetDevice();
 	chargingSpritesTexture.onResetDevice();
 	bulletTexture.onResetDevice();
-	bulletChargedSmallTexture.onResetDevice();
+	chargedBulletTexture.onResetDevice();
 
     Game::resetAll();
     return;

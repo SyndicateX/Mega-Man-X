@@ -104,7 +104,7 @@ class Image
 	virtual State getState() { return spriteData.state; }
 
 	// Return state of action.
-	virtual ShotState getShotState() { return spriteData.shotState; }
+	virtual ShotType getShotType() { return spriteData.shotType; }
 
     ////////////////////////////////////////
     //           Set functions            //
@@ -167,9 +167,9 @@ class Image
 	{spriteData.state = newState;}
 	
 	// Set state of action
-	virtual void setShotState(ShotState newShotState)
+	virtual void setShotType(ShotType newShotType)
 	{
-		spriteData.shotState = newShotState;
+		spriteData.shotType = newShotType;
 	}
 
 	// Set file coordinates boolean

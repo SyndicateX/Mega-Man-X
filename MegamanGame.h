@@ -8,7 +8,7 @@
 #include "megaman.h"
 #include "enemy.h"
 #include "bullet.h"
-#include "bulletChargedSmall.h"
+#include "chargedBullet.h"
 #include "chargingSprites.h"
 #include <vector>
 
@@ -65,7 +65,7 @@ private:
     TextureManager megamanTexture;		// megaman texture
 	TextureManager mechaSonicTexture;	// Mecha_Sonic.Forte.32 texture
 	TextureManager bulletTexture;		// bullet texture
-	TextureManager bulletChargedSmallTexture;	//bullet charged small texture
+	TextureManager chargedBulletTexture;	//bullet charged small texture
 	TextureManager chargingSpritesTexture;
 
 	Megaman	megaman;					// megaman
@@ -73,7 +73,7 @@ private:
 
 	chargingSprites chargingSprites;	// charging Sprites
 	std::vector<Bullet>	bullet;			// bullet
-	BulletChargedSmall bulletChargedSmall;				// bullet charged small
+	ChargedBullet chargedBullet;				// bullet charged small
 	Image   backdrop;					// backdrop image
 	Image	tile;
 	std::vector<Entity>	floor;

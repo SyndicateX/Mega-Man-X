@@ -117,8 +117,6 @@ private:
 	bool canWallJump_ = false;
 	bool canShoot_ = true;
 	bool isDashJumping_ = false;
-
-	//bool charge1_ = false;
 };
 #endif
 

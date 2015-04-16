@@ -121,13 +121,13 @@
 
 -<Coordinates>
 
-<X>1315</X>
+<X>1305</X>
 
-<Y>260</Y>
+<Y>268</Y>
 
 <Width>200</Width>
 
-<Height>200</Height>
+<Height>180</Height>
 
 </Coordinates>
 
@@ -141,9 +141,9 @@
 
 -<Coordinates>
 
-<X>1520</X>
+<X>1515</X>
 
-<Y>260</Y>
+<Y>268</Y>
 
 <Width>200</Width>
 
