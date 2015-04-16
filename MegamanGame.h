@@ -16,17 +16,17 @@ namespace megamanGameNS
 	const char FONT[] = "Arial Bold";  // font
 	const COLOR_ARGB FONT_COLOR = graphicsNS::YELLOW;
 	const int TEXTURE_SIZE = 128;
-	const int TEXTURE_COLS = 4;
+	const int TEXTURE_COLS = 0;
 	const int MH = 8;
 	const int MW = 16;
-	const float SCROLL_RATE = 10;
+	const float SCROLL_RATE = 1;
 	//const int POST_TOP = 11;
 	//const int POST_BOTTOM = 15;
 	//const float POST_X = TEXTURE_SIZE * 7;        // post position in map
 	//const float POST_TOP_Y = TEXTURE_SIZE * 6;    //  "
 	//const float POST_BOTTOM_Y = TEXTURE_SIZE * 7; //  "
 	// collision box {left, top, right ,bottom} relative to center
-	//const RECT POST_EDGE = { -26, -64, 26, 64 };
+	const RECT MEGAMAN_EDGE = { -TEXTURE_SIZE / 2, -TEXTURE_SIZE / 2, TEXTURE_SIZE / 2, TEXTURE_SIZE / 2 };
 
 	// map tile legend 
 	// C=cloud, G=grass, F=flower, W=web, S=seed, L=leaf, P=post
@@ -41,14 +41,14 @@ namespace megamanGameNS
 
 	// The world map
 	const int tileMap[MH][MW] = {
-		F1, __, __, __, __, F1, F1, __, __, __, __, __, __, __, __, __,//0
-		F1, __, __, __, F1, __, __, F1, __, __, __, __, __, __, __, __,//1
-		F1, __, __, F1, F1, __, __, F1, __, __, __, __, __, __, __, __,//2
-		F1, __, __, __, __, __, __, F1, __, __, __, __, __, __, __, __,//3
-		F1, __, __, F1, F1, __, __, F1, F1, F1, F1, F1, F1, F1, F1, F1,//4
+		F1, __, __, __, __, F1, __, __, __, __, __, __, __, __, __, __,//0
+		F1, __, __, __, __, F1, __, __, __, __, __, __, __, __, __, __,//1
+		__, __, F1, __, __, F1, __, __, __, __, __, __, __, __, __, __,//2
+		F1, F1, __, __, __, F1, __, __, __, __, __, __, __, __, __, __,//3
+		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//4
 		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//5
 		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//6
-		F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1 //7
+		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __ //7
 	};//0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
 }
 

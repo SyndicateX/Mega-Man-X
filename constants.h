@@ -34,8 +34,9 @@ const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calcul
 const float GRAVITY = 500.0f;                   // acceleration of gravity pixels/sec
 const UINT MAP_WIDTH = 2000;
 const int JUMP_VELOCITY = -180;
-const UINT  TILE_MAP_WIDTH = 100;           // width of tile map in tiles
-const UINT  TILE_MAP_HEIGHT = 20;           // height of tile map in tiles
+const int TERMINAL_VELOCITY = -JUMP_VELOCITY;
+//const UINT  TILE_MAP_WIDTH = 15;           // width of tile map in tiles
+//const UINT  TILE_MAP_HEIGHT = 8;           // height of tile map in tiles
 
 const double WALK_SPEED = 1;
 const double DASH_SPEED = 2.5;

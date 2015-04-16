@@ -302,6 +302,11 @@ void Megaman::update(float frameTime)
 		isDashing_ = false;
 	}
 
+	if (velocity.y > TERMINAL_VELOCITY)
+	{
+		velocity.y = TERMINAL_VELOCITY;
+	}
+
 	floorCollision_ = false;
 	canWallJump_ = false;
 }
@@ -321,7 +326,6 @@ void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 		floorCollision_ = false;
 		canWallJump_ = false;
 	}
-
 	// Case: Above surface
 	else if (((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y + spriteData.height <= wallY + 20) && velocity.y >= 0)
 	{
@@ -351,15 +355,6 @@ void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
 			canWallJump_ = true;
 		}
 	}
-	////////// Case: Below surface
-	////////else if ((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y >= wallY + wallHeight - 10)
-	////////{
-	////////	spriteData.y = wallY + wallHeight;
-	////////	velocity.y = 1;
-	////////	standingOnSurface_ = false;
-	////////	floorCollision_ = false;
-	////////	canWallJump_ = false;
-	////////}
 }
 
 //=============================================================================

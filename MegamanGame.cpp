@@ -60,8 +60,6 @@ void MegamanGame::initialize(HWND hwnd)
 	// tile image
 	if (!tile.initialize(graphics, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_COLS, &tileTextures))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing tile"));
-	tile.setFrames(0, 0);
-	tile.setCurrentFrame(0);
 
     // megaman
 	if (!megaman.initialize(this, megamanNS::WIDTH, megamanNS::HEIGHT, 0, &megamanTexture))
@@ -83,16 +81,16 @@ void MegamanGame::initialize(HWND hwnd)
 			if (tileMap[i][j] >= 0)
 			{
 				floor.push_back(Entity());
-				RECT rect = { -64, -64, 64, 64 };
 				if (!floor[floor.size() - 1].initialize(this, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_COLS, &tileTextures))
 					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing floor"));
 				floor[floor.size() - 1].setFrames(0, 0);
 				floor[floor.size() - 1].setCurrentFrame(0);
 				floor[floor.size() - 1].setCollisionType(entityNS::ROTATED_BOX);
-				floor[floor.size() - 1].setEdge(rect);
+				floor[floor.size() - 1].setEdge(MEGAMAN_EDGE);
 				// Set post position
 				floor[floor.size() - 1].setX(j*TEXTURE_SIZE);
 				floor[floor.size() - 1].setY(i*TEXTURE_SIZE);
+				// floor[floor.size() - 1].setScale(5);
 			}
 		}
 	}
@@ -441,17 +439,16 @@ void MegamanGame::render()
 
 	for (int row = 0; row<MH; row++)       // for each row of map
 	{
-		tile.setY((float)(row*TEXTURE_SIZE)); // set tile Y
-		for (int col = 0; col<MAP_WIDTH; col++)    // for each column of map
+		//tile.setY((float)(row*TEXTURE_SIZE)); // set tile Y
+		for (int col = 0; col<MW; col++)    // for each column of map
 		{
 			if (tileMap[row][col] >= 0)          // if tile present
 			{
-				tile.setCurrentFrame(tileMap[row][col]);    // set tile texture
-				tile.setX((float)(col*TEXTURE_SIZE) + tileMapX);  // set tile X
-				tile.setY((float)(row*TEXTURE_SIZE) + tileMapY);  // set tile Y
+				//tile.setCurrentFrame(tileMap[row][col]);    // set tile texture
+				tile.setX((float)(col*TEXTURE_SIZE) +tileMapX);  // set tile X
+				tile.setY((float)(row*TEXTURE_SIZE) +tileMapY);  // set tile Y
 				// if tile on screen
-				if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) &&
-					(tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))
+				if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) && (tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))
 					tile.draw();                // draw tile
 			}
 		}
