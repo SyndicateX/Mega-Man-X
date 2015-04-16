@@ -73,7 +73,7 @@ void MegamanGame::initialize(HWND hwnd)
 
 	// enemy
 	if (!mechaSonic.initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &mechaSonicTexture))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
 
 	// megaman charging sprites
 	if (!chargingSprites.initialize(this, chargingSpritesNS::WIDTH, chargingSpritesNS::HEIGHT, 0, &chargingSpritesTexture))
@@ -458,9 +458,9 @@ void MegamanGame::render()
 		{
 			if (tileMap[row][col] >= 0)          // if tile present
 			{
-				tile.setCurrentFrame(tileMap[row][col]);    // set tile texture
-				tile.setX((float)(col*TEXTURE_SIZE) + tileMapX);  // set tile X
-				tile.setY((float)(row*TEXTURE_SIZE) + tileMapY);  // set tile Y
+				//tile.setCurrentFrame(tileMap[row][col]);			// set tile texture
+				tile.setX((float)(col*TEXTURE_SIZE) + tileMapX);	// set tile X
+				tile.setY((float)(row*TEXTURE_SIZE) + tileMapY);	// set tile Y
 				// if tile on screen
 				if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) &&
 					(tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))
