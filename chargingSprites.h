@@ -16,7 +16,7 @@ namespace chargingSpritesNS
 	const float MASS = 1.0e6f;
 
 	const int CHARGE1_MEGAMAN_START_FRAME = 0;
-	const int CHARGE1_MEGAMAN_END_FRAME = 5;
+	const int CHARGE1_MEGAMAN_END_FRAME = 7;
 	const float CHARGE1_MEGAMAN_ANIMATION_DELAY = 0.07f;
 }
 
