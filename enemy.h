@@ -37,7 +37,7 @@ public:
 
 private:
 	Image enemyIdle;
-
+	SpriteCoordinates mechaSonicSpriteCoordinates;
 };
 
 //// inherits from Entity class
