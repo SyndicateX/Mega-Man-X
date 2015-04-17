@@ -9,12 +9,23 @@ namespace bulletNS
 {
 	const int WIDTH = 26;                   // image width
 	const int HEIGHT = 13;                  // image height
-	const int X = GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
-	const int Y = GAME_HEIGHT / 2 - HEIGHT / 2;
-	const float SPEED = 1200;                // pixels per second
-	const float ENERGY_LOSS = 100;          // energy loss on bounce (pixels/sec)
-	const float MIN_VY = 1;                 // minumum Y velocity
+	const int X = 0;						// GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
+	const int Y = 0;						// GAME_HEIGHT / 2 - HEIGHT / 2;
+	const float SPEED = 1200;               // pixels per second
 	const float MASS = 1.0f;
+
+	const int NO_CHARGE_START_FRAME = 0;
+	const int NO_CHARGE_END_FRAME = 0;
+	const float NO_CHARGE_ANIMATION_DELAY = 1.0f;
+
+	const int SMALL_CHARGE_START_FRAME = 0;
+	const int SMALL_CHARGE_END_FRAME = 0;
+	const float SMALL_CHARGE_ANIMATION_DELAY = 1.0f;
+
+	const int LARGE_CHARGE_START_FRAME = 0;
+	const int LARGE_CHARGE_END_FRAME = 0;
+	const float LARGE_CHARGE_ANIMATION_DELAY = 1.0f;
+
 }
 
 // inherits from Entity class
@@ -23,9 +34,15 @@ class Bullet : public Entity
 public:
 	// constructor
 	Bullet();
+	bool initialize(Game *gamePtr, int width, int height, int ncols, TextureManager *textureM);
 
 	// inherited member functions
 	void update(float frameTime);
+	virtual void draw();
+
+	Image regularBullet;
+	Image bulletSmall;
+	Image bulletLarge;
 };
 #endif
 

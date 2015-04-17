@@ -1,6 +1,6 @@
 #include "bullet.h"
 
-//=============================================================================
+//=============================================================================bullet
 // default constructor
 //=============================================================================
 Bullet::Bullet() : Entity()
@@ -22,6 +22,28 @@ Bullet::Bullet() : Entity()
 	mass = bulletNS::MASS;
 }
 
+bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
+	TextureManager *textureM)
+{
+	//No Charge
+	regularBullet.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
+		bulletNS::HEIGHT, 1, textureM);
+	regularBullet.setCurrentFrame(bulletNS::NO_CHARGE_START_FRAME);
+
+	//Small Charge
+	bulletSmall.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
+		bulletNS::HEIGHT, 1, textureM);
+	bulletSmall.setCurrentFrame(bulletNS::SMALL_CHARGE_START_FRAME);
+
+	//Large Charge
+	bulletLarge.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
+		bulletNS::HEIGHT, 1, textureM);
+	bulletLarge.setCurrentFrame(bulletNS::LARGE_CHARGE_START_FRAME);
+
+	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
+}
+
+
 //=============================================================================
 // update
 // typically called once per frame
@@ -31,13 +53,28 @@ void Bullet::update(float frameTime)
 {
 	Entity::update(frameTime);
 
-	// Bounce off walls
-	if (spriteData.x > GAME_WIDTH - bulletNS::WIDTH + 50)  // if hit right screen edge + 50
+	regularBullet.update(frameTime);
+	bulletSmall.update(frameTime);
+	bulletLarge.update(frameTime);
+}
+
+void Bullet::draw()
+{
+	if (spriteData.shotType == REGULAR_SHOT)
 	{
-		//destroy
+		regularBullet.setY(regularBullet.getY() + 8880);
+		regularBullet.draw(spriteData);
 	}
-	else if (spriteData.x < 0 - 50)                    // else if hit left screen edge - 50
+	else if (spriteData.shotType == SMALL_CHARGE)
 	{
-		//destroy
+		RECT rect = { 26, 0, 85, 58 };
+		bulletSmall.setSpriteDataRect(rect);
+		bulletSmall.draw(spriteData);
+	}
+	else if (spriteData.shotType == MEDIUM_CHARGE)
+	{
+		RECT rect = { 85, 0, 217, 65 };
+		bulletLarge.setSpriteDataRect(rect);
+		bulletLarge.draw(spriteData);
 	}
 }

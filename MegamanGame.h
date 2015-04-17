@@ -8,7 +8,7 @@
 #include "megaman.h"
 #include "enemy.h"
 #include "bullet.h"
-#include "chargedBullet.h"
+#include "bullet.h"
 #include "chargingSprites.h"
 #include <vector>
 
@@ -42,11 +42,11 @@ namespace megamanGameNS
 
 	// The world map
 	const int tileMap[MH][MW] = {
-		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//0
-		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//1
-		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//2
-		F1, F1, __, __, __, F1, __, __, __, __, __, __, __, __, __, __,//3
-		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//4
+		F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//0
+		F1, __, F1, __, __, __, __, __, __, __, __, __, __, __, __, __,//1
+		F1, __, F1, __, __, __, __, __, __, __, __, __, __, __, __, __,//2
+		F1, __, __, __, __, F1, __, __, __, __, __, __, __, __, __, __,//3
+		F1, F1, F1, F1, F1, F1, __, __, __, __, __, __, __, __, __, __,//4
 		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//5
 		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,//6
 		__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __ //7
@@ -65,15 +65,13 @@ private:
     TextureManager megamanTexture;		// megaman texture
 	TextureManager mechaSonicTexture;	// Mecha_Sonic.Forte.32 texture
 	TextureManager bulletTexture;		// bullet texture
-	TextureManager chargedBulletTexture;	//bullet charged small texture
 	TextureManager chargingSpritesTexture;
 
 	Megaman	megaman;					// megaman
 	Enemy mechaSonic;					// enemy
 
 	chargingSprites chargingSprites;	// charging Sprites
-	std::vector<Bullet>	bullet;			// bullet
-	ChargedBullet chargedBullet;				// bullet charged small
+	std::vector<Bullet> bullet;				// bullet charged small
 	Image   backdrop;					// backdrop image
 	Image	tile;
 	std::vector<Entity>	floor;
@@ -88,6 +86,7 @@ public:
     void initialize(HWND hwnd);
     void update();      // must override pure virtual from Game
 	void moveMegaman(double moveRate); // handles megaman's and the map's movements after input
+	void shoot();		// shoots megaman's x-buster bullets
     void ai();          // "
     void collisions();  // "
     void render();      // "

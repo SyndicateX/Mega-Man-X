@@ -164,13 +164,14 @@ void Megaman::update(float frameTime)
 		spriteData.state = WALL_SLIDING;
 	}
 
-	if (spriteData.state == JUMPING && (standingOnSurface_ ))//|| input->canWallJump())) // && !floorCollision_)//spriteData.y + spriteData.height == GAME_HEIGHT)
+	if (spriteData.state == JUMPING && (standingOnSurface_ ))
 	{
-		velocity.y = JUMP_VELOCITY;								// Determines the height of megaman's jump -- needs adjusting
-		spriteData.y += frameTime * velocity.y;         // move along Y
+		velocity.y = JUMP_VELOCITY;							// Determines the height of megaman's jump -- can be adjusted
+		spriteData.y += frameTime * velocity.y;				// move along Y
 		standingOnSurface_ = false;
 	}
-	else if (!wallJumped && spriteData.state != JUMPING && velocity.y < 0)	// Upward velocity set to 0 if the user releases the UP arrow
+	else if (spriteData.state != JUMPING && velocity.y < 0)
+	//else if (!wallJumped && spriteData.state != JUMPING && velocity.y < 0)	// Upward velocity set to 0 if the user releases the UP arrow
 	{														// This enables a variable jump height
 		velocity.y = 0;	
 		wallJumped = false;
@@ -227,7 +228,7 @@ void Megaman::update(float frameTime)
 		{
 			velocity.y = 45;		//if sliding down wall, fall at constant rate 
 		}
-		spriteData.y += frameTime * velocity.y * 5;     // Determines speed and height of Mega Man's jump -- needs adjusting
+		spriteData.y += frameTime * velocity.y * 5;     // Determines speed and height of Mega Man's jump -- can be adjusted
 		velocity.y += frameTime * GRAVITY;              // gravity
 		spriteData.state = JUMPING;
 		standingOnSurface_ = false;
