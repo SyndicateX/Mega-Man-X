@@ -62,7 +62,6 @@ void Bullet::draw()
 {
 	if (spriteData.shotType == REGULAR_SHOT)
 	{
-		regularBullet.setY(regularBullet.getY() + 8880);
 		regularBullet.draw(spriteData);
 	}
 	else if (spriteData.shotType == SMALL_CHARGE)

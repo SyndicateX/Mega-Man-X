@@ -76,21 +76,18 @@ void MegamanGame::initialize(HWND hwnd)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing charging sprites"));
 
 	// floors
-	for (int i = 0; i < MH; i++)
+	for (int i = 0; i < TILE_ROWS; i++)
 	{
-		for (int j = 0; j < MW; j++)
+		for (int j = 0; j < TILE_COLUMNS; j++)
 		{
 			if (tileMap[i][j] >= 0)
 			{
 				floor.push_back(Entity());
-				RECT rect = { -64, -64, 64, 64 };
 				if (!floor[floor.size() - 1].initialize(this, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_COLS, &tileTextures))
 					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing floor"));
-				floor[floor.size() - 1].setFrames(0, 0);
-				floor[floor.size() - 1].setCurrentFrame(0);
-				floor[floor.size() - 1].setCollisionType(entityNS::ROTATED_BOX);
-				floor[floor.size() - 1].setEdge(rect);
-				// Set post position
+				floor[floor.size() - 1].setCollisionType(entityNS::BOX);
+				floor[floor.size() - 1].setEdge(MEGAMAN_EDGE);
+				// Set floor position
 				floor[floor.size() - 1].setX(j*TEXTURE_SIZE);
 				floor[floor.size() - 1].setY(i*TEXTURE_SIZE);
 			}
@@ -301,7 +298,7 @@ void MegamanGame::update()
 		}
 	}
 
-	chargingSprites.update(frameTime);					
+	chargingSprites.update(frameTime);		
     megaman.update(frameTime);
 }
 
@@ -310,28 +307,20 @@ void MegamanGame::update()
 //=============================================================================
 void MegamanGame::moveMegaman(double moveRate)
 {
-	//if (megaman.getDirection() == LEFT)
-	//{
-	//	if (mapX > 0 && megaman.getX() < GAME_WIDTH / 2)
-	//		mapX -= megamanNS::SPEED * frameTime * moveRate;
-	//	else
-	//		megaman.setX(megaman.getX() - megamanNS::SPEED * frameTime * moveRate);
-	//}
-	//else
-	//{
-	//	if (mapX < MAP_WIDTH && megaman.getX() >= GAME_WIDTH / 2)
-	//		mapX += megamanNS::SPEED * frameTime * moveRate;
-	//	else if (mapX >= MAP_WIDTH && megaman.getX() <= GAME_WIDTH)
-	//		megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
-	//	else
-	//		megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
-	//}
 	if (megaman.getDirection() == LEFT)
 	{
+		if (mapX > 0 && megaman.getX() < GAME_WIDTH / 2)
+			mapX -= megamanNS::SPEED * frameTime * moveRate;
+		else
 			megaman.setX(megaman.getX() - megamanNS::SPEED * frameTime * moveRate);
 	}
 	else
 	{
+		if (mapX < MAP_WIDTH && megaman.getX() >= GAME_WIDTH / 2)
+			mapX += megamanNS::SPEED * frameTime * moveRate;
+		else if (mapX >= MAP_WIDTH && megaman.getX() <= GAME_WIDTH)
+			megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
+		else
 			megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
 	}
 }
@@ -380,7 +369,7 @@ void MegamanGame::collisions()
     VECTOR2 cv;
 	//if (bullet.collidesWith(paddle, cv))
 	//	Destroy? Move out of bounds? Reset parameters?
-
+	int temp = megaman.getY();
 	for (int i = 0; i < floor.size(); i++)
 	{
 		for (int j = 0; j < bullet.size(); j++)
@@ -402,35 +391,62 @@ void MegamanGame::render()
 {
     graphics->spriteBegin();                // begin drawing sprites
 
-	//if (mapX > 0 && mapX < MAP_WIDTH && megaman.getX())
-	//{
-	//	//backdrop.setX(-mapX);
-	//	//backdrop.setY(-mapY);
-	//}
-	//else
-	//{
-	//	if (mapX <= 0)
-	//	{
-	//		mapX = 0;
-	//	}
-	//	else
-	//	{
-	//		mapX = MAP_WIDTH;
-	//	}
-	//}
+	if (mapX > 0 && mapX < MAP_WIDTH)// && megaman.getX())
+	{
+		backdrop.setX(-mapX);
+	}
+	else
+	{
+		if (mapX <= 0)
+		{
+			mapX = 0;
+		}
+		else
+		{
+			mapX = MAP_WIDTH;
+		}
+	}
+
+	static int pageCount = 0;
+	if ((int)megaman.getY() / (TEXTURE_SIZE * 8) >= 1)
+	{
+		pageCount++;
+		mapY = TEXTURE_SIZE * 8 * pageCount;
+		megaman.setY(megaman.getY() - TEXTURE_SIZE * 8);
+	}
+	else if ((int)megaman.getY() < 0)
+	{
+		pageCount--;
+		mapY = TEXTURE_SIZE * 8 * pageCount;
+		megaman.setY(megaman.getY() + TEXTURE_SIZE * 8);
+	}
+
+	int counter = 0;
+	for (int i = 0; i < TILE_ROWS; i++)
+	{
+		for (int j = 0; j < TILE_COLUMNS; j++)
+		{
+			if (tileMap[i][j] >= 0)
+			{
+				floor[counter].setX(j*TEXTURE_SIZE - mapX);
+				floor[counter].setY(i*TEXTURE_SIZE - mapY);
+				counter++;
+			}
+		}
+	}
 	
 	backdrop.draw();                        // add the backdrop to the scene
 
-	for (int row = 0; row<MH; row++)       // for each row of map
+	for (int row = 0; row<TILE_ROWS; row++)       // for each row of map
 	{
 		tile.setY((float)(row*TEXTURE_SIZE)); // set tile Y
-		for (int col = 0; col<MW; col++)    // for each column of map
+		for (int col = 0; col<TILE_COLUMNS; col++)    // for each column of map
 		{
 			if (tileMap[row][col] >= 0)          // if tile present
 			{
 				//tile.setCurrentFrame(tileMap[row][col]);			// set tile texture
-				tile.setX((float)(col*TEXTURE_SIZE) + tileMapX);	// set tile X
-				tile.setY((float)(row*TEXTURE_SIZE) + tileMapY);	// set tile Y
+				tile.setX((float)(col*TEXTURE_SIZE) - mapX);	// set tile X
+				tile.setY((float)(row*TEXTURE_SIZE) - mapY);	// set tile Y
 				// if tile on screen
 				if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) &&
 					(tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))

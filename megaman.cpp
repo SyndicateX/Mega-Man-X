@@ -23,7 +23,7 @@ Megaman::Megaman() : Entity()
 	edge.bottom = megamanNS::HEIGHT / 2;
 	edge.left = -megamanNS::WIDTH / 2;
 	edge.right = megamanNS::WIDTH / 2;
-	collisionType = entityNS::ROTATED_BOX;
+	collisionType = entityNS::BOX;
 	mass = megamanNS::MASS;
 }
 
@@ -188,7 +188,7 @@ void Megaman::update(float frameTime)
 		spriteData.x = GAME_WIDTH - megamanNS::WIDTH;		// position at right screen edge
 	else if (spriteData.x < 0)							// else if hit left screen edge
 		spriteData.x = 0;								// position at left screen edge
-	if (spriteData.y + spriteData.height >= GAME_HEIGHT) //else if at the bottom edge
+	if (spriteData.y + spriteData.height >= MAP_HEIGHT)//GAME_HEIGHT) //else if at the bottom edge
 	{
 		spriteData.y = GAME_HEIGHT - spriteData.height;	 // position at the bottom edge
 		velocity.y = 0;									 // stop y acceleration
@@ -237,7 +237,7 @@ void Megaman::update(float frameTime)
 		{
 			wallJumped = true;
 			velocity.y = JUMP_VELOCITY;
-			spriteData.y += frameTime * velocity.y;         
+			spriteData.y += frameTime * velocity.y;  
 			if (spriteData.direction == LEFT)
 			{
 				//spriteData.x += 100;
