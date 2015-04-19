@@ -9,10 +9,9 @@ using namespace megamanGameNS;
 MegamanGame::MegamanGame()
 {
 	mapX = 0;
-	mapY = 0;
 	mapY = megaman.getY();
-	tileMapX = 0;
-	tileMapY = 0;
+	oldY_ = 0;
+	directionChange_ = false;
 }
 
 //=============================================================================
@@ -111,7 +110,6 @@ void MegamanGame::update()
 	QueryPerformanceCounter(&currentTime);
 	static LARGE_INTEGER dashTime = currentTime;
 	static int chargeTime = 0;
-	static bool directionChange = false;
 
 	if (megaman.isDashing() && megaman.getState() == JUMPING)
 	{
@@ -121,52 +119,12 @@ void MegamanGame::update()
 	//******************************** PRESSED LEFT *******************************
 	if (input->isKeyDown(LEFT_KEY) || input->getGamepadDPadLeft(0))
 	{
-		if (megaman.getDirection() == RIGHT)
-		{
-			directionChange = true;
-			megaman.setIsDashing(false);
-		}
-		else
-		{
-			directionChange = false;
-		}
-
-		if (megaman.isDashJumping())
-		{
-			moveMegaman(DASH_SPEED);
-		}
-		else if (!megaman.isDashing())
-		{
-			moveMegaman(WALK_SPEED);
-		}
-
-		megaman.setDirection(LEFT);
-		megaman.setState(WALKING);
+		leftRightInput(LEFT);
 	}
 	//******************************* PRESSED RIGHT *******************************
 	else if (input->isKeyDown(RIGHT_KEY) || input->getGamepadDPadRight(0))
 	{ 
-		if (megaman.getDirection() == LEFT)
-		{
-			directionChange = true;
-			megaman.setIsDashing(false);
-		}
-		else
-		{
-			directionChange = false;
-		}
-
-		if (megaman.isDashJumping())
-		{
-			moveMegaman(DASH_SPEED);
-		}
-		else if (!megaman.isDashing())
-		{
-			moveMegaman(WALK_SPEED);
-		}
-
-		megaman.setState(WALKING);
-		megaman.setDirection(RIGHT);
+		leftRightInput(RIGHT);
 	}	
 	//********************************** IDLE *************************************
 	else
@@ -266,7 +224,7 @@ void MegamanGame::update()
 		megaman.setCanDash(false);
 		dashTime = currentTime; // Reset dash timer if megaman is not dashing
 	}
-	if (directionChange)
+	if (directionChange_)
 	{
 		megaman.setIsDashing(false);
 		megaman.setCanDash(false);
@@ -278,6 +236,10 @@ void MegamanGame::update()
 		if (megaman.canWallJump())
 		{
 			megaman.setDoWallJump(true);
+			if (input->isKeyDown(SPACE_KEY) || input->getGamepadB(0))
+			{
+				megaman.setIsDashJumping(true);
+			}
 		}
 		megaman.setState(JUMPING);
 	}
@@ -305,25 +267,57 @@ void MegamanGame::update()
 }
 
 //=============================================================================
+// Handles left and right keyboard/gamepad input
+//=============================================================================
+void MegamanGame::leftRightInput(Direction direction)
+{
+	if (megaman.getDirection() != direction)
+	{
+		directionChange_ = true;
+		megaman.setVelocity(VECTOR2(0, megaman.getVelocity().y));
+		megaman.setIsDashing(false);
+	}
+	else
+	{
+		directionChange_ = false;
+	}
+
+	if (megaman.isDashJumping())
+	{
+		moveMegaman(DASH_SPEED);
+	}
+	else if (!megaman.isDashing())
+	{
+		moveMegaman(WALK_SPEED);
+	}
+
+	megaman.setDirection(direction);
+	megaman.setState(WALKING);
+}
+
+//=============================================================================
 // Handle Mega Man and map movements on the x-coordinate
 //=============================================================================
 void MegamanGame::moveMegaman(double moveRate)
 {
-	if (megaman.getDirection() == LEFT)
+	if (megaman.getVelocity().x == 0)
 	{
-		if (mapX > 0 && megaman.getX() < GAME_WIDTH / 2)
-			mapX -= megamanNS::SPEED * frameTime * moveRate;
+		if (megaman.getDirection() == LEFT)
+		{
+			if (mapX > 0 && megaman.getX() < GAME_WIDTH / 2)
+				mapX -= megamanNS::SPEED * frameTime * moveRate;
+			else
+				megaman.setX(megaman.getX() - megamanNS::SPEED * frameTime * moveRate);
+		}
 		else
-			megaman.setX(megaman.getX() - megamanNS::SPEED * frameTime * moveRate);
-	}
-	else
-	{
-		if (mapX < MAP_WIDTH && megaman.getX() >= GAME_WIDTH / 2)
-			mapX += megamanNS::SPEED * frameTime * moveRate;
-		else if (mapX >= MAP_WIDTH && megaman.getX() <= GAME_WIDTH)
-			megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
-		else
-			megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
+		{
+			if (mapX < MAP_WIDTH && megaman.getX() >= GAME_WIDTH / 2)
+				mapX += megamanNS::SPEED * frameTime * moveRate;
+			else if (mapX >= MAP_WIDTH && megaman.getX() <= GAME_WIDTH)
+				megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
+			else
+				megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
+		}
 	}
 }
 

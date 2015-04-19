@@ -55,6 +55,10 @@ namespace megamanNS
 	const int DASHING_MEGAMAN_END_FRAME = 71;
 	const float DASHING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
+	const int SHOOTING_DASHING_MEGAMAN_START_FRAME = 136;
+	const int SHOOTING_DASHING_MEGAMAN_END_FRAME = 136;
+	const float SHOOTING_DASHING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
 	const int WALL_SLIDING_MEGAMAN_START_FRAME = 158;
 	const int WALL_SLIDING_MEGAMAN_END_FRAME = 158;
 	const float WALL_SLIDING_MEGAMAN_ANIMATION_DELAY = 0.07f;
@@ -106,6 +110,7 @@ private:
 	Image megamanShootingJumpPeak;
 	Image megamanShootingFalling;
 	Image megamanDashing;
+	Image megamanShootingDashing;
 	Image megamanWallSliding;
 	SpriteCoordinates megamanSpriteCoordinates;
 	bool standingOnSurface_ = true;

@@ -8,7 +8,7 @@
 namespace bulletNS
 {
 	const int WIDTH = 26;                   // image width
-	const int HEIGHT = 13;                  // image height
+	const int HEIGHT = 65;                  // image height
 	const int X = 0;						// GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = 0;						// GAME_HEIGHT / 2 - HEIGHT / 2;
 	const float SPEED = 1200;               // pixels per second

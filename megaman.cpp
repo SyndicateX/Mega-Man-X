@@ -111,7 +111,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanShootingJumpPeak.setCurrentFrame(megamanNS::SHOOTING_JUMP_PEAK_MEGAMAN_START_FRAME);
 	megamanShootingJumpPeak.setFrameDelay(megamanNS::SHOOTING_JUMP_PEAK_MEGAMAN_ANIMATION_DELAY);
 
-	//Shooting & Falling
+	//Shooting and falling
 	megamanShootingFalling.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
 		megamanNS::HEIGHT, 0, textureM);
 	if (!megamanShootingFalling.initialize(megamanSpriteCoordinates))
@@ -120,6 +120,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanShootingFalling.setCurrentFrame(megamanNS::SHOOTING_FALLING_MEGAMAN_START_FRAME);
 	megamanShootingFalling.setFrameDelay(megamanNS::SHOOTING_FALLING_MEGAMAN_ANIMATION_DELAY);
 
+	//Dashing
 	megamanDashing.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
 		megamanNS::HEIGHT, 0, textureM);
 	if (!megamanDashing.initialize(megamanSpriteCoordinates))
@@ -128,6 +129,16 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanDashing.setCurrentFrame(megamanNS::DASHING_MEGAMAN_START_FRAME);
 	megamanDashing.setFrameDelay(megamanNS::DASHING_MEGAMAN_ANIMATION_DELAY);
 
+	//Dashing and shooting
+	megamanShootingDashing.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
+		megamanNS::HEIGHT, 0, textureM);
+	if (!megamanShootingDashing.initialize(megamanSpriteCoordinates))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
+	megamanShootingDashing.setFrames(megamanNS::SHOOTING_DASHING_MEGAMAN_START_FRAME, megamanNS::SHOOTING_DASHING_MEGAMAN_END_FRAME);
+	megamanShootingDashing.setCurrentFrame(megamanNS::SHOOTING_DASHING_MEGAMAN_START_FRAME);
+	megamanShootingDashing.setFrameDelay(megamanNS::SHOOTING_DASHING_MEGAMAN_ANIMATION_DELAY);
+
+	//Sliding down a wall
 	megamanWallSliding.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
 		megamanNS::HEIGHT, 0, textureM);
 	if (!megamanWallSliding.initialize(megamanSpriteCoordinates))
@@ -226,7 +237,7 @@ void Megaman::update(float frameTime)
 	{
 		if (spriteData.state == WALL_SLIDING)
 		{
-			velocity.y = 45;		//if sliding down wall, fall at constant rate 
+			velocity.y = 45;		//if sliding down wall, fall at constant rate
 		}
 		spriteData.y += frameTime * velocity.y * 5;     // Determines speed and height of Mega Man's jump -- can be adjusted
 		velocity.y += frameTime * GRAVITY;              // gravity
@@ -239,16 +250,17 @@ void Megaman::update(float frameTime)
 			wallJumped = true;
 			velocity.y = JUMP_VELOCITY;
 			spriteData.y += frameTime * velocity.y;  
-			if (spriteData.direction == LEFT)
+
+			velocity.x = 70;		//Mega Man is forced away from wall after jumping off it
+			if (isDashJumping_)
 			{
-				//spriteData.x += 100;
-				velocity.x = 120;		//Mega Man is forced away from wall after jumping off it
+				velocity.x *= 1.35;
 			}
-			else
+			if (spriteData.direction == RIGHT)
 			{
-				//spriteData.x -= 100;
-				velocity.x = -120;
+				velocity.x = -velocity.x;
 			}
+			canWallJump_ = false;
 			doWallJump_ = false;
 		}
 		canDash_ = false;			// Mega Man cannot dash in the air
@@ -378,6 +390,17 @@ void Megaman::draw()
 	{
 		megamanWallSliding.draw(spriteData);
 	}
+	else if (spriteData.state == DASHING)
+	{
+		if (spriteData.shotType == NONE)
+		{
+			megamanDashing.draw(spriteData);
+		}
+		else
+		{
+			megamanShootingDashing.draw(spriteData);
+		}
+	}
 	else if (spriteData.state == JUMPING)
 	{
 		if (spriteData.shotType == NONE)
@@ -402,10 +425,6 @@ void Megaman::draw()
 	else if (spriteData.shotType != NONE)
 	{
 		megamanShooting.draw(spriteData);
-	}
-	else if (spriteData.state == DASHING)
-	{
-		megamanDashing.draw(spriteData);
 	}
 	else if (spriteData.state == STANDING)
 	{

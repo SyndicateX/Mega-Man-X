@@ -96,7 +96,8 @@ private:
 	Image	tile;
 	std::vector<Entity>	floor;
 	double   mapX, mapY, tileMapX, tileMapY;
-	double oldY_ = 0;
+	double oldY_;
+	bool directionChange_;
 
 public:
     // Constructor
@@ -106,6 +107,7 @@ public:
     // Initialize the game
     void initialize(HWND hwnd);
     void update();      // must override pure virtual from Game
+	void leftRightInput(Direction direction);
 	void moveMegaman(double moveRate); // handles megaman's and the map's movements after input
 	void shoot();		// shoots megaman's x-buster bullets
     void ai();          // "

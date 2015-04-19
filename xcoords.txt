@@ -2467,11 +2467,11 @@
 
 <X>887</X>
 
-<Y>2066</Y>
+<Y>2035</Y>
 
 <Width>145</Width>
 
-<Height>68</Height>
+<Height>102</Height>
 
 </Coordinates>
 
