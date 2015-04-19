@@ -18,7 +18,7 @@ Bullet::Bullet() : Entity()
 	endFrame = 0;                           // last frame of animation
 	currentFrame = startFrame;
 	radius = bulletNS::WIDTH / 2.0;
-	collisionType = entityNS::CIRCLE;
+	collisionType = entityNS::BOX;
 	mass = bulletNS::MASS;
 }
 

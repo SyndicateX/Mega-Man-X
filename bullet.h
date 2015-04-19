@@ -40,9 +40,18 @@ public:
 	void update(float frameTime);
 	virtual void draw();
 
+	void setInitialY(double initialY)
+	{ initialY_ = initialY; }
+
+	double getInitialY()
+	{ return initialY_; }
+
 	Image regularBullet;
 	Image bulletSmall;
 	Image bulletLarge;
+
+private:
+	double initialY_;
 };
 #endif
 

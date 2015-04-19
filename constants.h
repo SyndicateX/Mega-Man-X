@@ -22,7 +22,7 @@ const char CLASS_NAME[] = "Mega Man X";
 const char GAME_TITLE[] = "Mega Man X";
 const bool FULLSCREEN = false;              // windowed or fullscreen
 const UINT GAME_WIDTH =  1024;              // width of game in pixels
-const UINT GAME_HEIGHT = 640;               // height of game in pixels
+const UINT GAME_HEIGHT = 720;               // height of game in pixels
  
 // game
 const bool VSYNC = true;                    // true locks display to vertical sync rate
@@ -32,7 +32,7 @@ const float MIN_FRAME_RATE = 10.0f;         // the minimum frame rate
 const float MIN_FRAME_TIME = 1.0f/FRAME_RATE;   // minimum desired time for 1 frame
 const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calculations
 const float GRAVITY = 500.0f;                   // acceleration of gravity pixels/sec
-const UINT MAP_WIDTH = 2000;
+//const UINT MAP_WIDTH = 2000;
 const UINT MAP_HEIGHT = 1500;
 const int JUMP_VELOCITY = -180;
 const int TERMINAL_VELOCITY = -JUMP_VELOCITY;

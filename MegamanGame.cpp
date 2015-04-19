@@ -10,6 +10,7 @@ MegamanGame::MegamanGame()
 {
 	mapX = 0;
 	mapY = 0;
+	mapY = megaman.getY();
 	tileMapX = 0;
 	tileMapY = 0;
 }
@@ -102,6 +103,7 @@ void MegamanGame::initialize(HWND hwnd)
 //=============================================================================
 void MegamanGame::update()
 {
+	oldY_ = megaman.getY();
 	static LARGE_INTEGER lastShootTime;
 	LARGE_INTEGER frequency;
 	LARGE_INTEGER currentTime;
@@ -303,7 +305,7 @@ void MegamanGame::update()
 }
 
 //=============================================================================
-// Handle Mega Man and map movements
+// Handle Mega Man and map movements on the x-coordinate
 //=============================================================================
 void MegamanGame::moveMegaman(double moveRate)
 {
@@ -325,6 +327,9 @@ void MegamanGame::moveMegaman(double moveRate)
 	}
 }
 
+//=============================================================================
+// Handle Mega Man's bullets initialization
+//=============================================================================
 void MegamanGame::shoot()
 {
 	chargingSprites.setCharge1(false);
@@ -351,6 +356,7 @@ void MegamanGame::shoot()
 		bullet[bullet.size() - 1].setX(megaman.getX());
 		bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 	}
+	bullet[bullet.size() - 1].setInitialY(mapY);
 }
 
 //=============================================================================
@@ -367,21 +373,22 @@ void MegamanGame::ai()
 void MegamanGame::collisions()
 {
     VECTOR2 cv;
-	//if (bullet.collidesWith(paddle, cv))
-	//	Destroy? Move out of bounds? Reset parameters?
-	int temp = megaman.getY();
 	for (int i = 0; i < floor.size(); i++)
 	{
 		for (int j = 0; j < bullet.size(); j++)
 		{
 			if (bullet[j].collidesWith(floor[i], cv))
+
 				bullet.erase(bullet.begin() + j);
 		}
 		if (megaman.collidesWith(floor[i], cv)) // 
+		{
 			megaman.stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+		}
+			
 	}
-	if (megaman.collidesWith(mechaSonic, cv))
-		megaman.stop(mechaSonic.getX(), mechaSonic.getY(),mechaSonic.getWidth(), mechaSonic.getHeight());
+	//if (megaman.collidesWith(mechaSonic, cv))
+	//	megaman.stop(mechaSonic.getX(), mechaSonic.getY(),mechaSonic.getWidth(), mechaSonic.getHeight());
 }
 
 //=============================================================================
@@ -390,7 +397,8 @@ void MegamanGame::collisions()
 void MegamanGame::render()
 {
     graphics->spriteBegin();                // begin drawing sprites
-
+	mapY += megaman.getY()-oldY_;
+	megaman.setY(oldY_);
 	if (mapX > 0 && mapX < MAP_WIDTH)// && megaman.getX())
 	{
 		backdrop.setX(-mapX);
@@ -406,20 +414,7 @@ void MegamanGame::render()
 			mapX = MAP_WIDTH;
 		}
 	}
-
-	static int pageCount = 0;
-	if ((int)megaman.getY() / (TEXTURE_SIZE * 8) >= 1)
-	{
-		pageCount++;
-		mapY = TEXTURE_SIZE * 8 * pageCount;
-		megaman.setY(megaman.getY() - TEXTURE_SIZE * 8);
-	}
-	else if ((int)megaman.getY() < 0)
-	{
-		pageCount--;
-		mapY = TEXTURE_SIZE * 8 * pageCount;
-		megaman.setY(megaman.getY() + TEXTURE_SIZE * 8);
-	}
+	backdrop.setY(-mapY + megamanNS::Y);
 
 	int counter = 0;
 	for (int i = 0; i < TILE_ROWS; i++)
@@ -429,7 +424,7 @@ void MegamanGame::render()
 			if (tileMap[i][j] >= 0)
 			{
 				floor[counter].setX(j*TEXTURE_SIZE - mapX);
-				floor[counter].setY(i*TEXTURE_SIZE - mapY);
+				floor[counter].setY(i*TEXTURE_SIZE - mapY + megamanNS::Y);
 				counter++;
 			}
 		}
@@ -437,16 +432,21 @@ void MegamanGame::render()
 	
 	backdrop.draw();                        // add the backdrop to the scene
 
+	for (int i = 0; i < bullet.size(); i++)
+	{
+		bullet[i].setY(bullet[i].getInitialY() - mapY + megamanNS::Y);
+	}
+
 	for (int row = 0; row<TILE_ROWS; row++)       // for each row of map
 	{
-		tile.setY((float)(row*TEXTURE_SIZE)); // set tile Y
+		tile.setY((float)(row*TEXTURE_SIZE - mapY + megamanNS::Y)); // set tile Y
 		for (int col = 0; col<TILE_COLUMNS; col++)    // for each column of map
 		{
 			if (tileMap[row][col] >= 0)          // if tile present
 			{
 				//tile.setCurrentFrame(tileMap[row][col]);			// set tile texture
 				tile.setX((float)(col*TEXTURE_SIZE) - mapX);	// set tile X
-				tile.setY((float)(row*TEXTURE_SIZE) - mapY);	// set tile Y
+				tile.setY((float)(row*TEXTURE_SIZE) - mapY + megamanNS::Y);	// set tile Y
 				// if tile on screen
 				if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) &&
 					(tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))
@@ -472,7 +472,7 @@ void MegamanGame::releaseAll()
 {
 	mechaSonicTexture.onLostDevice();
 
-    megamanTexture.onLostDevice();            // megaman texture
+    megamanTexture.onLostDevice();          // megaman texture
 	bulletTexture.onLostDevice();			// bullet texture
 	bulletTexture.onLostDevice();			// bullet texture
 	chargingSpritesTexture.onLostDevice();

@@ -10,8 +10,8 @@ namespace megamanNS
 {
     const int WIDTH = 75;                  // image width
     const int HEIGHT = 100;                  // image height
-    const int X = GAME_WIDTH/2 - WIDTH * 3;     // location on screen
-    const int Y = GAME_HEIGHT / 2;
+	const int X = 70;// GAME_WIDTH / 2 - WIDTH * 3;     // location on screen
+    const int Y = GAME_HEIGHT - 4 * HEIGHT;
     const float SPEED = 300;                // pixels per second
 	const float MASS = 1.0e6f;
 
@@ -84,6 +84,7 @@ public:
 	void setCanWallJump(bool wallJumpStatus) { canWallJump_ = wallJumpStatus; }
 	void setCanShoot(bool shootStatus) { canShoot_ = shootStatus; }
 	void setIsDashJumping(bool dashJumpStatus) { isDashJumping_ = dashJumpStatus; }
+	void setFloorCollision(bool floorCollisionStatus) { floorCollision_ = floorCollisionStatus; }
 
 	// Get Functions
 	bool canDash() { return canDash_; }
@@ -108,7 +109,7 @@ private:
 	Image megamanWallSliding;
 	SpriteCoordinates megamanSpriteCoordinates;
 	bool standingOnSurface_ = true;
-	bool floorCollision_ = true;
+	bool floorCollision_ = false;
 	bool wallJump_ = false;
 	bool doWallJump_ = false;
 	bool canDash_ = false;
