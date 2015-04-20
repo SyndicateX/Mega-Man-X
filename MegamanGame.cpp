@@ -116,6 +116,7 @@ void MegamanGame::update()
 		megaman.setIsDashJumping(true);
 	}
 
+
 	//******************************** PRESSED LEFT *******************************
 	if (input->isKeyDown(LEFT_KEY) || input->getGamepadDPadLeft(0))
 	{
@@ -366,7 +367,7 @@ void MegamanGame::ai()
 //=============================================================================
 void MegamanGame::collisions()
 {
-    VECTOR2 cv;
+	VECTOR2 cv;
 	for (int i = 0; i < floor.size(); i++)
 	{
 		for (int j = 0; j < bullet.size(); j++)
@@ -379,7 +380,6 @@ void MegamanGame::collisions()
 		{
 			megaman.stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
 		}
-			
 	}
 	//if (megaman.collidesWith(mechaSonic, cv))
 	//	megaman.stop(mechaSonic.getX(), mechaSonic.getY(),mechaSonic.getWidth(), mechaSonic.getHeight());

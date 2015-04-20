@@ -181,8 +181,8 @@ void Megaman::update(float frameTime)
 		spriteData.y += frameTime * velocity.y;				// move along Y
 		standingOnSurface_ = false;
 	}
-	else if (spriteData.state != JUMPING && velocity.y < 0)
-	//else if (!wallJumped && spriteData.state != JUMPING && velocity.y < 0)	// Upward velocity set to 0 if the user releases the UP arrow
+	else if (spriteData.state != JUMPING && velocity.y < 0)	// Upward velocity set to 0 if the user releases the UP arrow
+	//else if (!wallJumped && spriteData.state != JUMPING && velocity.y < 0)	
 	{														// This enables a variable jump height
 		velocity.y = 0;	
 		wallJumped = false;
@@ -219,7 +219,7 @@ void Megaman::update(float frameTime)
 	}
 	if (velocity.x > 0)
 	{
-		spriteData.x -= frameTime * velocity.x * 3;
+		spriteData.x += frameTime * velocity.x * 3;
 		velocity.x -= frameTime * GRAVITY;
 		if (velocity.x < 0)
 		{
@@ -322,10 +322,6 @@ void Megaman::update(float frameTime)
 		velocity.y = TERMINAL_VELOCITY;
 	}
 
-	//if (velocity.y != 0)
-	{
-	//	floorCollision_ = false;
-	}
 	floorCollision_ = false;
 	canWallJump_ = false;
 }
