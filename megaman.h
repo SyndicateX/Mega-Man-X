@@ -10,9 +10,9 @@ namespace megamanNS
 {
     const int WIDTH = 75;                  // image width
     const int HEIGHT = 100;                  // image height
-	const int X = 70;// GAME_WIDTH / 2 - WIDTH * 3;     // location on screen
+	const int X = GAME_WIDTH / 2;// GAME_WIDTH / 2 - WIDTH * 3;     // location on screen
     const int Y = GAME_HEIGHT - 4 * HEIGHT;
-    const float SPEED = 300;                // pixels per second
+    const float SPEED = 125;                // pixels per second
 	const float MASS = 1.0e6f;
 
 	const int IDLE_MEGAMAN_START_FRAME = 17;

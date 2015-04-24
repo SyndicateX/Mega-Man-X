@@ -96,6 +96,7 @@ private:
 	Image	tile;
 	std::vector<Entity>	floor;
 	double   mapX, mapY, tileMapX, tileMapY;
+	double oldX_;
 	double oldY_;
 	bool directionChange_;
 
