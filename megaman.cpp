@@ -5,7 +5,7 @@
 //=============================================================================
 Megaman::Megaman() : Entity()
 {
-	spriteData.width = megamanNS::WIDTH;          // size of Ship1
+	spriteData.width = megamanNS::WIDTH;          // size of megaman
 	spriteData.height = megamanNS::HEIGHT;
 	spriteData.x = megamanNS::X;                  // location on screen
 	spriteData.y = megamanNS::Y;

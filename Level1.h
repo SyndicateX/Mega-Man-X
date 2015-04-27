@@ -1,20 +1,11 @@
-#ifndef _MEGA_MAN_X_H              // Prevent multiple definitions if this
-#define _MEGA_MAN_X_H              // file is included in more than one place
+#ifndef _LEVEL1_H              // Prevent multiple definitions if this
+#define _LEVEL1_H              // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN
 
-#include "game.h"
-#include "textureManager.h"
-#include "image.h"
-#include "megaman.h"
-#include "enemy.h"
-#include "bullet.h"
-#include "bullet.h"
-#include "chargingSprites.h"
-#include <vector>
 #include "Levels.h"
-#include "Level1.h"
+#include "megaman.h"
 
-namespace megamanGameNS
+namespace level1NS
 {
 	const char FONT[] = "Arial Bold";  // font
 	const COLOR_ARGB FONT_COLOR = graphicsNS::YELLOW;
@@ -47,7 +38,7 @@ namespace megamanGameNS
 		F1, __, __, F1, F1, F1, F1, __, __, __, __, __, F1, F1, F1, F1, __, __, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, __, __, F1, F1, F1, __, __, F1, F1, F1, F1, __, __, __, __, __, F1, F1, F1, F1, __, __, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, __, __, F1, F1,//12
 		F1, __, __, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1, F1, __, __, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1,//13
 		F1, __, __, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1, F1, __, __, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1,//14
-		F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, 
+		F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,
 		F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __,
 		F1, __, __, __, __, __, __, __, __, __, __, __, F1, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, F1, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1,
 		F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1,
@@ -67,48 +58,21 @@ namespace megamanGameNS
 	};//0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31
 }
 
-//=============================================================================
-// This class is the core of the game
-//=============================================================================
-class MegamanGame : public Game
+class Level1 : public Levels
 {
-private:
-    // game items
-    TextureManager backdropTexture;		// backdrop texture
-	TextureManager tileTextures;		// tiles
-    TextureManager megamanTexture;		// megaman texture
-	TextureManager mechaSonicTexture;	// Mecha_Sonic.Forte.32 texture
-	TextureManager bulletTexture;		// bullet texture
-	TextureManager chargingSpritesTexture;
-
-	Megaman	megaman;					// megaman
-	Enemy mechaSonic;					// enemy
-
-	chargingSprites chargingSprites;	// charging Sprites
-	std::vector<Bullet> bullet;				// bullet charged small
-	Image   backdrop;					// backdrop image
-	Image	tile;
-	std::vector<Entity>	floor;
-	double   mapX, mapY, tileMapX, tileMapY;
-	double oldX_;
-	double oldY_;
-	bool directionChange_;
-
-	Levels* level;
-
 public:
-    // Constructor
-	MegamanGame();
-    // Destructor
-	virtual ~MegamanGame();
-    // Initialize the game
-    void initialize(HWND hwnd);
-    void update();      // must override pure virtual from Game
-    void ai();          // "
-    void collisions();  // "
-    void render();      // "
-    void releaseAll();
-    void resetAll();
+	Level1();
+	~Level1();
+
+	// Initialize the game
+	void initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, Game* game);
+
+	void update(float frameTime, Input* input, Game* game);
+	void ai();          // "
+	void collisions();  // "
+	void render(Graphics* graphics);      // "
+	void releaseAll();
+	void resetAll();
 };
 
 #endif
