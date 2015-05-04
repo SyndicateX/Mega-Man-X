@@ -78,7 +78,7 @@ public:
 	virtual void draw();
 
 	// In case megaman collides with a wall
-	void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight);
+	void Megaman::stop(float frameTime, int wallX, int wallY, int wallLength, int wallHeight);
 
 	// Set Functions
 	void setDoWallJump(bool doWallJump) { doWallJump_ = doWallJump; }

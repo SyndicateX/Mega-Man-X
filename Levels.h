@@ -16,6 +16,7 @@
 //=============================================================================
 class Levels
 {
+friend class MegamanGame;
 protected:
 	// game items
 	TextureManager backdropTexture;		// backdrop texture
@@ -37,6 +38,7 @@ protected:
 	double oldX_;
 	double oldY_;
 	bool directionChange_;
+	bool levelComplete_;
 
 public:
 	// Constructor
@@ -52,8 +54,9 @@ public:
 	void leftRightInput(Direction direction, double MAP_WIDTH, double MAP_HEIGHT);
 	void moveMegaman(double moveRatedouble, double MAP_WIDTH, double MAP_HEIGHT); // handles megaman's and the map's movements after input
 	void shoot();		// shoots megaman's x-buster bullets
+	bool isLevelComplete();
 	virtual void ai() = 0;          // "
-	virtual void collisions() = 0;  // "
+	virtual void collisions(float frameTime) = 0;  // "
 	virtual void render(Graphics* graphics) = 0;      // "
 	virtual void releaseAll();
 	virtual void resetAll();

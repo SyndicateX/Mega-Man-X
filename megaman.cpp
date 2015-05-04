@@ -313,42 +313,8 @@ void Megaman::update(float frameTime)
 // stop
 // Collision detection between Mega Man and solid surfaces
 //=============================================================================
-void Megaman::stop(int wallX, int wallY, int wallLength, int wallHeight)
+void Megaman::stop(float frameTime, int wallX, int wallY, int wallLength, int wallHeight)
 {
-	//if (velocity.y >= 0 && abs(wallY - spriteData.y - spriteData.height) > abs(wallX + wallLength - spriteData.x) && abs(wallY - spriteData.y - spriteData.height) > abs(wallX - spriteData.x - spriteData.width))
-	//{
-	//	standingOnSurface_ = true;
-	//	spriteData.y = wallY - spriteData.height;		 // position at the top of the wall
-	//	velocity.y = 0; 										 // stop y acceleration
-	//	floorCollision_ = true;
-	//	isDashJumping_ = false;
-	//	isDashing_ = false;
-	//	canWallJump_ = false;
-	//}
-	//else if (velocity.y < 0 && abs(wallY + wallHeight - spriteData.y) > abs(wallX + wallLength - spriteData.x) && abs(wallY + wallHeight - spriteData.y) > abs(wallX - spriteData.x - spriteData.width))
-	//{
-	//	spriteData.y = wallY + wallHeight + 1;
-	//	velocity.y = 1;
-	//	standingOnSurface_ = false;
-	//	floorCollision_ = false;
-	//	canWallJump_ = false;
-	//}
-	//else if (velocity.x > 0)
-	//{
-	//	spriteData.x = wallX - spriteData.width;
-	//	if (velocity.y > 0)
-	//	{
-	//		canWallJump_ = true;
-	//	}
-	//}
-	//else if (velocity.x < 0)
-	//{
-	//	spriteData.x = wallX + wallLength; //+1;
-	//	if (velocity.y > 0)
-	//	{
-	//		canWallJump_ = true;
-	//	}
-	//}
 	// Case: Below surface
 	if ((spriteData.x + spriteData.width / 2 > wallX) && (spriteData.x + spriteData.width / 2 < wallX + wallLength) && spriteData.y >= wallY + wallHeight - 20)
 	{

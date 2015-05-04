@@ -86,6 +86,7 @@ enum Direction
 	LEFT,
 	RIGHT
 };
+
 //=============================================================================
 // Function templates for safely dealing with pointer referenced items.
 // The functions defined by these templates may be called using a normal

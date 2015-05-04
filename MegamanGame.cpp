@@ -1,8 +1,6 @@
 #include "MegamanGame.h"
 #include "sprites.h"
 
-using namespace megamanGameNS;
-
 //=============================================================================
 // Constructor
 //=============================================================================
@@ -38,6 +36,13 @@ void MegamanGame::initialize(HWND hwnd)
 //=============================================================================
 void MegamanGame::update()
 {
+	if (level->isLevelComplete())
+	{
+		delete level;
+		level = new Level1();
+		level->initialize(hwnd, graphics, input, this);
+		level->initializeAdditional(hwnd, graphics, input, this);
+	}
 	level->update(frameTime, input, this);
 }
 
@@ -48,7 +53,7 @@ void MegamanGame::ai()
 
 void MegamanGame::collisions()
 {
-	level->collisions();
+	level->collisions(frameTime);
 }
 
 void MegamanGame::render()
@@ -64,7 +69,6 @@ void MegamanGame::render()
 //=============================================================================
 void MegamanGame::releaseAll()
 {
-	backdropTexture.onLostDevice();         // backdrop texture
     return;
 }
 
@@ -74,6 +78,5 @@ void MegamanGame::releaseAll()
 //=============================================================================
 void MegamanGame::resetAll()
 {
-	backdropTexture.onResetDevice();
     return;
 }

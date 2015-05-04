@@ -12,6 +12,7 @@ Levels::Levels()
 	oldX_ = 0;
 	oldY_ = 0;
 	directionChange_ = false;
+	levelComplete_ = false;
 }
 
 //=============================================================================
@@ -51,11 +52,6 @@ void Levels::initialize(HWND& hwnd, Graphics* graphics, Input* input, Game* game
 	return;
 }
 
-//void Levels::update() 
-//{
-//	//updateMegaman(MAP_WIDTH, MAP_HEIGHT);
-//}
-
 //=============================================================================
 // Update all game items
 //=============================================================================
@@ -70,6 +66,11 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 	QueryPerformanceCounter(&currentTime);
 	static LARGE_INTEGER dashTime = currentTime;
 	static int chargeTime = 0;
+
+	if (megaman.getX() >= GAME_WIDTH - megaman.getWidth())
+	{
+		levelComplete_ = true;
+	}
 
 	if (megaman.isDashing() && megaman.getState() == JUMPING)
 	{
@@ -301,12 +302,10 @@ void Levels::moveMegaman(double moveRate, double MAP_WIDTH, double MAP_HEIGHT)
 	{
 		if (mapX > 0 && megaman.getX() < GAME_WIDTH / 2)
 		{
-			//mapX -= megamanNS::SPEED * frameTime * moveRate;
 			megaman.setVelocity(VECTOR2(-moveRate * megamanNS::SPEED, megaman.getVelocity().y));
 		}
 		else
 		{
-			//megaman.setX(megaman.getX() - megamanNS::SPEED * frameTime * moveRate);
 			megaman.setVelocity(VECTOR2(-moveRate * megamanNS::SPEED, megaman.getVelocity().y));
 		}
 	}
@@ -315,17 +314,14 @@ void Levels::moveMegaman(double moveRate, double MAP_WIDTH, double MAP_HEIGHT)
 		if (mapX < MAP_WIDTH && megaman.getX() >= GAME_WIDTH / 2)
 		{
 			megaman.setVelocity(VECTOR2(moveRate * megamanNS::SPEED, megaman.getVelocity().y));
-			//mapX += megamanNS::SPEED * frameTime * moveRate;
 		}
 		else if (mapX >= MAP_WIDTH && megaman.getX() <= GAME_WIDTH)
 		{
 			megaman.setVelocity(VECTOR2(moveRate * megamanNS::SPEED, megaman.getVelocity().y));
-			//megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
 		}
 		else
 		{
 			megaman.setVelocity(VECTOR2(moveRate * megamanNS::SPEED, megaman.getVelocity().y));
-			//megaman.setX(megaman.getX() + megamanNS::SPEED * frameTime * moveRate);
 		}
 	}
 }
@@ -362,4 +358,9 @@ void Levels::resetAll()
 	bulletTexture.onResetDevice();
 
 	return;
+}
+
+bool Levels::isLevelComplete()
+{
+	return levelComplete_;
 }

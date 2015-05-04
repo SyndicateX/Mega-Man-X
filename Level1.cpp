@@ -76,7 +76,7 @@ void Level1::ai()
 
 }
 
-void Level1::collisions()
+void Level1::collisions(float frameTime)
 {
 	VECTOR2 cv;
 	for (int i = 0; i < floor.size(); i++)
@@ -89,7 +89,7 @@ void Level1::collisions()
 		}
 		if (megaman.collidesWith(floor[i], cv)) // 
 		{
-			megaman.stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+			megaman.stop(frameTime, floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
 		}
 	}
 }
