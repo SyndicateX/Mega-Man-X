@@ -4,12 +4,13 @@
 
 #include "Levels.h"
 #include "megaman.h"
+#include "Bee.h"
 
 namespace level1NS
 {
 	const char FONT[] = "Arial Bold";  // font
 	const COLOR_ARGB FONT_COLOR = graphicsNS::YELLOW;
-	const int TEXTURE_SIZE = 64;
+	const int TEXTURE_SIZE = 128;
 	const int TEXTURE_COLS = 0;
 	const int TILE_ROWS = 32;
 	const int TILE_COLUMNS = 64;
@@ -60,6 +61,11 @@ namespace level1NS
 
 class Level1 : public Levels
 {
+protected:
+	// level1 items
+	TextureManager beeTexture;			// bee texture
+
+	Bee bee;							// bee enemy
 public:
 	Level1();
 	~Level1();

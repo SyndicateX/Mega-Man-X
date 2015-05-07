@@ -16,15 +16,14 @@
 //=============================================================================
 class Levels
 {
-friend class MegamanGame;
 protected:
-	// game items
+	// level items
 	TextureManager backdropTexture;		// backdrop texture
-	TextureManager tileTextures;		// tiles
+	TextureManager tileTextures;		// tile textures
 	TextureManager megamanTexture;		// megaman texture
 	TextureManager mechaSonicTexture;	// Mecha_Sonic.Forte.32 texture
 	TextureManager bulletTexture;		// bullet texture
-	TextureManager chargingSpritesTexture;
+	TextureManager chargingSpritesTexture; // megaman charging sprites texture
 
 	Megaman	megaman;					// megaman
 	Enemy mechaSonic;					// enemy

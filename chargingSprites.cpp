@@ -15,7 +15,7 @@ chargingSprites::chargingSprites() : Entity()
 	spriteData.state = STANDING;
 	velocity.x = 0;						        // velocity X
 	velocity.y = 0;							    // velocity Y
-	frameDelay = 1.0;// 0.07;
+	frameDelay = 1.0;
 	startFrame = 0;                             // first frame of animation
 	endFrame = 0;                           // last frame of animation
 	currentFrame = startFrame;

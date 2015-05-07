@@ -25,6 +25,10 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	if (!mechaSonicTexture.initialize(graphics, ENEMY001))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
 
+	// bee enemy texture
+	if (!beeTexture.initialize(graphics, BEE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
+
 	// map textures
 	if (!tileTextures.initialize(graphics, TILE_TEXTURES))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing tile textures"));
@@ -42,6 +46,10 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	// enemy
 	if (!mechaSonic.initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &mechaSonicTexture))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
+
+	// bee enemy
+	if (!bee.initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &beeTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 
 	// floors
 	for (int i = 0; i < TILE_ROWS; i++)
@@ -67,6 +75,7 @@ void Level1::update(float frameTime, Input* input, Game* game)
 {
 	// Handles megaman's input and actions
 	updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
+	bee.update(frameTime);
 
 	// Level specific code goes here
 }
@@ -105,10 +114,20 @@ void Level1::render(Graphics* graphics)
 	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
 	{
 		backdrop.setX(-mapX);
+		bee.setX(beeNS::X + bee.getDx() - mapX);
 		megaman.setX(oldX_);
+	}
+	else if (mapX < 0)
+	{
+		bee.setX(beeNS::X + bee.getDx());
+	}
+	else
+	{
+		bee.setX(beeNS::X + bee.getDx() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
 	}
 
 	backdrop.setY(-mapY + megamanNS::Y);
+	bee.setY(beeNS::Y - mapY + megamanNS::Y);
 
 	int counter = 0;
 	for (int i = 0; i < TILE_ROWS; i++)
@@ -172,6 +191,7 @@ void Level1::render(Graphics* graphics)
 		}
 	}
 	mechaSonic.draw();						// add enemy to the scene
+	bee.draw();								// add bee enemy to the scene
 	megaman.draw();							// add megaman to the scene
 	chargingSprites.draw();					// add megaman charging sprites to the scene
 	for (int i = 0; i < bullet.size(); i++)
@@ -191,6 +211,7 @@ void Level1::releaseAll()
 	chargingSpritesTexture.onLostDevice();
 	backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
+	beeTexture.onLostDevice();
 
 	//Game::releaseAll();
 	return;
@@ -206,6 +227,7 @@ void Level1::resetAll()
 	chargingSpritesTexture.onResetDevice();
 	bulletTexture.onResetDevice();
 	bulletTexture.onResetDevice();
+	beeTexture.onResetDevice();
 
 	//Game::resetAll();
 	return;
