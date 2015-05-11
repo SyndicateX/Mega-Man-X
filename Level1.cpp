@@ -93,12 +93,23 @@ void Level1::collisions(float frameTime)
 		for (int j = 0; j < bullet.size(); j++)
 		{
 			if (bullet[j].collidesWith(floor[i], cv))
-
 				bullet.erase(bullet.begin() + j);
 		}
 		if (megaman.collidesWith(floor[i], cv)) // 
 		{
 			megaman.stop(frameTime, floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+		}
+		if (bee.collidesWith(floor[i], cv))
+		{
+			bee.stop(floor[i].getX(), floor[i].getWidth());
+		}
+	}
+	for (int j = 0; j < bullet.size(); j++)
+	{
+		if (bullet[j].collidesWith(bee, cv))
+
+		{
+			// bee takes damage
 		}
 	}
 }

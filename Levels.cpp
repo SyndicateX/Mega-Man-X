@@ -91,10 +91,11 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 	//********************************** IDLE *************************************
 	else
 	{
+		// Holds megaman's shooting animation for a few frames after shooting
 		megaman.setVelocity(VECTOR2(0, megaman.getVelocity().y));
 		if (megaman.getShotType() != NONE && (currentTime.QuadPart - lastShootTime.QuadPart) / (double)(frequency.QuadPart) < .35)
 		{
-			megaman.setState(SHOOTING);		// Holds megamn shooting animation for a few frames after shooting
+			megaman.setState(SHOOTING);		
 		}
 		else
 		{

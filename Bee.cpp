@@ -5,20 +5,20 @@
 //=============================================================================
 Bee::Bee() : Entity()
 {
-	spriteData.width = beeNS::WIDTH;           // size of Ship1
+	spriteData.width = beeNS::WIDTH;           // size of the bee
 	spriteData.height = beeNS::HEIGHT;
 	spriteData.x = beeNS::X;                   // location on screen
 	spriteData.y = beeNS::Y;
 	spriteData.rect.bottom = beeNS::HEIGHT;    // rectangle to select parts of an image
 	spriteData.rect.right = beeNS::WIDTH;
+	spriteData.direction = RIGHT;
 	velocity.x = beeNS::SPEED;                 // velocity X
 	velocity.y = beeNS::SPEED;                 // velocity Y
 	frameDelay = 1;
 	startFrame = 0;                             // first frame of animation
-	endFrame = 0;                           // last frame of animation
+	endFrame = 0;								// last frame of animation
 	currentFrame = startFrame;
-	radius = beeNS::WIDTH / 2.0;
-	collisionType = entityNS::CIRCLE;
+	collisionType = entityNS::BOX;
 	mass = beeNS::MASS;
 
 	dx = 0;
@@ -56,7 +56,14 @@ void Bee::update(float frameTime)
 	
 
 	//spriteData.x += frameTime * 50;         // move along X 
-	dx += frameTime * 150;
+	if (spriteData.direction == RIGHT)
+	{
+		dx += frameTime * 150;
+	}
+	else
+	{
+		dx -= frameTime * 150;
+	}
 	
 	//spriteData.x += frameTime * velocity.x;         // move along X 
 	//spriteData.y += frameTime * velocity.y;         // move along Y
@@ -92,6 +99,22 @@ void Bee::update(float frameTime)
 	//velocity.y += frameTime * GRAVITY;              // gravity
 
 	beeFlying.update(frameTime);
+}
+
+void Bee::stop(double wallX, double wallWidth)
+{
+	if (spriteData.direction == RIGHT)
+	{
+		spriteData.direction = LEFT;
+		flipHorizontal(true);
+		dx -= spriteData.x + spriteData.width - wallX;
+	}
+	else
+	{
+		spriteData.direction = RIGHT;
+		flipHorizontal(false);
+		dx += wallX + wallWidth - spriteData.x;
+	}
 }
 
 void Bee::draw()

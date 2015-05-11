@@ -8,8 +8,8 @@
 
 namespace beeNS
 {
-	const int WIDTH = 60;                   // image width
-	const int HEIGHT = 60;                  // image height
+	const int WIDTH = 87;                   // image width
+	const int HEIGHT = 114;                  // image height
 	const int X = GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = GAME_HEIGHT / 2 - HEIGHT / 2;
 	const float SPEED = 10;                // pixels per second
@@ -34,6 +34,8 @@ public:
 	virtual bool initialize(Game *gamePtr, int width, int height, int ncols,
 		TextureManager *textureM);
 	virtual void draw();
+
+	void stop(double wallX, double wallWidth);
 
 	double getDx()
 	{ 
