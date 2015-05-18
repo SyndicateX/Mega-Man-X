@@ -401,7 +401,7 @@ void Megaman::stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileC
 void Megaman::stop(int wallX, int wallY, int wallWidth, int wallHeight)
 {
 	// Case: Below surface
-	if ((spriteData.x + spriteData.width > wallX) && (spriteData.x + spriteData.width < wallX + wallWidth) && spriteData.y >= wallY + wallHeight - 45)
+	if ((spriteData.x + spriteData.width > wallX) && (spriteData.x < wallX + wallWidth) && spriteData.y >= wallY + wallHeight - 10)
 	{
 		bottomCollision(wallY, wallHeight);
 	}
