@@ -36,12 +36,23 @@ void MegamanGame::initialize(HWND hwnd)
 //=============================================================================
 void MegamanGame::update()
 {
+	// A menu should go here
+
 	if (level->isLevelComplete())
 	{
+		static int lCount = 0;
 		delete level;
-		level = new Level1();
+		if (lCount % 2 == 0)
+		{
+			level = new Level2();
+		}
+		else
+		{
+			level = new Level1();
+		}
 		level->initialize(hwnd, graphics, input, this);
 		level->initializeAdditional(hwnd, graphics, input, this);
+		lCount++;
 	}
 	level->update(frameTime, input, this);
 }

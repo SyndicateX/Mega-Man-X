@@ -92,6 +92,7 @@
     <ClCompile Include="chargingSprites.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="Level1.cpp" />
+    <ClCompile Include="Level2.cpp" />
     <ClCompile Include="Levels.cpp" />
     <ClCompile Include="MegamanGame.cpp" />
     <ClCompile Include="entity.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="chargingSprites.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="Level1.h" />
+    <ClInclude Include="Level2.h" />
     <ClInclude Include="Levels.h" />
     <ClInclude Include="MegamanGame.h" />
     <ClInclude Include="constants.h" />

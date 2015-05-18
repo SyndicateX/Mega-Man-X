@@ -47,9 +47,8 @@ public:
 	}
 
 private:
-	Image beeFlying;
-
 	SpriteCoordinates beeSpriteCoordinates;
+	Image beeFlying;
 
 	double dx;
 	double dy;

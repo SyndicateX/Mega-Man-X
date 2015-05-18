@@ -12,6 +12,7 @@
 #include <vector>
 #include "Levels.h"
 #include "Level1.h"
+#include "Level2.h"
 
 //=============================================================================
 // This class is the core of the game
