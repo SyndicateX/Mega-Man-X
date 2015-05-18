@@ -77,8 +77,15 @@ public:
 	void update(float frameTime);
 	virtual void draw();
 
-	// In case megaman collides with a wall
-	void Megaman::stop(float frameTime, int wallX, int wallY, int wallLength, int wallHeight);
+	// Determines where to place megaman if he collides with several blocks at once. 
+	// Calls the other stop() function to deal with single block collision scenarios
+	void stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoordinates);
+	// Determines where to place megaman if he collides with a single block
+	void stop(int wallX, int wallY, int wallWidth, int wallHeight);
+	void topCollision(int wallY);
+	void leftCollision(int wallX);
+	void rightCollision(int wallX, int wallWidth);
+	void bottomCollision(int wallY, int wallHeight);
 
 	// Set Functions
 	void setDoWallJump(bool doWallJump) { doWallJump_ = doWallJump; }
@@ -91,15 +98,16 @@ public:
 	void setFloorCollision(bool floorCollisionStatus) { floorCollision_ = floorCollisionStatus; }
 
 	// Get Functions
-	bool canDash() { return canDash_; }
-	bool isDashing() { return isDashing_; }
-	bool canJump() { return canJump_; }
-	bool canWallJump() { return canWallJump_; }
-	bool canShoot() { return canShoot_; }
-	bool isDashJumping() { return isDashJumping_; }
+	bool canDash() const { return canDash_; }
+	bool isDashing() const { return isDashing_; }
+	bool canJump() const { return canJump_; }
+	bool canWallJump() const { return canWallJump_; }
+	bool canShoot() const { return canShoot_; }
+	bool isDashJumping() const { return isDashJumping_; }
 
 
 private:
+	SpriteCoordinates megamanSpriteCoordinates;
 	Image megamanIdle;
 	Image megamanWalking;
 	Image megamanJumping;
@@ -112,7 +120,6 @@ private:
 	Image megamanDashing;
 	Image megamanShootingDashing;
 	Image megamanWallSliding;
-	SpriteCoordinates megamanSpriteCoordinates;
 	bool standingOnSurface_ = true;
 	bool floorCollision_ = false;
 	bool wallJump_ = false;

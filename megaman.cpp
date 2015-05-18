@@ -233,15 +233,15 @@ void Megaman::update(float frameTime)
 			velocity.y = JUMP_VELOCITY;
 			spriteData.y += frameTime * velocity.y;  
 
-			velocity.x = 70;		//Mega Man is forced away from wall after jumping off it
-			if (isDashJumping_)
-			{
-				velocity.x *= 1.35;
-			}
-			if (spriteData.direction == RIGHT)
-			{
-				velocity.x = -velocity.x;
-			}
+			//////////velocity.x = 70;		//Mega Man is forced away from wall after jumping off it
+			//////////if (isDashJumping_)
+			//////////{
+			//////////	velocity.x *= 1.35;
+			//////////}
+			//////////if (spriteData.direction == RIGHT)
+			//////////{
+			//////////	velocity.x = -velocity.x;
+			//////////}
 
 			canWallJump_ = false;
 			doWallJump_ = false;
@@ -313,51 +313,161 @@ void Megaman::update(float frameTime)
 // stop
 // Collision detection between Mega Man and solid surfaces
 //=============================================================================
-void Megaman::stop(float frameTime, int wallX, int wallY, int wallLength, int wallHeight)
+void Megaman::stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoordinates)
 {
-	// Case: Below surface
-	if ((spriteData.x + spriteData.width / 2 > wallX) && (spriteData.x + spriteData.width / 2 < wallX + wallLength) && spriteData.y >= wallY + wallHeight - 20)
+	if (collisionVector.size() == 1)
 	{
-		spriteData.y = wallY + wallHeight + 1;
-		velocity.y = 1;
-		standingOnSurface_ = false;
-		floorCollision_ = false;
-		canWallJump_ = false;
+		stop(tileCoordinates[0].left, tileCoordinates[0].top, tileCoordinates[0].right - tileCoordinates[0].left, tileCoordinates[0].bottom - tileCoordinates[0].top);
 	}
-	// Case: Above surface
-	else if (((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y + spriteData.height <= wallY + 20) && velocity.y >= 0)
+	else
 	{
- 		standingOnSurface_ = true;
-		spriteData.y = wallY - spriteData.height + 1;		 // position at the top of the wall
-		velocity.y = 0; 										 // stop y acceleration
-		floorCollision_ = true;
-		isDashJumping_ = false;
-		isDashing_ = false;
-		canWallJump_ = false;
-	}
-	// Case: Left of surface
-	else if (spriteData.x + spriteData.width >= wallX && spriteData.x + spriteData.width < wallX + wallLength && spriteData.y < wallY + wallHeight)
-	{
-		spriteData.x = wallX - spriteData.width;
-		if (velocity.y > 0)
+		while (collisionVector.empty() == false)
 		{
-			canWallJump_ = true;
-		}
-	}
-	// Case: Right of surface
-	else if (spriteData.x < wallX + wallLength && spriteData.x + spriteData.width > wallX  && spriteData.y < wallY + wallHeight)
-	{
-		spriteData.x = wallX + wallLength; //+1;
-		if (velocity.y > 0)
-		{
-			canWallJump_ = true;
+			VECTOR2 tempCV = collisionVector[0];
+			collisionVector.erase(collisionVector.begin());
+
+			RECT tempTC = tileCoordinates[0];
+			tileCoordinates.erase(tileCoordinates.begin());
+
+			bool blocksInLine = false;
+			bool onTop = false;
+			bool onBottom = false;
+			bool onLeft = false;
+			bool onRight = false;
+
+			for (int i = 0; i < collisionVector.size(); i++)
+			{
+ 				if (!collisionVector.empty() && tempTC.top == tileCoordinates[i].top)
+				{
+					collisionVector.erase(collisionVector.begin() + i);
+					tileCoordinates.erase(tileCoordinates.begin() + i);
+					i--;
+					blocksInLine = true;
+				}
+			}
+			// If blocks lined up on the same y-coordinate (top y)
+			if (blocksInLine) 
+			{
+				//top/bottom collision
+				if (tempCV.y > 0)
+				{
+					topCollision(tempTC.top);
+				}
+				else
+				{
+					bottomCollision(tempTC.top, tempTC.bottom - tempTC.top);
+				}
+			}
+			else
+			{
+				for (int i = 0; i < collisionVector.size(); i++)
+				{
+					if (!collisionVector.empty() && tempTC.left == tileCoordinates[i].left)
+					{
+						collisionVector.erase(collisionVector.begin() + i);
+						tileCoordinates.erase(tileCoordinates.begin() + i);
+						i--;
+						blocksInLine = true;
+					}
+				}
+
+				// If blocks lined up on the same x-coordinate (left x)
+				if (blocksInLine)
+				{
+					//left/right collision
+					if (tempCV.x > 0)
+					{
+						leftCollision(tempTC.left);
+					}
+					else
+					{
+						rightCollision(tempTC.left, tempTC.right - tempTC.left);
+					}
+				}
+			}
+			if (collisionVector.size() == 1 || collisionVector.empty())
+			{
+				if (!collisionVector.empty())
+				{
+					stop(tileCoordinates[0].left, tileCoordinates[0].top, tileCoordinates[0].right - tileCoordinates[0].left, tileCoordinates[0].bottom - tileCoordinates[0].top);
+					collisionVector.erase(collisionVector.begin());
+					tileCoordinates.erase(tileCoordinates.begin());
+				}
+			}
 		}
 	}
 }
 
+void Megaman::stop(int wallX, int wallY, int wallWidth, int wallHeight)
+{
+	// Case: Below surface
+	if ((spriteData.x + spriteData.width > wallX) && (spriteData.x + spriteData.width < wallX + wallWidth) && spriteData.y >= wallY + wallHeight - 45)
+	{
+		bottomCollision(wallY, wallHeight);
+	}
+	// Case: Above surface
+	else if (((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallWidth) && spriteData.y + spriteData.height <= wallY + 20) && velocity.y >= 0)
+	{
+		topCollision(wallY);
+	}
+	// Case: Left of surface
+	else if (spriteData.x + spriteData.width >= wallX && spriteData.x + spriteData.width < wallX + wallWidth && spriteData.y < wallY + wallHeight)
+	{
+		leftCollision(wallX);
+	}
+	// Case: Right of surface
+	else if (spriteData.x < wallX + wallWidth && spriteData.x + spriteData.width > wallX  && spriteData.y < wallY + wallHeight)
+	{
+		rightCollision(wallX, wallWidth);
+	}
+}
+
+//=============================================================================
+// Collision Handlers
+// Helper functions for stop() functions. Resolve Megaman's collisions
+// for each direction when Mega Man collides with a wall or floor.
+//=============================================================================
+void Megaman::topCollision(int wallY)
+{
+	standingOnSurface_ = true;
+	spriteData.y = wallY - spriteData.height + 1;		 // position at the top of the wall
+	velocity.y = 0; 										 // stop y acceleration
+	floorCollision_ = true;
+	isDashJumping_ = false;
+	isDashing_ = false;
+	canWallJump_ = false;
+}
+void Megaman::leftCollision(int wallX)
+{
+	spriteData.x = wallX - spriteData.width;			// position at the left of the wall
+	velocity.x = 0;
+	if (velocity.y > 0 && !input->isKeyDown(UP_KEY) && !input->getGamepadA(0))
+	{
+			canWallJump_ = true;
+	}
+}
+void Megaman::rightCollision(int wallX, int wallWidth)
+{
+	velocity.x = 0;
+	spriteData.x = wallX + wallWidth + 1; //+1;			// position at the right of the wall
+	if (velocity.y > 0 && !input->isKeyDown(UP_KEY) && !input->getGamepadA(0))
+	{
+			canWallJump_ = true;
+	}
+}
+void Megaman::bottomCollision(int wallY, int wallHeight)
+{
+	spriteData.y = wallY + wallHeight + 1;				// position underneath the wall
+	velocity.y = 1;										// set velocity to make megaman fall
+	standingOnSurface_ = false;			
+	floorCollision_ = false;
+	canWallJump_ = false;
+	canJump_ = false;
+}
+
 //=============================================================================
 // draw
-// Drawing all of Mega Man's different states
+// Draws Mega Man according to his current state
 //=============================================================================
 void Megaman::draw()
 {

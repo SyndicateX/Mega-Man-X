@@ -88,6 +88,9 @@ void Level1::ai()
 void Level1::collisions(float frameTime)
 {
 	VECTOR2 cv;
+	std::vector<VECTOR2> collisionVector;
+	std::vector<RECT> tileCoordinates;
+	bool megamanCollided = false;
 	for (int i = 0; i < floor.size(); i++)
 	{
 		for (int j = 0; j < bullet.size(); j++)
@@ -97,7 +100,14 @@ void Level1::collisions(float frameTime)
 		}
 		if (megaman.collidesWith(floor[i], cv)) // 
 		{
-			megaman.stop(frameTime, floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+			collisionVector.push_back(cv);
+			tileCoordinates.push_back(RECT());
+			tileCoordinates[tileCoordinates.size() - 1].top = floor[i].getY();
+			tileCoordinates[tileCoordinates.size() - 1].left = floor[i].getX();
+			tileCoordinates[tileCoordinates.size() - 1].bottom = floor[i].getY() + floor[i].getHeight();
+			tileCoordinates[tileCoordinates.size() - 1].right = floor[i].getX() + floor[i].getWidth();
+			megamanCollided = true;
+			//megaman.stop(frameTime, floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
 		}
 		if (bee.collidesWith(floor[i], cv))
 		{
@@ -111,6 +121,10 @@ void Level1::collisions(float frameTime)
 		{
 			// bee takes damage
 		}
+	}
+	if (megamanCollided)
+	{
+		megaman.stop(collisionVector, tileCoordinates);
 	}
 }
 

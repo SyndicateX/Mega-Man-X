@@ -25,20 +25,34 @@ Bullet::Bullet() : Entity()
 bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
 	TextureManager *textureM)
 {
+	//// bullet sprite initialize
+	//bulletSpriteCoordinates.populateVector("pictures\\bulletsprites.xml");
+	//if (!initializeCoords(bulletSpriteCoordinates))
+	//	throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullets"));
+
 	//No Charge
 	regularBullet.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
 		bulletNS::HEIGHT, 1, textureM);
+	//regularBullet.initialize(bulletSpriteCoordinates);
+	//regularBullet.setFrames(bulletNS::NO_CHARGE_START_FRAME, bulletNS::NO_CHARGE_END_FRAME);
 	regularBullet.setCurrentFrame(bulletNS::NO_CHARGE_START_FRAME);
+	//regularBullet.setFrameDelay(bulletNS::NO_CHARGE_ANIMATION_DELAY);
 
 	//Small Charge
 	bulletSmall.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
 		bulletNS::HEIGHT, 1, textureM);
+	//bulletSmall.initialize(bulletSpriteCoordinates);
+	//bulletSmall.setFrames(bulletNS::SMALL_CHARGE_START_FRAME, bulletNS::SMALL_CHARGE_END_FRAME);
 	bulletSmall.setCurrentFrame(bulletNS::SMALL_CHARGE_START_FRAME);
+	//bulletSmall.setFrameDelay(bulletNS::SMALL_CHARGE_ANIMATION_DELAY);
 
 	//Large Charge
 	bulletLarge.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
 		bulletNS::HEIGHT, 1, textureM);
+	//bulletLarge.initialize(bulletSpriteCoordinates);
+	//bulletLarge.setFrames(bulletNS::LARGE_CHARGE_START_FRAME, bulletNS::LARGE_CHARGE_END_FRAME);
 	bulletLarge.setCurrentFrame(bulletNS::LARGE_CHARGE_START_FRAME);
+	//bulletLarge.setFrameDelay(bulletNS::LARGE_CHARGE_ANIMATION_DELAY);
 
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }

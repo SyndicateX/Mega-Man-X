@@ -4,6 +4,7 @@
 
 #include "entity.h"
 #include "constants.h"
+#include "sprites.h"
 
 namespace bulletNS
 {
@@ -15,16 +16,16 @@ namespace bulletNS
 	const float MASS = 1.0f;
 
 	const int NO_CHARGE_START_FRAME = 0;
-	const int NO_CHARGE_END_FRAME = 0;
-	const float NO_CHARGE_ANIMATION_DELAY = 1.0f;
+	const int NO_CHARGE_END_FRAME = 11;
+	const float NO_CHARGE_ANIMATION_DELAY = 0.07f;
 
 	const int SMALL_CHARGE_START_FRAME = 0;
-	const int SMALL_CHARGE_END_FRAME = 0;
-	const float SMALL_CHARGE_ANIMATION_DELAY = 1.0f;
+	const int SMALL_CHARGE_END_FRAME = 19;
+	const float SMALL_CHARGE_ANIMATION_DELAY = 0.1f;
 
 	const int LARGE_CHARGE_START_FRAME = 0;
-	const int LARGE_CHARGE_END_FRAME = 0;
-	const float LARGE_CHARGE_ANIMATION_DELAY = 1.0f;
+	const int LARGE_CHARGE_END_FRAME = 25;
+	const float LARGE_CHARGE_ANIMATION_DELAY = 0.1f;
 
 }
 
@@ -46,6 +47,7 @@ public:
 	double getInitialY()
 	{ return initialY_; }
 
+	//SpriteCoordinates bulletSpriteCoordinates;
 	Image regularBullet;
 	Image bulletSmall;
 	Image bulletLarge;

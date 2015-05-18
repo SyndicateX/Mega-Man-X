@@ -49,6 +49,14 @@ void Levels::initialize(HWND& hwnd, Graphics* graphics, Input* input, Game* game
 	if (!chargingSprites.initialize(game, chargingSpritesNS::WIDTH, chargingSpritesNS::HEIGHT, 0, &chargingSpritesTexture))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing charging sprites"));
 
+	//// bullet
+	//for (int i = 0; i < MAX_BULLETS; i++)
+	//{
+	//	bullet.push_back(Bullet());
+	//	if (!bullet[i].initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
+	//	throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
+	//}
+
 	return;
 }
 
@@ -122,7 +130,6 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 					if (!bullet[bullet.size() - 1].initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
 						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
 					bullet[bullet.size() - 1].setShotType(REGULAR_SHOT);
-
 					shoot();
 					lastShootTime = currentTime;
 					justShot = true;
@@ -162,8 +169,8 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 			shoot();
 			lastShootTime = currentTime;
 		}
-		chargeTime = 0;			// reset charge time						// Both are reset even if no charged shot
-		justShot = false;		// allows another small shot to be fired	// was fired
+		chargeTime = 0;			// reset charge time						++ Both are reset even if no charged shot
+		justShot = false;		// allows another small shot to be fired	++ was fired
 	}
 
 	//************************************* DASHING *************************************

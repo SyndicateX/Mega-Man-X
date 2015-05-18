@@ -29,7 +29,7 @@ protected:
 	Enemy mechaSonic;					// enemy
 
 	chargingSprites chargingSprites;	// charging Sprites
-	std::vector<Bullet> bullet;				// bullet charged small
+	std::vector<Bullet> bullet;			// bullets
 	Image   backdrop;					// backdrop image
 	Image	tile;
 	std::vector<Entity>	floor;
