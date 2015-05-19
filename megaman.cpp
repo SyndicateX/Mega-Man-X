@@ -440,19 +440,27 @@ void Megaman::topCollision(int wallY)
 void Megaman::leftCollision(int wallX)
 {
 	spriteData.x = wallX - spriteData.width;			// position at the left of the wall
-	velocity.x = 0;
-	if (velocity.y > 0 && !input->isKeyDown(UP_KEY) && !input->getGamepadA(0))
+	//velocity.x = 0;
+	//if (velocity.y > 0 && !input->isKeyDown(UP_KEY) && !input->getGamepadA(0))
+	//{
+	//		canWallJump_ = true;
+	//}
+	if (velocity.y > 0 && velocity.x != 0)
 	{
-			canWallJump_ = true;
+		canWallJump_ = true;
 	}
 }
 void Megaman::rightCollision(int wallX, int wallWidth)
 {
-	velocity.x = 0;
 	spriteData.x = wallX + wallWidth + 1; //+1;			// position at the right of the wall
-	if (velocity.y > 0 && !input->isKeyDown(UP_KEY) && !input->getGamepadA(0))
+	//velocity.x = 0;
+	//if (velocity.y > 0 && !input->isKeyDown(UP_KEY) && !input->getGamepadA(0))
+	//{
+	//		canWallJump_ = true;
+	//}
+	if (velocity.y > 0 && velocity.x != 0)
 	{
-			canWallJump_ = true;
+		canWallJump_ = true;
 	}
 }
 void Megaman::bottomCollision(int wallY, int wallHeight)
