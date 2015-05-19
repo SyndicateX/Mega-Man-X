@@ -18,8 +18,8 @@ Level1::~Level1()
 void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, Game* game)
 {
 	// backdrop texture
-	if (!backdropTexture.initialize(graphics,BACKDROP_IMAGE))
-	    throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
+	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
 	// enemy texture
 	if (!mechaSonicTexture.initialize(graphics, ENEMY001))
@@ -34,8 +34,8 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing tile textures"));
 
 	// backdrop
-	if (!backdrop.initialize(graphics,0,0,0,&backdropTexture))
-	    throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
+	if (!backdrop.initialize(graphics, 0, 0, 0, &backdropTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
 	// tile image
 	if (!tile.initialize(graphics, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_COLS, &tileTextures))
@@ -88,9 +88,10 @@ void Level1::ai()
 void Level1::collisions(float frameTime)
 {
 	VECTOR2 cv;
-	std::vector<VECTOR2> collisionVector;
-	std::vector<RECT> tileCoordinates;
-	bool megamanCollided = false;
+	std::vector<VECTOR2> collisionVector;		// Centers of collision between a wall and Mega Man
+	std::vector<RECT> tileCoordinates;			// Coordinates of all tiles that collided with Mega Man
+	bool megamanCollided = false;				// True if Mega Man collides with any tile
+
 	for (int i = 0; i < floor.size(); i++)
 	{
 		for (int j = 0; j < bullet.size(); j++)
@@ -107,55 +108,56 @@ void Level1::collisions(float frameTime)
 			tileCoordinates[tileCoordinates.size() - 1].bottom = floor[i].getY() + floor[i].getHeight();
 			tileCoordinates[tileCoordinates.size() - 1].right = floor[i].getX() + floor[i].getWidth();
 			megamanCollided = true;
-			//megaman.stop(frameTime, floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+			//megaman.stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
 		}
 		if (bee.collidesWith(floor[i], cv))
 		{
 			bee.stop(floor[i].getX(), floor[i].getWidth());
 		}
 	}
+
 	for (int j = 0; j < bullet.size(); j++)
 	{
 		if (bullet[j].collidesWith(bee, cv))
-
 		{
 			// bee takes damage
 		}
 	}
+
 	if (megamanCollided)
 	{
-		megaman.stop(collisionVector, tileCoordinates);
+		megaman.stop(collisionVector, tileCoordinates);		// Sets Mega Man's position and status after a collision
 	}
 }
 
 void Level1::render(Graphics* graphics)
 {
 	graphics->spriteBegin();                // begin drawing sprites
-	mapY += megaman.getY() - oldY_;
-	mapX += megaman.getX() - oldX_;
 
-	megaman.setY(oldY_);
+	mapY += megaman.getY() - oldY_;			// update map coordinates
+	mapX += megaman.getX() - oldX_;			//
 
-	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
+	megaman.setY(oldY_);					// reset Mega Man's y-coordinate to his previous y-coordinate (keeps him centered on the screen)
+	backdrop.setY(-mapY + megamanNS::Y);
+	bee.setY(beeNS::Y - mapY + megamanNS::Y);
+
+	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near and edge of the map on either end
 	{
 		backdrop.setX(-mapX);
 		bee.setX(beeNS::X + bee.getDx() - mapX);
-		megaman.setX(oldX_);
+		megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
 	}
-	else if (mapX < 0)
+	else if (mapX < 0)													// if Mega Man is near the left edge of the map
 	{
 		bee.setX(beeNS::X + bee.getDx());
 	}
-	else
+	else																// if Mega Man is near the right edge of the map
 	{
 		bee.setX(beeNS::X + bee.getDx() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
 	}
 
-	backdrop.setY(-mapY + megamanNS::Y);
-	bee.setY(beeNS::Y - mapY + megamanNS::Y);
-
 	int counter = 0;
-	for (int i = 0; i < TILE_ROWS; i++)
+	for (int i = 0; i < TILE_ROWS; i++)					// Moving tiles based on the map's movements
 	{
 		for (int j = 0; j < TILE_COLUMNS; j++)
 		{
@@ -171,7 +173,7 @@ void Level1::render(Graphics* graphics)
 				}
 				else if (mapX > TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
 				{
-					floor[counter].setX(j*TEXTURE_SIZE - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));// + TEXTURE_SIZE * TILE_ROWS + GAME_WIDTH);
+					floor[counter].setX(j*TEXTURE_SIZE - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)); // + TEXTURE_SIZE * TILE_ROWS + GAME_WIDTH);
 				}
 				floor[counter].setY(i*TEXTURE_SIZE - mapY + megamanNS::Y);
 				counter++;
@@ -181,7 +183,7 @@ void Level1::render(Graphics* graphics)
 
 	backdrop.draw();                        // add the backdrop to the scene
 
-	for (int i = 0; i < bullet.size(); i++)
+	for (int i = 0; i < bullet.size(); i++)			// Moving bullets based on the map's movements
 	{
 		bullet[i].setY(bullet[i].getInitialY() - mapY + megamanNS::Y);
 	}
@@ -193,7 +195,6 @@ void Level1::render(Graphics* graphics)
 		{
 			if (tileMap[row][col] >= 0)          // if tile present
 			{
-				//tile.setCurrentFrame(tileMap[row][col]);			// set tile texture
 				if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
 				{
 					tile.setX((float)(col*TEXTURE_SIZE) - mapX);	// set tile X
@@ -217,8 +218,8 @@ void Level1::render(Graphics* graphics)
 	}
 	mechaSonic.draw();						// add enemy to the scene
 	bee.draw();								// add bee enemy to the scene
-	megaman.draw();							// add megaman to the scene
-	chargingSprites.draw();					// add megaman charging sprites to the scene
+	megaman.draw();							// add Mega Man to the scene
+	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
 	for (int i = 0; i < bullet.size(); i++)
 	{
 		bullet[i].draw();					// add regular uncharged bullet to the scene
