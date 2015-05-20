@@ -384,6 +384,10 @@ void Megaman::stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileC
 						rightCollision(tempTC.left, tempTC.right - tempTC.left);
 					}
 				}
+				else
+				{
+					stop(tempTC.left, tempTC.top, tempTC.right - tempTC.left, tempTC.bottom - tempTC.top);
+				}
 			}
 			if (collisionVector.size() == 1 || collisionVector.empty())
 			{

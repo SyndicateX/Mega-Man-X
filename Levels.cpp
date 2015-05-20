@@ -13,6 +13,7 @@ Levels::Levels()
 	oldY_ = 0;
 	directionChange_ = false;
 	levelComplete_ = false;
+	bulletNumber_ = 0;
 }
 
 //=============================================================================
@@ -49,13 +50,13 @@ void Levels::initialize(HWND& hwnd, Graphics* graphics, Input* input, Game* game
 	if (!chargingSprites.initialize(game, chargingSpritesNS::WIDTH, chargingSpritesNS::HEIGHT, 0, &chargingSpritesTexture))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing charging sprites"));
 
-	//// bullet
-	//for (int i = 0; i < MAX_BULLETS; i++)
-	//{
-	//	bullet.push_back(Bullet());
-	//	if (!bullet[i].initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
-	//	throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
-	//}
+	//bullet
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		bullet.push_back(Bullet());
+		if (!bullet[i].initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
+	}
 
 	return;
 }
@@ -122,17 +123,20 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 			}
 			else
 			{
-				if (bullet.size() < MAX_BULLETS)
+				for (int i = 0; i < bullet.size(); i++)
 				{
-					megaman.setState(SHOOTING);
-					megaman.setShotType(REGULAR_SHOT);
-					bullet.push_back(Bullet());
-					if (!bullet[bullet.size() - 1].initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
-						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
-					bullet[bullet.size() - 1].setShotType(REGULAR_SHOT);
-					shoot();
-					lastShootTime = currentTime;
-					justShot = true;
+					if (!bullet[i].getVisible() && !bullet[i].getActive())
+					{
+						megaman.setState(SHOOTING);
+						megaman.setShotType(REGULAR_SHOT);
+						bullet[i].setVisible(true);
+						bullet[i].setActive(true);
+						bullet[i].setShotType(megaman.getShotType());
+						shoot(i);
+						lastShootTime = currentTime;
+						justShot = true;
+						break; // :O
+					}
 				}
 			}
 		}
@@ -161,13 +165,19 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 			{
 				megaman.setShotType(MEDIUM_CHARGE);
 			}
-			bullet.push_back(Bullet());
-			if (!bullet[bullet.size() - 1].initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
-				throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
-			bullet[bullet.size() - 1].setShotType(megaman.getShotType());
-			chargingSprites.setCharge1(false);
-			shoot();
-			lastShootTime = currentTime;
+			for (int i = 0; i < bullet.size(); i++)
+			{
+				if (!bullet[i].getActive() && !bullet[i].getVisible())
+				{
+					bullet[i].setVisible(true);
+					bullet[i].setActive(true);
+					bullet[i].setShotType(megaman.getShotType());
+					chargingSprites.setCharge1(false);
+					shoot(i);
+					lastShootTime = currentTime;
+					break; // :O
+				}
+			}
 		}
 		chargeTime = 0;			// reset charge time						++ Both are reset even if no charged shot
 		justShot = false;		// allows another small shot to be fired	++ was fired
@@ -220,18 +230,22 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 	//*********************************** UPDATE DATA ************************************
 	for (int i = 0; i < bullet.size(); i++)			// Update bullet data -- is this the best place for this?
 	{
-		if (bullet[i].getDirection() == RIGHT)
+		if (bullet[i].getVisible() && bullet[i].getActive())
 		{
-			bullet[i].setX(bullet[i].getX() + bulletNS::SPEED*frameTime);
-		}
-		else
-		{
-			bullet[i].setX(bullet[i].getX() - bulletNS::SPEED*frameTime);
-		}
-		bullet[i].update(frameTime);
-		if (bullet[i].getX() > GAME_WIDTH || bullet[i].getX() < 0)
-		{
-			bullet.erase(bullet.begin() + i);
+			if (bullet[i].getDirection() == RIGHT)
+			{
+				bullet[i].setX(bullet[i].getX() + bulletNS::SPEED*frameTime);
+			}
+			else
+			{
+				bullet[i].setX(bullet[i].getX() - bulletNS::SPEED*frameTime);
+			}
+			bullet[i].update(frameTime);
+			if (bullet[i].getX() > GAME_WIDTH || bullet[i].getX() < 0)
+			{
+				bullet[i].setVisible(false);
+				bullet[i].setActive(false);
+			}
 		}
 	}
 
@@ -243,33 +257,33 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 //=============================================================================
 // Handle Mega Man's bullets initialization
 //=============================================================================
-void Levels::shoot()
+void Levels::shoot(int index)
 {
 	chargingSprites.setCharge1(false);
 	megaman.setState(SHOOTING);
-	bullet[bullet.size() - 1].setDirection(megaman.getDirection());
+	bullet[index].setDirection(megaman.getDirection());
 	if (megaman.canWallJump())
 	{
-		if (bullet[bullet.size() - 1].getDirection() == RIGHT)
-			bullet[bullet.size() - 1].setDirection(LEFT);
+		if (bullet[index].getDirection() == RIGHT)
+			bullet[index].setDirection(LEFT);
 		else
-			bullet[bullet.size() - 1].setDirection(RIGHT);
+			bullet[index].setDirection(RIGHT);
 	}
-	if (bullet[bullet.size() - 1].getDirection() == RIGHT)
+	if (bullet[index].getDirection() == RIGHT)
 	{
-		bullet[bullet.size() - 1].flipHorizontal(false);
-		bullet[bullet.size() - 1].setDirection(RIGHT);
-		bullet[bullet.size() - 1].setX(megaman.getX() + megaman.getWidth());
-		bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 20);
+		bullet[index].flipHorizontal(false);
+		bullet[index].setDirection(RIGHT);
+		bullet[index].setX(megaman.getX() + megaman.getWidth());
+		bullet[index].setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 	}
 	else
 	{
-		bullet[bullet.size() - 1].flipHorizontal(true);
-		bullet[bullet.size() - 1].setDirection(LEFT);
-		bullet[bullet.size() - 1].setX(megaman.getX());
-		bullet[bullet.size() - 1].setY(megaman.getY() + megaman.getHeight() / 3 - 20);
+		bullet[index].flipHorizontal(true);
+		bullet[index].setDirection(LEFT);
+		bullet[index].setX(megaman.getX());
+		bullet[index].setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 	}
-	bullet[bullet.size() - 1].setInitialY(mapY);
+	bullet[index].setInitialY(mapY);
 }
 
 //=============================================================================

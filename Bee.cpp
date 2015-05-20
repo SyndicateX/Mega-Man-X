@@ -58,7 +58,7 @@ void Bee::update(float frameTime)
 	//spriteData.x += frameTime * 50;         // move along X 
 	if (spriteData.direction == RIGHT)
 	{
-		dx += frameTime * 150;
+		dx += frameTime * beeNS::SPEED;
 	}
 	else
 	{

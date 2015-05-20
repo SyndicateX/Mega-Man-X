@@ -97,7 +97,10 @@ void Level1::collisions(float frameTime)
 		for (int j = 0; j < bullet.size(); j++)
 		{
 			if (bullet[j].collidesWith(floor[i], cv))
-				bullet.erase(bullet.begin() + j);
+			{
+				bullet[j].setVisible(false);
+				bullet[j].setActive(false);
+			}
 		}
 		if (megaman.collidesWith(floor[i], cv)) // 
 		{
@@ -220,9 +223,11 @@ void Level1::render(Graphics* graphics)
 	bee.draw();								// add bee enemy to the scene
 	megaman.draw();							// add Mega Man to the scene
 	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
+
 	for (int i = 0; i < bullet.size(); i++)
 	{
-		bullet[i].draw();					// add regular uncharged bullet to the scene
+		if (bullet[i].getVisible() && bullet[i].getActive())
+			bullet[i].draw();					// add bullets to the scene
 	}
 	graphics->spriteEnd();                  // end drawing sprites
 }

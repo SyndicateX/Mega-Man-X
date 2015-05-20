@@ -38,6 +38,7 @@ protected:
 	double oldY_;
 	bool directionChange_;
 	bool levelComplete_;
+	int bulletNumber_;
 
 public:
 	// Constructor
@@ -45,15 +46,18 @@ public:
 	// Destructor
 	virtual ~Levels();
 	// Initialize the game
+
 	void initialize(HWND& hwnd, Graphics* graphics, Input* input, Game* game);
 	virtual void initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, Game* game) = 0;
 	virtual void update(float frameTime, Input* input, Game* game) = 0;// { updateMegaman(100, 100); };
 	virtual void updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime, Input* input, Game* game);
+
 	void update2(double MAP_WIDTH, double MAP_HEIGHT);      // must override pure virtual from Game
 	void leftRightInput(Direction direction, double MAP_WIDTH, double MAP_HEIGHT);
 	void moveMegaman(double moveRatedouble, double MAP_WIDTH, double MAP_HEIGHT); // handles megaman's and the map's movements after input
-	void shoot();		// shoots megaman's x-buster bullets
+	void shoot(int index);		// shoots megaman's x-buster bullets
 	bool isLevelComplete();
+
 	virtual void ai() = 0;          // "
 	virtual void collisions(float frameTime) = 0;  // "
 	virtual void render(Graphics* graphics) = 0;      // "

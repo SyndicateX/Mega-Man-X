@@ -15,17 +15,17 @@ namespace bulletNS
 	const float SPEED = 1200;               // pixels per second
 	const float MASS = 1.0f;
 
-	const int NO_CHARGE_START_FRAME = 0;
+	const int NO_CHARGE_START_FRAME = 8;
 	const int NO_CHARGE_END_FRAME = 11;
-	const float NO_CHARGE_ANIMATION_DELAY = 0.07f;
+	const float NO_CHARGE_ANIMATION_DELAY = 0.17f;
 
-	const int SMALL_CHARGE_START_FRAME = 0;
-	const int SMALL_CHARGE_END_FRAME = 19;
-	const float SMALL_CHARGE_ANIMATION_DELAY = 0.1f;
+	const int SMALL_CHARGE_START_FRAME = 17;
+	const int SMALL_CHARGE_END_FRAME = 18;
+	const float SMALL_CHARGE_ANIMATION_DELAY = 0.12f;
 
-	const int LARGE_CHARGE_START_FRAME = 0;
+	const int LARGE_CHARGE_START_FRAME = 23;
 	const int LARGE_CHARGE_END_FRAME = 25;
-	const float LARGE_CHARGE_ANIMATION_DELAY = 0.1f;
+	const float LARGE_CHARGE_ANIMATION_DELAY = 0.07f;
 
 }
 
@@ -41,13 +41,15 @@ public:
 	void update(float frameTime);
 	virtual void draw();
 
+	// set functions
 	void setInitialY(double initialY)
 	{ initialY_ = initialY; }
 
+	// get functions
 	double getInitialY()
 	{ return initialY_; }
 
-	//SpriteCoordinates bulletSpriteCoordinates;
+	SpriteCoordinates bulletSpriteCoordinates;
 	Image regularBullet;
 	Image bulletSmall;
 	Image bulletLarge;
