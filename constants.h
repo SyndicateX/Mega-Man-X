@@ -17,6 +17,7 @@ const char BULLET_IMAGE[]				= "pictures\\BusterBusterEdit.png";
 const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CHARGING_SPRITES_IMAGE[]		= "pictures\\BusterBuster.png";
 const char ENEMY001[]					= "pictures\\Mecha_Sonic.Forte.32.png";
+const char EXPLOSION[]					= "pictures\\explosion.png";
 const char BEE[]						= "pictures\\baddies.png";
 
 // window

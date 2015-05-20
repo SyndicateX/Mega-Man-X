@@ -18,8 +18,14 @@ Bee::Bee() : Entity()
 	startFrame = 0;                             // first frame of animation
 	endFrame = 0;								// last frame of animation
 	currentFrame = startFrame;
+	edge.top = -beeNS::HEIGHT / 2;			// set collision edges
+	edge.bottom = beeNS::HEIGHT / 2;
+	edge.left = -beeNS::WIDTH / 2;
+	edge.right = beeNS::WIDTH / 2;
 	collisionType = entityNS::BOX;
 	mass = beeNS::MASS;
+	active = true;
+	visible = true;
 
 	dx = 0;
 	dy = 0;
@@ -64,39 +70,6 @@ void Bee::update(float frameTime)
 	{
 		dx -= frameTime * 150;
 	}
-	
-	//spriteData.x += frameTime * velocity.x;         // move along X 
-	//spriteData.y += frameTime * velocity.y;         // move along Y
-
-	//// Bounce off walls
-	//if (spriteData.x > GAME_WIDTH - beeNS::WIDTH)  // if hit right screen edge
-	//{
-	//	spriteData.x = GAME_WIDTH - beeNS::WIDTH;  // position at right screen edge
-	//	velocity.x = -velocity.x;                   // reverse X direction
-	//}
-	//else if (spriteData.x < 0)                    // else if hit left screen edge
-	//{
-	//	spriteData.x = 0;                           // position at left screen edge
-	//	velocity.x = -velocity.x;                   // reverse X direction
-	//}
-	//if (spriteData.y > GAME_HEIGHT - beeNS::HEIGHT) // if hit bottom screen edge
-	//{
-	//	spriteData.y = GAME_HEIGHT - beeNS::HEIGHT; // position at bottom screen edge
-	//	velocity.y -= beeNS::ENERGY_LOSS;
-	//	if (velocity.y < beeNS::MIN_VY)            // if bee has small bounce
-	//	{
-	//		spriteData.y = GAME_HEIGHT / 4;
-	//		velocity.x = beeNS::SPEED;
-	//	}
-	//	velocity.y = -velocity.y;                   // reverse Y direction
-	//}
-	//else if (spriteData.y < 0)                    // else if hit top screen edge
-	//{
-	//	spriteData.y = 0;                           // position at top screen edge
-	//	velocity.y = -velocity.y;                   // reverse Y direction
-	//}
-
-	//velocity.y += frameTime * GRAVITY;              // gravity
 
 	beeFlying.update(frameTime);
 }
@@ -107,13 +80,13 @@ void Bee::stop(double wallX, double wallWidth)
 	{
 		spriteData.direction = LEFT;
 		flipHorizontal(true);
-		dx -= spriteData.x + spriteData.width - wallX;
+		dx -= spriteData.x + spriteData.width - wallX +5;
 	}
 	else
 	{
 		spriteData.direction = RIGHT;
 		flipHorizontal(false);
-		dx += wallX + wallWidth - spriteData.x;
+		dx += wallX + wallWidth - spriteData.x + 5;
 	}
 }
 

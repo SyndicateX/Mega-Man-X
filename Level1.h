@@ -5,6 +5,7 @@
 #include "Levels.h"
 #include "megaman.h"
 #include "Bee.h"
+#include "sprites.h"
 
 namespace level1NS
 {
@@ -63,9 +64,14 @@ class Level1 : public Levels
 {
 protected:
 	// level1 items
+	TextureManager explosionTexture;
 	TextureManager beeTexture;			// bee texture
 
+	SpriteCoordinates explosionSpriteCoordinates;
+	Entity explosion;
 	Bee bee;							// bee enemy
+
+	bool explode = false;
 public:
 	Level1();
 	~Level1();

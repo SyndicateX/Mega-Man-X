@@ -21,7 +21,7 @@ namespace bulletNS
 
 	const int SMALL_CHARGE_START_FRAME = 17;
 	const int SMALL_CHARGE_END_FRAME = 18;
-	const float SMALL_CHARGE_ANIMATION_DELAY = 0.12f;
+	const float SMALL_CHARGE_ANIMATION_DELAY = 0.25f;
 
 	const int LARGE_CHARGE_START_FRAME = 23;
 	const int LARGE_CHARGE_END_FRAME = 25;
