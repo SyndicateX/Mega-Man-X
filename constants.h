@@ -73,7 +73,8 @@ enum State
 	JUMPING,
 	SHOOTING,
 	DASHING,
-	WALL_SLIDING
+	WALL_SLIDING,
+	DEAD
 };
 
 enum ShotType

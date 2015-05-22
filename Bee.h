@@ -19,7 +19,11 @@ namespace beeNS
 
 	const int FLYING_BEE_START_FRAME = 49;
 	const int FLYING_BEE_END_FRAME = 50;
-	const int FLYING_BEE_ANIMATION_DELAY = 0.05f;
+	const float FLYING_BEE_ANIMATION_DELAY = 0.05f;
+
+	const int DYING_BEE_START_FRAME = 152;
+	const int DYING_BEE_END_FRAME = 155;
+	const float DYING_BEE_ANIMATION_DELAY = 0.10f;
 }
 
 // inherits from Entity class
@@ -49,6 +53,7 @@ public:
 private:
 	SpriteCoordinates beeSpriteCoordinates;
 	Image beeFlying;
+	Image beeDying;
 
 	double dx;
 	double dy;

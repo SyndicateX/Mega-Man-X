@@ -42,11 +42,22 @@ bool Bee::initialize(Game *gamePtr, int width, int height, int ncols,
 	//Idle
 	beeFlying.initialize(gamePtr->getGraphics(), beeNS::WIDTH,
 		beeNS::HEIGHT, 0, textureM);
+
 	if (!beeFlying.initialize(beeSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 	beeFlying.setFrames(beeNS::FLYING_BEE_START_FRAME, beeNS::FLYING_BEE_END_FRAME);
 	beeFlying.setCurrentFrame(beeNS::FLYING_BEE_START_FRAME);
 	beeFlying.setFrameDelay(beeNS::FLYING_BEE_ANIMATION_DELAY);
+
+	//Dying
+	beeDying.initialize(gamePtr->getGraphics(), beeNS::WIDTH,
+		beeNS::HEIGHT, 0, textureM);
+
+	if (!beeDying.initialize(beeSpriteCoordinates))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
+	beeDying.setFrames(beeNS::DYING_BEE_START_FRAME, beeNS::DYING_BEE_END_FRAME);
+	beeDying.setCurrentFrame(beeNS::DYING_BEE_START_FRAME);
+	beeDying.setFrameDelay(beeNS::DYING_BEE_ANIMATION_DELAY);
 
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
@@ -60,18 +71,27 @@ void Bee::update(float frameTime)
 {
 	Entity::update(frameTime);
 	
-
-	//spriteData.x += frameTime * 50;         // move along X 
-	if (spriteData.direction == RIGHT)
+	if (spriteData.state != DEAD)
 	{
-		dx += frameTime * beeNS::SPEED;
+		//spriteData.x += frameTime * 50;         // move along X 
+		if (spriteData.direction == RIGHT)
+		{
+			dx += frameTime * beeNS::SPEED;
+		}
+		else
+		{
+			dx -= frameTime * beeNS::SPEED;
+		}
+		beeFlying.update(frameTime);
 	}
 	else
 	{
-		dx -= frameTime * 150;
+		if (beeDying.getCurrentFrame() == beeNS::DYING_BEE_END_FRAME)
+		{
+			visible = false;
+		}
+		beeDying.update(frameTime);
 	}
-
-	beeFlying.update(frameTime);
 }
 
 void Bee::stop(double wallX, double wallWidth)
@@ -80,7 +100,7 @@ void Bee::stop(double wallX, double wallWidth)
 	{
 		spriteData.direction = LEFT;
 		flipHorizontal(true);
-		dx -= spriteData.x + spriteData.width - wallX +5;
+		dx -= spriteData.x + spriteData.width - wallX + 5;
 	}
 	else
 	{
@@ -92,5 +112,12 @@ void Bee::stop(double wallX, double wallWidth)
 
 void Bee::draw()
 {
-	beeFlying.draw(spriteData);
+	if (spriteData.state == DEAD)
+	{
+		beeDying.draw(spriteData);
+	}
+	else
+	{
+		beeFlying.draw(spriteData);
+	}
 }

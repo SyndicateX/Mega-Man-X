@@ -25,10 +25,6 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	if (!mechaSonicTexture.initialize(graphics, ENEMY001))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
 
-	// explosion texture
-	if (!explosionTexture.initialize(graphics, EXPLOSION))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing explosion texture"));
-
 	// bee enemy texture
 	if (!beeTexture.initialize(graphics, BEE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee texture"));
@@ -53,15 +49,6 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 
 	// bee enemy
 	if (!bee.initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &beeTexture))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
-
-	// explosion
-	if (!explosion.initialize(game, 0, 0, 0, &explosionTexture))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing explosion"));
-
-	// explosion sprite initialize
-	explosionSpriteCoordinates.populateVector("pictures\\explosion.xml");
-	if (!explosion.initializeCoords(explosionSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 
 	// floors
@@ -143,12 +130,8 @@ void Level1::collisions(float frameTime)
 		if (bullet[j].collidesWith(bee, cv))
 		{
 			// bee takes damage
-			explosion.setX(bee.getX());
-			explosion.setY(bee.getY());
-			explosion.setCurrentFrame(10);
 			bee.setActive(false);
-			bee.setVisible(false);
-			explode = true;
+			bee.setState(DEAD);
 		}
 	}
 
@@ -247,11 +230,8 @@ void Level1::render(Graphics* graphics)
 	mechaSonic.draw();						// add enemy to the scene
 	megaman.draw();							// add Mega Man to the scene
 	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
-	if (explode)
-	{
-		explosion.draw();
-	}
-	if (bee.getActive() && bee.getVisible())
+
+	if (bee.getVisible())
 	{
 		bee.draw();								// add bee enemy to the scene
 	}
@@ -274,6 +254,7 @@ void Level1::releaseAll()
 	backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
 	beeTexture.onLostDevice();
+	explosionTexture.onLostDevice();
 
 	//Game::releaseAll();
 	return;
@@ -290,6 +271,7 @@ void Level1::resetAll()
 	bulletTexture.onResetDevice();
 	bulletTexture.onResetDevice();
 	beeTexture.onResetDevice();
+	explosionTexture.onResetDevice();
 
 	//Game::resetAll();
 	return;
