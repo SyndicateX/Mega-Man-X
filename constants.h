@@ -42,6 +42,8 @@ const int TERMINAL_VELOCITY = -JUMP_VELOCITY;
 
 const double WALK_SPEED = 1;
 const double DASH_SPEED = 2.2;
+const float DAMAGE_TIME = 0.4f;
+const float INVINCIBILITY_TIME = 1.2f;
 const int MAX_BULLETS = 3;
 
 // audio files required by audio.cpp
@@ -74,7 +76,8 @@ enum State
 	SHOOTING,
 	DASHING,
 	WALL_SLIDING,
-	DEAD
+	DEAD,
+	DAMAGED
 };
 
 enum ShotType

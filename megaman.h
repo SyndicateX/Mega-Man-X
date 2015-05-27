@@ -62,6 +62,10 @@ namespace megamanNS
 	const int WALL_SLIDING_MEGAMAN_START_FRAME = 158;
 	const int WALL_SLIDING_MEGAMAN_END_FRAME = 158;
 	const float WALL_SLIDING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
+	const int DAMAGED_MEGAMAN_START_FRAME = 179;
+	const int DAMAGED_MEGAMAN_END_FRAME = 182;
+	const float DAMAGED_MEGAMAN_ANIMATION_DELAY = 0.10f;
 }
 
 // inherits from Entity class
@@ -96,6 +100,8 @@ public:
 	void setCanShoot(bool shootStatus) { canShoot_ = shootStatus; }
 	void setIsDashJumping(bool dashJumpStatus) { isDashJumping_ = dashJumpStatus; }
 	void setFloorCollision(bool floorCollisionStatus) { floorCollision_ = floorCollisionStatus; }
+	void setDamageTimer(float damageTime) { damageTimer = damageTime; }
+	void setInvincible(bool invincibleStatus) { isInvincible_ = invincibleStatus; }
 
 	// Get Functions
 	bool canDash() const { return canDash_; }
@@ -104,7 +110,7 @@ public:
 	bool canWallJump() const { return canWallJump_; }
 	bool canShoot() const { return canShoot_; }
 	bool isDashJumping() const { return isDashJumping_; }
-
+	bool isInvincible() const { return isInvincible_; }
 
 private:
 	SpriteCoordinates megamanSpriteCoordinates;
@@ -120,6 +126,8 @@ private:
 	Image megamanDashing;
 	Image megamanShootingDashing;
 	Image megamanWallSliding;
+	Image megamanDamaged;
+
 	bool standingOnSurface_ = true;
 	bool floorCollision_ = false;
 	bool wallJump_ = false;
@@ -130,6 +138,12 @@ private:
 	bool canWallJump_ = false;
 	bool canShoot_ = true;
 	bool isDashJumping_ = false;
+	bool isInvincible_ = false;
+
+	float damageTimer;                  // time remaining until user can control Mega Man
+	float invincibleTimer;                  // time remaining until Mega Man can take damage again
+
+	int flicker;
 };
 #endif
 

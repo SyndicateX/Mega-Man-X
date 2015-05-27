@@ -3243,9 +3243,9 @@
 
 <Y>2763</Y>
 
-<Width>70</Width>
+<Width>77</Width>
 
-<Height>106</Height>
+<Height>121</Height>
 
 </Coordinates>
 
@@ -3261,7 +3261,7 @@
 
 <Y>2748</Y>
 
-<Width>75</Width>
+<Width>77</Width>
 
 <Height>121</Height>
 
@@ -3279,9 +3279,9 @@
 
 <Y>2763</Y>
 
-<Width>75</Width>
+<Width>77</Width>
 
-<Height>106</Height>
+<Height>121</Height>
 
 </Coordinates>
 
@@ -3299,7 +3299,7 @@
 
 <Width>77</Width>
 
-<Height>115</Height>
+<Height>121</Height>
 
 </Coordinates>
 

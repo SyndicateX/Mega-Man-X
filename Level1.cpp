@@ -89,7 +89,14 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 void Level1::update(float frameTime, Input* input, Game* game)
 {
 	// Handles megaman's input and actions
-	updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
+	if (megaman.getState() != DAMAGED)
+	{
+		updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
+	}
+	else
+	{
+		megaman.update(frameTime);
+	}
 	for (int i = 0; i < enemy.size(); i++)
 	{
 		enemy[i].update(frameTime);
@@ -144,15 +151,14 @@ void Level1::collisions(float frameTime)
 		}
 		for (int j = 0; j < enemy.size(); j++)
 		{
-			//double tempX = enemy[j].getX();
-			//double tempY = enemy[j].getY();
-			//enemy[j].setX(enemy[j].getStartX() + enemy[j].getDx());
-			//enemy[j].setY(enemy[j].getStartY() + enemy[j].getDy());
 			if (enemy[j].collidesWith(floor[i], cv))
 			{
-				//enemy[j].setX(tempX);
-				//enemy[j].setY(tempY);
 				enemy[j].stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+			}
+			if (enemy[j].collidesWith(megaman, cv) && !megaman.isInvincible() && megaman.getState() != DAMAGED)
+			{
+				megaman.setState(DAMAGED);
+				megaman.setDamageTimer(DAMAGE_TIME);
 			}
 		}
 	}
@@ -161,12 +167,11 @@ void Level1::collisions(float frameTime)
 	{
 		if (bullet[j].collidesWith(bee, cv))
 		{
-			// bee takes damage
+			// bee explodes 
 			bee.setActive(false);
 			bee.setState(DEAD);
 		}
 	}
-
 	if (megamanCollided)
 	{
 		megaman.stop(collisionVector, tileCoordinates);		// Sets Mega Man's position and status after a collision

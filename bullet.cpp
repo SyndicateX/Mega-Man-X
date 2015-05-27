@@ -60,6 +60,21 @@ bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
 
+void Bullet::setInitialY(double initialY)
+{
+	if (spriteData.shotType == REGULAR_SHOT)
+	{
+		initialY_ = initialY + 22;
+	}
+	else if (spriteData.shotType == SMALL_CHARGE)
+	{
+		initialY_ = initialY + 14;
+	}
+	else
+	{
+		initialY_ = initialY;
+	}
+}
 
 //=============================================================================
 // update
@@ -83,14 +98,10 @@ void Bullet::draw()
 	}
 	else if (spriteData.shotType == SMALL_CHARGE)
 	{
-		//RECT rect = { 26, 0, 85, 58 };
-		//bulletSmall.setSpriteDataRect(rect);
 		bulletSmall.draw(spriteData);
 	}
 	else if (spriteData.shotType == MEDIUM_CHARGE)
 	{
-		//RECT rect = { 85, 0, 217, 65 };
-		//bulletLarge.setSpriteDataRect(rect);
 		bulletLarge.draw(spriteData);
 	}
 }
