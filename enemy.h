@@ -34,6 +34,7 @@ public:
 	void update(float framTime);
 	virtual void draw();
 	void stop(int wallX, int wallY, int wallLength, int wallHeight);
+	void stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoordinates);
 
 	void setStartX(double startX)
 	{
@@ -69,6 +70,12 @@ private:
 	double startY_;
 	double dx;
 	double dy;
+
+	void topCollision(int wallY);
+	void leftCollision(int wallX);
+	void rightCollision(int wallX, int wallWidth);
+	void bottomCollision(int wallY, int wallHeight);
+	
 };
 
 #endif
