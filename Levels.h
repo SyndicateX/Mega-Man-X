@@ -27,15 +27,15 @@ protected:
 	TextureManager chargingSpritesTexture; // megaman charging sprites texture
 
 	Megaman	megaman;					// megaman
-	Enemy mechaSonic;					// enemy
+	//Enemy mechaSonic;					// enemy
 
 	chargingSprites chargingSprites;	// charging Sprites
 	std::vector<Bullet> bullet;			// bullets
 	Image   backdrop;					// backdrop image
 	Image	tile;
 	std::vector<Entity>	floor;
-	std::vector<Enemy> enemy;
-	double   mapX, mapY, tileMapX, tileMapY;
+	std::vector<Enemy*> enemy;
+	double  mapX, mapY, tileMapX, tileMapY;
 	double oldX_;
 	double oldY_;
 	bool directionChange_;

@@ -44,8 +44,8 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	tile.setCurrentFrame(0);
 
 	// enemy
-	if (!mechaSonic.initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &mechaSonicTexture))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
+//	if (!mechaSonic.initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &mechaSonicTexture))
+//		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
 
 	// bee enemy
 	if (!bee.initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &beeTexture))
@@ -231,7 +231,7 @@ void Level2::render(Graphics* graphics)
 			}
 		}
 	}
-	mechaSonic.draw();						// add enemy to the scene
+	//mechaSonic.draw();						// add enemy to the scene
 	megaman.draw();							// add Mega Man to the scene
 	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
 

@@ -30,7 +30,8 @@ public:
 
 	//inherited member functions
 	virtual bool initialize(Game * gamePtr, int width, int height, int ncols,
-		TextureManager * textureM);
+		TextureManager * textureM) = 0;
+//		std::string spriteCoordinatesFileName);
 	void update(float framTime);
 	virtual void draw();
 	void stop(int wallX, int wallY, int wallLength, int wallHeight);
@@ -62,14 +63,17 @@ public:
 		return dy;
 	}
 
-private:
+protected:
+	SpriteCoordinates spriteCoordinates;
+
 	Image enemyIdle;
-	SpriteCoordinates mechaSonicSpriteCoordinates;
 
 	double startX_;
 	double startY_;
 	double dx;
 	double dy;
+
+	bool gravity_;
 
 	void topCollision(int wallY);
 	void leftCollision(int wallX);

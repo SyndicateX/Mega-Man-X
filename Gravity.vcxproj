@@ -94,6 +94,7 @@
     <ClCompile Include="Level1.cpp" />
     <ClCompile Include="Level2.cpp" />
     <ClCompile Include="Levels.cpp" />
+    <ClCompile Include="MechaSonic.cpp" />
     <ClCompile Include="MegamanGame.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="Level1.h" />
     <ClInclude Include="Level2.h" />
     <ClInclude Include="Levels.h" />
+    <ClInclude Include="MechaSonic.h" />
     <ClInclude Include="MegamanGame.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="entity.h" />

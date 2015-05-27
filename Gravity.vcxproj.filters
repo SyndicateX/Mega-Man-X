@@ -66,6 +66,9 @@
     <ClCompile Include="Level2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MechaSonic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -123,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Level2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MechaSonic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
