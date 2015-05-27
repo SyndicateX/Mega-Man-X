@@ -283,7 +283,7 @@ void Levels::shoot(int index)
 		bullet[index].setX(megaman.getX());
 		bullet[index].setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 	}
-	bullet[index].setInitialY(mapY);
+	bullet[index].setInitialY(mapY, megaman.canWallJump());
 }
 
 //=============================================================================

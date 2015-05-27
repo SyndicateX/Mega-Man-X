@@ -60,7 +60,7 @@ bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
 
-void Bullet::setInitialY(double initialY)
+void Bullet::setInitialY(double initialY, bool wallSliding)
 {
 	if (spriteData.shotType == REGULAR_SHOT)
 	{
@@ -73,6 +73,10 @@ void Bullet::setInitialY(double initialY)
 	else
 	{
 		initialY_ = initialY;
+	}
+	if (wallSliding)
+	{
+		initialY_ += 30;
 	}
 }
 
