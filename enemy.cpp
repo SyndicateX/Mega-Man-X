@@ -14,7 +14,7 @@ Enemy::Enemy() : Entity()
 	spriteData.direction = RIGHT;				  // enemy always faces right at the start of any level
 	spriteData.state = STANDING;					
 	velocity.x = 0;						        // velocity X
-	velocity.y = 0;							    // velocity Y
+	velocity.y = -20;							    // velocity Y
 	frameDelay = 1.0;// 0.07;
 	startFrame = 0;                             // first frame of animation
 	endFrame = 0;                           // last frame of animation
@@ -23,7 +23,7 @@ Enemy::Enemy() : Entity()
 	edge.bottom = enemyNS::HEIGHT / 2;
 	edge.left = -enemyNS::WIDTH / 2;
 	edge.right = enemyNS::WIDTH / 2;
-	collisionType = entityNS::ROTATED_BOX;
+	collisionType = entityNS::BOX;
 	mass = enemyNS::MASS;
 	visible = true;
 	active = true;
@@ -71,50 +71,12 @@ void Enemy::update(float frameTime)
 {
 	Entity::update(frameTime);
 	dy += frameTime * velocity.y;
-	enemyIdle.update(frameTime);
+	velocity.y += frameTime * GRAVITY;              // gravity
+	if (velocity.y >= TERMINAL_VELOCITY)
+	{
+		velocity.y = TERMINAL_VELOCITY;
+	}
 }
-
-//=============================================================================
-// stop
-// Collision detection between Enemy and solid surfaces
-//=============================================================================
-//void Enemy::stop(int wallX, int wallY, int wallLength, int wallHeight)
-//{
-//	// Case: Above surface
-//	if (((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y + spriteData.height <= wallY + 10) && velocity.y >= 0)
-//	{
-//		standingOnSurface_ = true;
-//		spriteData.y = wallY - spriteData.height;		 // position at the top of the wall
-//		velocity.y = 0; 										 // stop y acceleration
-//		floorCollision_ = true;
-//	}
-//	// Case: Below surface
-//	else if ((spriteData.x + spriteData.width > wallX && spriteData.x < wallX + wallLength) && spriteData.y >= wallY + wallHeight - 10)
-//	{
-//		spriteData.y = wallY + wallHeight;
-//		velocity.y = 1;
-//		standingOnSurface_ = false;
-//		floorCollision_ = false;
-//	}
-//	// Case: Left of surface
-//	else if (spriteData.x + spriteData.width >= wallX && spriteData.x + spriteData.width < wallX + wallLength)
-//	{
-//		spriteData.x = wallX - spriteData.width;
-//		if (velocity.y > 0)
-//		{
-//			canWallJump_ = true;
-//		}
-//	}
-//	// Case: Right of surface
-//	else if (spriteData.x < wallX + wallLength && spriteData.x + spriteData.width > wallX)
-//	{
-//		spriteData.x = wallX + wallLength;
-//		if (velocity.y > 0)
-//		{
-//			canWallJump_ = true;
-//		}
-//	}
-//}
 
 //=============================================================================
 // stop
@@ -212,7 +174,7 @@ void Enemy::stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoo
 void Enemy::stop(int wallX, int wallY, int wallWidth, int wallHeight)
 {
 	// Case: Below surface
-	if ((spriteData.x + spriteData.width > wallX) && (spriteData.x < wallX + wallWidth) && spriteData.y >= wallY + wallHeight - 10)
+ 	if ((spriteData.x + spriteData.width > wallX) && (spriteData.x < wallX + wallWidth) && spriteData.y >= wallY + wallHeight - 10)
 	{
 		bottomCollision(wallY, wallHeight);
 	}
@@ -240,8 +202,8 @@ void Enemy::stop(int wallX, int wallY, int wallWidth, int wallHeight)
 //=============================================================================
 void Enemy::topCollision(int wallY)
 {
-	spriteData.y = wallY - spriteData.height + 1;		 // position at the top of the wall
-	velocity.y = 0; 										 // stop y acceleration
+	spriteData.y = wallY - spriteData.height + 1;			// position at the top of the wall
+	velocity.y = 0; 										// stop y acceleration
 }
 void Enemy::leftCollision(int wallX)
 {

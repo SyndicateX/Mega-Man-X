@@ -142,6 +142,19 @@ void Level1::collisions(float frameTime)
 			}
 
 		}
+		for (int j = 0; j < enemy.size(); j++)
+		{
+			//double tempX = enemy[j].getX();
+			//double tempY = enemy[j].getY();
+			//enemy[j].setX(enemy[j].getStartX() + enemy[j].getDx());
+			//enemy[j].setY(enemy[j].getStartY() + enemy[j].getDy());
+			if (enemy[j].collidesWith(floor[i], cv))
+			{
+				//enemy[j].setX(tempX);
+				//enemy[j].setY(tempY);
+				enemy[j].stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+			}
+		}
 	}
 
 	for (int j = 0; j < bullet.size(); j++)
@@ -172,7 +185,7 @@ void Level1::render(Graphics* graphics)
 	bee.setY(beeNS::Y - mapY + megamanNS::Y);
 	for (int i = 0; i < enemy.size(); i++)
 	{
-		enemy[i].setY(enemy[i].getStartY() + megamanNS::Y - mapY);
+		enemy[i].setY(enemy[i].getStartY() + megamanNS::Y - mapY + enemy[i].getDy());
 	}
 
 	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near and edge of the map on either end
