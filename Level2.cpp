@@ -27,7 +27,7 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 
 	// bee enemy texture
 	if (!beeTexture.initialize(graphics, BEE))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee texture"));
 
 	// map textures
 	if (!tileTextures.initialize(graphics, TILE_TEXTURES))
@@ -56,17 +56,21 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	{
 		for (int j = 0; j < TILE_COLUMNS; j++)
 		{
-			if (tileMap[i][j] >= 0)
-			{
-				floor.push_back(Entity());
-				if (!floor[floor.size() - 1].initialize(game, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_COLS, &tileTextures))
-					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing floor"));
-				floor[floor.size() - 1].setCollisionType(entityNS::BOX);
-				floor[floor.size() - 1].setEdge(MEGAMAN_EDGE);
-				// Set floor position
-				floor[floor.size() - 1].setX(j*TEXTURE_SIZE);
-				floor[floor.size() - 1].setY(i*TEXTURE_SIZE);
-			}
+			//if (tileMap[i][j] >= 0 && tileMap[i][j] < 100)
+			//{
+			//	floor.push_back(Entity());
+			//	if (!floor[floor.size() - 1].initialize(game, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_COLS, &tileTextures))
+			//		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing floor"));
+			//	floor[floor.size() - 1].setCollisionType(entityNS::BOX);
+			//	floor[floor.size() - 1].setEdge(MEGAMAN_EDGE);
+			//	// Set floor position
+			//	floor[floor.size() - 1].setX(j*TEXTURE_SIZE);
+			//	floor[floor.size() - 1].setY(i*TEXTURE_SIZE);
+			//}
+			//else if (tileMap[i][j] >= 100)
+			//{
+			//	enemy.push_back(Enemy());
+			//}
 		}
 	}
 }
@@ -91,6 +95,7 @@ void Level2::collisions(float frameTime)
 	std::vector<VECTOR2> collisionVector;		// Centers of collision between a wall and Mega Man
 	std::vector<RECT> tileCoordinates;			// Coordinates of all tiles that collided with Mega Man
 	bool megamanCollided = false;				// True if Mega Man collides with any tile
+	bool beeCollided = false;
 
 	for (int i = 0; i < floor.size(); i++)
 	{
@@ -115,7 +120,12 @@ void Level2::collisions(float frameTime)
 		}
 		if (bee.collidesWith(floor[i], cv))
 		{
-			bee.stop(floor[i].getX(), floor[i].getWidth());
+			if (!beeCollided)
+			{
+				bee.stop(floor[i].getX(), floor[i].getWidth());
+				beeCollided = true;
+			}
+
 		}
 	}
 
@@ -124,6 +134,8 @@ void Level2::collisions(float frameTime)
 		if (bullet[j].collidesWith(bee, cv))
 		{
 			// bee takes damage
+			bee.setActive(false);
+			bee.setState(DEAD);
 		}
 	}
 
@@ -220,10 +232,13 @@ void Level2::render(Graphics* graphics)
 		}
 	}
 	mechaSonic.draw();						// add enemy to the scene
-	bee.draw();								// add bee enemy to the scene
 	megaman.draw();							// add Mega Man to the scene
 	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
 
+	if (bee.getVisible())
+	{
+		bee.draw();								// add bee enemy to the scene
+	}
 	for (int i = 0; i < bullet.size(); i++)
 	{
 		if (bullet[i].getVisible() && bullet[i].getActive())
@@ -243,6 +258,7 @@ void Level2::releaseAll()
 	backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
 	beeTexture.onLostDevice();
+	explosionTexture.onLostDevice();
 
 	//Game::releaseAll();
 	return;
@@ -259,6 +275,7 @@ void Level2::resetAll()
 	bulletTexture.onResetDevice();
 	bulletTexture.onResetDevice();
 	beeTexture.onResetDevice();
+	explosionTexture.onResetDevice();
 
 	//Game::resetAll();
 	return;

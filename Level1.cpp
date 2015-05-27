@@ -21,8 +21,12 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
-	// enemy texture
+	// Mecha Sonic texture
 	if (!mechaSonicTexture.initialize(graphics, ENEMY001))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
+
+	// enemy texture
+	if (!enemyTexture.initialize(graphics, ENEMY001))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
 
 	// bee enemy texture
@@ -56,7 +60,7 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	{
 		for (int j = 0; j < TILE_COLUMNS; j++)
 		{
-			if (tileMap[i][j] >= 0)
+			if (tileMap[i][j] >= 0 && tileMap[i][j] < 100)
 			{
 				floor.push_back(Entity());
 				if (!floor[floor.size() - 1].initialize(game, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_COLS, &tileTextures))
@@ -67,6 +71,17 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 				floor[floor.size() - 1].setX(j*TEXTURE_SIZE);
 				floor[floor.size() - 1].setY(i*TEXTURE_SIZE);
 			}
+			else if (tileMap[i][j] >= 100)
+			{
+				enemy.push_back(Enemy());
+
+				// enemy
+				if (!enemy[enemy.size() - 1].initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &enemyTexture))
+					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
+
+				enemy[enemy.size() - 1].setX(j*TEXTURE_SIZE);
+				enemy[enemy.size() - 1].setY(i*TEXTURE_SIZE);
+			}
 		}
 	}
 }
@@ -75,6 +90,10 @@ void Level1::update(float frameTime, Input* input, Game* game)
 {
 	// Handles megaman's input and actions
 	updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
+	for (int i = 0; i < enemy.size(); i++)
+	{
+		enemy[i].update(frameTime);
+	}
 	bee.update(frameTime);
 
 	// Level specific code goes here
@@ -151,20 +170,36 @@ void Level1::render(Graphics* graphics)
 	megaman.setY(oldY_);					// reset Mega Man's y-coordinate to his previous y-coordinate (keeps him centered on the screen)
 	backdrop.setY(-mapY + megamanNS::Y);
 	bee.setY(beeNS::Y - mapY + megamanNS::Y);
+	for (int i = 0; i < enemy.size(); i++)
+	{
+		enemy[i].setY(enemyNS::Y + megamanNS::Y - mapY);
+	}
 
 	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near and edge of the map on either end
 	{
 		backdrop.setX(-mapX);
 		bee.setX(beeNS::X + bee.getDx() - mapX);
 		megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
+		for (int i = 0; i < enemy.size(); i++)
+		{
+			enemy[i].setX(enemyNS::X + enemy[i].getDx() - mapX);
+		}
 	}
 	else if (mapX < 0)													// if Mega Man is near the left edge of the map
 	{
 		bee.setX(beeNS::X + bee.getDx());
+		for (int i = 0; i < enemy.size(); i++)
+		{
+			enemy[i].setX(enemyNS::X + enemy[i].getDx());
+		}
 	}
 	else																// if Mega Man is near the right edge of the map
 	{
 		bee.setX(beeNS::X + bee.getDx() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
+		for (int i = 0; i < enemy.size(); i++)
+		{
+			enemy[i].setX(enemyNS::X - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
+		}
 	}
 
 	int counter = 0;
@@ -172,7 +207,7 @@ void Level1::render(Graphics* graphics)
 	{
 		for (int j = 0; j < TILE_COLUMNS; j++)
 		{
-			if (tileMap[i][j] >= 0)
+			if (tileMap[i][j] >= 0 && tileMap[i][j] < 100)
 			{
 				if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
 				{
@@ -204,7 +239,7 @@ void Level1::render(Graphics* graphics)
 		tile.setY((float)(row*TEXTURE_SIZE - mapY + megamanNS::Y)); // set tile Y
 		for (int col = 0; col<TILE_COLUMNS; col++)    // for each column of map
 		{
-			if (tileMap[row][col] >= 0)          // if tile present
+			if (tileMap[row][col] >= 0 && tileMap[row][col] < 100)          // if tile present
 			{
 				if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
 				{
@@ -227,6 +262,15 @@ void Level1::render(Graphics* graphics)
 			}
 		}
 	}
+
+	for (int i = 0; i < enemy.size(); i++)
+	{
+		if (enemy[i].getVisible())
+		{
+			enemy[i].draw();
+		}
+	}
+
 	mechaSonic.draw();						// add enemy to the scene
 	megaman.draw();							// add Mega Man to the scene
 	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
@@ -246,15 +290,13 @@ void Level1::render(Graphics* graphics)
 void Level1::releaseAll()
 {
 	mechaSonicTexture.onLostDevice();
-
 	megamanTexture.onLostDevice();          // megaman texture
 	bulletTexture.onLostDevice();			// bullet texture
-	bulletTexture.onLostDevice();			// bullet texture
+	enemyTexture.onLostDevice();			// bullet texture
 	chargingSpritesTexture.onLostDevice();
 	backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
 	beeTexture.onLostDevice();
-	explosionTexture.onLostDevice();
 
 	//Game::releaseAll();
 	return;
@@ -263,15 +305,13 @@ void Level1::releaseAll()
 void Level1::resetAll()
 {
 	mechaSonicTexture.onResetDevice();
-
 	backdropTexture.onResetDevice();
 	tileTextures.onResetDevice();
 	megamanTexture.onResetDevice();
 	chargingSpritesTexture.onResetDevice();
 	bulletTexture.onResetDevice();
-	bulletTexture.onResetDevice();
+	enemyTexture.onResetDevice();
 	beeTexture.onResetDevice();
-	explosionTexture.onResetDevice();
 
 	//Game::resetAll();
 	return;

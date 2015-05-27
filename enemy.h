@@ -35,70 +35,22 @@ public:
 	virtual void draw();
 	void stop(int wallX, int wallY, int wallLength, int wallHeight);
 
+	double getDx()
+	{
+		return dx;
+	}
+	double getDy()
+	{
+		return dy;
+	}
+
 private:
 	Image enemyIdle;
 	SpriteCoordinates mechaSonicSpriteCoordinates;
+
+	double dx;
+	double dy;
 };
 
-//// inherits from Entity class
-//class Enemy : public Entity
-//{
-//public:
-//    // constructor
-//    Enemy();
-//
-//    // inherited member functions
-//	virtual bool initialize(Game *gamePtr, int width, int height, int ncols,
-//		TextureManager *textureM);
-//	void update(float frameTime);
-//	virtual void draw();
-//
-//	// In case enemy collides with a wall
-//	void Enemy::stop(int wallX, int wallY, int wallLength, int wallHeight);
-//
-//	// Set Functions
-//	void setDoWallJump(bool doWallJump) { doWallJump_ = doWallJump; }
-//	void setCanDash(bool dashStatus) { canDash_ = dashStatus; }
-//	void setIsDashing(bool dashStatus) { isDashing_ = dashStatus; }
-//	void setCanJump(bool jumpStatus) { canJump_ = jumpStatus; }
-//	void setCanWallJump(bool wallJumpStatus) { canWallJump_ = wallJumpStatus; }
-//	void setCanShoot(bool shootStatus) { canShoot_ = shootStatus; }
-//	void setIsDashJumping(bool dashJumpStatus) { isDashJumping_ = dashJumpStatus; }
-//
-//	// Get Functions
-//	bool canDash() { return canDash_; }
-//	bool isDashing() { return isDashing_; }
-//	bool canJump() { return canJump_; }
-//	bool canWallJump() { return canWallJump_; }
-//	bool canShoot() { return canShoot_; }
-//	bool isDashJumping() { return isDashJumping_; }
-//
-//
-//private:
-//	Image enemyIdle;
-//	Image enemyWalking;
-//	Image enemyJumping;
-//	Image enemyJumpPeak;
-//	Image enemyFalling;
-//	Image enemyShooting;
-//	Image enemyShootingJump;
-//	Image enemyShootingJumpPeak;
-//	Image enemyShootingFalling;
-//	Image enemyDashing;
-//	Image enemyWallSliding;
-//	SpriteCoordinates enemySpriteCoordinates;
-//	bool standingOnSurface_ = true;
-//	bool floorCollision_ = true;
-//	bool wallJump_ = false;
-//	bool doWallJump_ = false;
-//	bool canDash_ = false;
-//	bool isDashing_ = false;
-//	bool canJump_ = false;
-//	bool canWallJump_ = false;
-//	bool canShoot_ = true;
-//	bool isDashJumping_ = false;
-//
-//	//bool charge1_ = false;
-//};
 #endif
 

@@ -21,6 +21,7 @@ protected:
 	TextureManager backdropTexture;		// backdrop texture
 	TextureManager tileTextures;		// tile textures
 	TextureManager megamanTexture;		// megaman texture
+	TextureManager enemyTexture;		// enemies texture
 	TextureManager mechaSonicTexture;	// Mecha_Sonic.Forte.32 texture
 	TextureManager bulletTexture;		// bullet texture
 	TextureManager chargingSpritesTexture; // megaman charging sprites texture
@@ -33,6 +34,7 @@ protected:
 	Image   backdrop;					// backdrop image
 	Image	tile;
 	std::vector<Entity>	floor;
+	std::vector<Enemy> enemy;
 	double   mapX, mapY, tileMapX, tileMapY;
 	double oldX_;
 	double oldY_;

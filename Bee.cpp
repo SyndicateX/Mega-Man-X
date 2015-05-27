@@ -3,7 +3,7 @@
 //=============================================================================
 // default constructor
 //=============================================================================
-Bee::Bee() : Entity()
+Bee::Bee() : Enemy()
 {
 	spriteData.width = beeNS::WIDTH;           // size of the bee
 	spriteData.height = beeNS::HEIGHT;

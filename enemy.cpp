@@ -25,6 +25,10 @@ Enemy::Enemy() : Entity()
 	edge.right = enemyNS::WIDTH / 2;
 	collisionType = entityNS::ROTATED_BOX;
 	mass = enemyNS::MASS;
+	visible = true;
+	active = true;
+	dx = 0;
+	dy = 0;
 }
 
 //=============================================================================

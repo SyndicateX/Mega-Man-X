@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include "entity.h"
+#include "enemy.h"
 #include "constants.h"
 #include "sprites.h"
 
@@ -27,7 +28,7 @@ namespace beeNS
 }
 
 // inherits from Entity class
-class Bee : public Entity
+class Bee : public Enemy
 {
 public:
 	// constructor
