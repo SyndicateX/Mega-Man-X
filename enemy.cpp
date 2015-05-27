@@ -70,6 +70,7 @@ bool Enemy::initialize(Game *gamePtr, int width, int height, int ncols,
 void Enemy::update(float frameTime)
 {
 	Entity::update(frameTime);
+	dy += frameTime * velocity.y;
 	enemyIdle.update(frameTime);
 }
 
