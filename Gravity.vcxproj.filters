@@ -60,10 +60,10 @@
     <ClCompile Include="Level1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bee.cpp">
+    <ClCompile Include="Level2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Level2.cpp">
+    <ClCompile Include="Bee.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MechaSonic.cpp">
@@ -122,10 +122,10 @@
     <ClInclude Include="Level1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bee.h">
+    <ClInclude Include="Level2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level2.h">
+    <ClInclude Include="Bee.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MechaSonic.h">

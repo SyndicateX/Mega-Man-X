@@ -16,7 +16,7 @@ namespace enemyNS
 	const float MASS = 1.0e6f;
 
 	const int IDLE_ENEMY_START_FRAME = 0;
-	const int IDLE_ENEMY_END_FRAME = 9;
+	const int IDLE_ENEMY_END_FRAME = 8;
 	const float IDLE_ENEMY_ANIMATION_DELAY = 0.55f;
 
 }

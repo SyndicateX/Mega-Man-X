@@ -71,6 +71,8 @@ protected:
 	Bee bee;							// bee enemy
 
 	bool explode = false;
+	bool takeDamage_ = false;
+
 public:
 	Level1();
 	~Level1();

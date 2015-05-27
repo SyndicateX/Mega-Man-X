@@ -20,14 +20,15 @@ namespace level2NS
 
 	const RECT MEGAMAN_EDGE = { -TEXTURE_SIZE / 2, -TEXTURE_SIZE / 2, TEXTURE_SIZE / 2, TEXTURE_SIZE / 2 };
 
-	const int F1 = 0;
+	const int F1 = 0;					// floor tile 1
+	const int E1 = 100;					// bee enemy
 	const int __ = -1;                  // empty tile
 
 	// The world map
 	const int tileMap[TILE_ROWS][TILE_COLUMNS] = {
 		F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, F1, //0
 		F1, __, __, __, __, __, __, __, __, __, __, __, F1, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, F1, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1,//1
-		F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1,//2
+		F1, __, __, __, __, __, __, __, E1, __, __, __, __, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1,//2
 		F1, __, __, __, __, F1, __, __, __, __, __, __, __, __, __, F1, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1, F1, __, __, __, __, F1, __, __, __, __, __, __, __, __, __, F1, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1,//3
 		F1, __, __, __, F1, __, F1, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1, F1, __, __, __, F1, F1, F1, F1, F1, __, __, F1, F1, F1, F1, F1, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1,//4
 		F1, __, __, __, F1, __, F1, __, __, __, __, __, __, __, __, F1, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1, F1, __, __, __, __, __, __, __, F1, __, __, __, __, __, __, F1, __, __, __, __, __, F1, F1, F1, F1, F1, __, __, __, __, F1, F1,//5
@@ -64,14 +65,14 @@ class Level2 : public Levels
 {
 protected:
 	// level2 items
-	TextureManager explosionTexture;
 	TextureManager beeTexture;			// bee texture
 
 	SpriteCoordinates explosionSpriteCoordinates;
-	Entity explosion;
 	Bee bee;							// bee enemy
 
 	bool explode = false;
+	bool takeDamage_ = false;
+
 public:
 	Level2();
 	~Level2();
