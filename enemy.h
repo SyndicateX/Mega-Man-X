@@ -36,6 +36,23 @@ public:
 	void stop(int wallX, int wallY, int wallLength, int wallHeight);
 	void stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoordinates);
 
+	void setStartX(double startX)
+	{
+		startX_ = startX;
+	}
+	void setStartY(double startY)
+	{
+		startY_ = startY;
+	}
+
+	double getStartX()
+	{
+		return startX_;
+	}
+	double getStartY()
+	{
+		return startY_;
+	}
 	double getDx()
 	{
 		return dx;
@@ -49,6 +66,8 @@ private:
 	Image enemyIdle;
 	SpriteCoordinates mechaSonicSpriteCoordinates;
 
+	double startX_;
+	double startY_;
 	double dx;
 	double dy;
 

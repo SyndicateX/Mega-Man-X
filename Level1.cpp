@@ -79,8 +79,8 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 				if (!enemy[enemy.size() - 1].initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &enemyTexture))
 					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
 
-				enemy[enemy.size() - 1].setX(j*TEXTURE_SIZE);
-				enemy[enemy.size() - 1].setY(i*TEXTURE_SIZE);
+				enemy[enemy.size() - 1].setStartX(j*TEXTURE_SIZE);
+				enemy[enemy.size() - 1].setStartY(i*TEXTURE_SIZE);
 			}
 		}
 	}
@@ -172,7 +172,7 @@ void Level1::render(Graphics* graphics)
 	bee.setY(beeNS::Y - mapY + megamanNS::Y);
 	for (int i = 0; i < enemy.size(); i++)
 	{
-		enemy[i].setY(enemyNS::Y + megamanNS::Y - mapY);
+		enemy[i].setY(enemy[i].getStartY() + megamanNS::Y - mapY);
 	}
 
 	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near and edge of the map on either end
@@ -182,7 +182,7 @@ void Level1::render(Graphics* graphics)
 		megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
 		for (int i = 0; i < enemy.size(); i++)
 		{
-			enemy[i].setX(enemyNS::X + enemy[i].getDx() - mapX);
+			enemy[i].setX(enemy[i].getStartX() + enemy[i].getDx() - mapX);
 		}
 	}
 	else if (mapX < 0)													// if Mega Man is near the left edge of the map
@@ -190,7 +190,7 @@ void Level1::render(Graphics* graphics)
 		bee.setX(beeNS::X + bee.getDx());
 		for (int i = 0; i < enemy.size(); i++)
 		{
-			enemy[i].setX(enemyNS::X + enemy[i].getDx());
+			enemy[i].setX(enemy[i].getStartX() + enemy[i].getDx());
 		}
 	}
 	else																// if Mega Man is near the right edge of the map
