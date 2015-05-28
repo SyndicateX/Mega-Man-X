@@ -26,7 +26,8 @@ Megaman::Megaman() : Entity()
 	collisionType = entityNS::BOX;
 	mass = megamanNS::MASS;
 	damageTimer = 0.0f;							// time remaining until user can control Mega Man
-	invincibleTimer = 0.0f;			
+	invincibleTimer = 0.0f;
+	isInvincible_ = false;
 	flicker = 0;
 }
 

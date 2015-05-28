@@ -8,16 +8,6 @@
 
 namespace enemyNS
 {
-    const int WIDTH = 88;                  // image width
-    const int HEIGHT = 121;                  // image height
-    const int X = GAME_WIDTH/2 + WIDTH * 3;     // location on screen
-    const int Y = GAME_HEIGHT / 2;
-    const float SPEED = 300;                // pixels per second
-	const float MASS = 1.0e6f;
-
-	const int IDLE_ENEMY_START_FRAME = 0;
-	const int IDLE_ENEMY_END_FRAME = 8;
-	const float IDLE_ENEMY_ANIMATION_DELAY = 0.55f;
 
 }
 
@@ -31,11 +21,14 @@ public:
 	//inherited member functions
 	virtual bool initialize(Game * gamePtr, int width, int height, int ncols,
 		TextureManager * textureM) = 0;
-//		std::string spriteCoordinatesFileName);
-	void update(float framTime);
-	virtual void draw();
+	//std::string spriteCoordinatesFileName);
+	virtual void update(float frameTime) = 0;
+	void gravity(float frameTime);
+	virtual void draw() = 0;
 	void stop(int wallX, int wallY, int wallLength, int wallHeight);
+	void stop(double wallX, double wallWidth);
 	void stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoordinates);
+	virtual void handleCollisions(int wallX, int wallY, int wallLength, int wallHeight) = 0;
 
 	void setStartX(double startX)
 	{
@@ -65,8 +58,6 @@ public:
 
 protected:
 	SpriteCoordinates spriteCoordinates;
-
-	Image enemyIdle;
 
 	double startX_;
 	double startY_;

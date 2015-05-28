@@ -7,8 +7,8 @@ Bee::Bee() : Enemy()
 {
 	spriteData.width = beeNS::WIDTH;           // size of the bee
 	spriteData.height = beeNS::HEIGHT;
-	spriteData.x = beeNS::X;                   // location on screen
-	spriteData.y = beeNS::Y;
+	spriteData.x = startX_;                   // location on screen
+	spriteData.y = startY_;
 	spriteData.rect.bottom = beeNS::HEIGHT;    // rectangle to select parts of an image
 	spriteData.rect.right = beeNS::WIDTH;
 	spriteData.direction = RIGHT;
@@ -26,9 +26,6 @@ Bee::Bee() : Enemy()
 	mass = beeNS::MASS;
 	active = true;
 	visible = true;
-
-	dx = 0;
-	dy = 0;
 }
 
 bool Bee::initialize(Game *gamePtr, int width, int height, int ncols,
@@ -93,20 +90,9 @@ void Bee::update(float frameTime)
 	}
 }
 
-void Bee::stop(double wallX, double wallWidth)
+void Bee::handleCollisions(int wallX, int wallY, int wallLength, int wallHeight)
 {
-	if (spriteData.direction == RIGHT)
-	{
-		spriteData.direction = LEFT;
-		flipHorizontal(true);
-		dx -= spriteData.x + spriteData.width - wallX + 5;
-	}
-	else
-	{
-		spriteData.direction = RIGHT;
-		flipHorizontal(false);
-		dx += wallX + wallWidth - spriteData.x + 5;
-	}
+	stop(wallX, wallLength);
 }
 
 void Bee::draw()

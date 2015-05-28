@@ -45,7 +45,7 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	tile.setCurrentFrame(0);
 
 	// bee enemy
-	if (!bee.initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &beeTexture))
+	if (!bee.initialize(game, beeNS::WIDTH, beeNS::HEIGHT, 0, &beeTexture))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 
 	// floors
@@ -69,7 +69,7 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 				enemy.push_back(new MechaSonic());
 
 				// enemy
-				if (!enemy[enemy.size() - 1]->initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &mechaSonicTexture))
+				if (!enemy[enemy.size() - 1]->initialize(game, beeNS::WIDTH, beeNS::HEIGHT, 0, &mechaSonicTexture))
 					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
 
 				enemy[enemy.size() - 1]->setStartX(j*TEXTURE_SIZE);
@@ -136,15 +136,15 @@ void Level2::collisions(float frameTime)
 			megamanCollided = true;
 			//megaman.stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
 		}
-		if (bee.collidesWith(floor[i], cv))
-		{
-			if (!beeCollided)
-			{
-				bee.stop(floor[i].getX(), floor[i].getWidth());
-				beeCollided = true;
-			}
+		//if (bee.collidesWith(floor[i], cv))
+		//{
+		//	if (!beeCollided)
+		//	{
+		//		bee.stop(floor[i].getX(), floor[i].getWidth());
+		//		beeCollided = true;
+		//	}
 
-		}
+		//}
 		for (int j = 0; j < enemy.size(); j++)
 		{
 			if (enemy[j]->collidesWith(floor[i], cv))
@@ -213,7 +213,7 @@ void Level2::render(Graphics* graphics)
 		bee.setX(beeNS::X + bee.getDx() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
 		for (int i = 0; i < enemy.size(); i++)
 		{
-			enemy[i]->setX(enemyNS::X - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
+			enemy[i]->setX(enemy[i]->getStartX() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
 		}
 	}
 

@@ -5,12 +5,8 @@
 //=============================================================================
 Enemy::Enemy() : Entity()
 {
-	spriteData.width = enemyNS::WIDTH;          // size of enemy
-	spriteData.height = enemyNS::HEIGHT;
-	spriteData.x = enemyNS::X;                  // location on screen
-	spriteData.y = enemyNS::Y;
-	spriteData.rect.bottom = enemyNS::HEIGHT;   // rectangle to select parts of an image
-	spriteData.rect.right = enemyNS::WIDTH;
+	spriteData.x = startX_;                  // location on screen
+	spriteData.y = startY_;
 	spriteData.direction = RIGHT;				  // enemy always faces right at the start of any level
 	spriteData.state = STANDING;					
 	velocity.x = 0;						        // velocity X
@@ -19,12 +15,7 @@ Enemy::Enemy() : Entity()
 	startFrame = 0;                             // first frame of animation
 	endFrame = 0;                           // last frame of animation
 	currentFrame = startFrame;
-	edge.top = -enemyNS::HEIGHT / 2;              // set collision edges
-	edge.bottom = enemyNS::HEIGHT / 2;
-	edge.left = -enemyNS::WIDTH / 2;
-	edge.right = enemyNS::WIDTH / 2;
 	collisionType = entityNS::BOX;
-	mass = enemyNS::MASS;
 	visible = true;
 	active = true;
 	dx = 0;
@@ -36,7 +27,7 @@ Enemy::Enemy() : Entity()
 // typically called once per frame
 // frameTime is used to regulate the speed of movement and animation
 //=============================================================================
-void Enemy::update(float frameTime)
+void Enemy::gravity(float frameTime)
 {
 	Entity::update(frameTime);
 	dy += frameTime * velocity.y * 2.5;
@@ -45,7 +36,6 @@ void Enemy::update(float frameTime)
 	{
 		velocity.y = TERMINAL_VELOCITY;
 	}
-	enemyIdle.update(frameTime);
 }
 
 //=============================================================================
@@ -162,6 +152,22 @@ void Enemy::stop(int wallX, int wallY, int wallWidth, int wallHeight)
 	else if (spriteData.x < wallX + wallWidth && spriteData.x + spriteData.width > wallX  && spriteData.y < wallY + wallHeight)
 	{
 		rightCollision(wallX, wallWidth);
+	}
+}
+
+void Enemy::stop(double wallX, double wallWidth)
+{
+	if (spriteData.x < wallX)
+	{
+		spriteData.direction = LEFT;
+		flipHorizontal(true);
+		dx -= spriteData.x +spriteData.width - wallX + 5;
+	}
+	else if (wallX + wallWidth > spriteData.x)
+	{
+		spriteData.direction = RIGHT;
+		flipHorizontal(false);
+		dx += wallX + wallWidth - spriteData.x + 5;
 	}
 }
 

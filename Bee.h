@@ -38,25 +38,12 @@ public:
 	void update(float frameTime);
 	virtual bool initialize(Game *gamePtr, int width, int height, int ncols,
 		TextureManager *textureM);
-	virtual void draw();
-
-	void stop(double wallX, double wallWidth);
-
-	double getDx()
-	{ 
-		return dx; 
-	}
-	double getDy() 
-	{ 
-		return dy; 
-	}
+	void handleCollisions(int wallX, int wallY, int wallLength, int wallHeight);
+	void draw();
 
 private:
 	SpriteCoordinates beeSpriteCoordinates;
 	Image beeFlying;
 	Image beeDying;
-
-	double dx;
-	double dy;
 };
 #endif
