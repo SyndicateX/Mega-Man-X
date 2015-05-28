@@ -21,13 +21,11 @@ protected:
 	TextureManager backdropTexture;		// backdrop texture
 	TextureManager tileTextures;		// tile textures
 	TextureManager megamanTexture;		// megaman texture
-	TextureManager enemyTexture;		// enemies texture
 	TextureManager mechaSonicTexture;	// Mecha_Sonic.Forte.32 texture
 	TextureManager bulletTexture;		// bullet texture
 	TextureManager chargingSpritesTexture; // megaman charging sprites texture
 
 	Megaman	megaman;					// megaman
-	//Enemy mechaSonic;					// enemy
 
 	chargingSprites chargingSprites;	// charging Sprites
 	std::vector<Bullet> bullet;			// bullets

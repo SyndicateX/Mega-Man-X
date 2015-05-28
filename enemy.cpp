@@ -32,11 +32,6 @@ Enemy::Enemy() : Entity()
 }
 
 //=============================================================================
-// Initialize Enemy.
-// Post: returns true if successful, false if failed
-//=============================================================================
-
-//=============================================================================
 // update
 // typically called once per frame
 // frameTime is used to regulate the speed of movement and animation

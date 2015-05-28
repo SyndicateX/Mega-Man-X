@@ -22,6 +22,10 @@ Levels::Levels()
 Levels::~Levels()
 {
 	releaseAll();           // call onLostDevice() for every graphics item
+	for (int i = 0; i < enemy.size(); i++)
+	{
+		delete enemy[i];
+	}
 }
 
 //=============================================================================
@@ -66,8 +70,8 @@ void Levels::initialize(HWND& hwnd, Graphics* graphics, Input* input, Game* game
 //=============================================================================
 void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime, Input* input, Game* game)
 {
-	oldY_ = megaman.getY();
-	oldX_ = megaman.getX();
+	//oldY_ = megaman.getY();
+	//oldX_ = megaman.getX();
 	static LARGE_INTEGER lastShootTime;
 	LARGE_INTEGER frequency;
 	LARGE_INTEGER currentTime;
@@ -283,7 +287,7 @@ void Levels::shoot(int index)
 		bullet[index].setX(megaman.getX());
 		bullet[index].setY(megaman.getY() + megaman.getHeight() / 3 - 20);
 	}
-	bullet[index].setInitialY(mapY, megaman.canWallJump());
+	bullet[index].setInitialY(mapY, megaman.canWallJump(), megaman.isDashing());
 }
 
 //=============================================================================

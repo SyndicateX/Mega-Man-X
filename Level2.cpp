@@ -23,8 +23,8 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
 	// enemy texture
-	if (!enemyTexture.initialize(graphics, ENEMY001))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
+	if (!mechaSonicTexture.initialize(graphics, MECHA_SONIC))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic texture"));
 
 	// bee enemy texture
 	if (!beeTexture.initialize(graphics, BEE))
@@ -69,7 +69,7 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 				enemy.push_back(new MechaSonic());
 
 				// enemy
-				if (!enemy[enemy.size() - 1]->initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &enemyTexture))
+				if (!enemy[enemy.size() - 1]->initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &mechaSonicTexture))
 					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
 
 				enemy[enemy.size() - 1]->setStartX(j*TEXTURE_SIZE);
@@ -81,6 +81,9 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 
 void Level2::update(float frameTime, Input* input, Game* game)
 {
+	oldY_ = megaman.getY();
+	oldX_ = megaman.getX();
+
 	// Handles megaman's input and actions
 	if (megaman.getState() != DAMAGED)
 	{
@@ -263,7 +266,7 @@ void Level2::render(Graphics* graphics)
 				}
 				else if (mapX > TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
 				{
-					tile.setX((float)(col*TEXTURE_SIZE) - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));// +TEXTURE_SIZE * TILE_ROWS + GAME_WIDTH));	// set tile X
+					tile.setX((float)(col*TEXTURE_SIZE) - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
 				}
 
 				tile.setY((float)(row*TEXTURE_SIZE) - mapY + megamanNS::Y);	// set tile Y
@@ -304,7 +307,7 @@ void Level2::releaseAll()
 	mechaSonicTexture.onLostDevice();
 	megamanTexture.onLostDevice();          // megaman texture
 	bulletTexture.onLostDevice();			// bullet texture
-	enemyTexture.onLostDevice();			// bullet texture
+	mechaSonicTexture.onLostDevice();			// bullet texture
 	chargingSpritesTexture.onLostDevice();
 	backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
@@ -322,7 +325,7 @@ void Level2::resetAll()
 	megamanTexture.onResetDevice();
 	chargingSpritesTexture.onResetDevice();
 	bulletTexture.onResetDevice();
-	enemyTexture.onResetDevice();
+	mechaSonicTexture.onResetDevice();
 	beeTexture.onResetDevice();
 
 	//Game::resetAll();

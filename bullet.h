@@ -42,7 +42,7 @@ public:
 	virtual void draw();
 
 	// set functions
-	void setInitialY(double initialY, bool wallSliding);
+	void setInitialY(double initialY, bool wallSliding, bool dashing);
 
 	// get functions
 	double getInitialY()

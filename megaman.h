@@ -65,7 +65,7 @@ namespace megamanNS
 
 	const int DAMAGED_MEGAMAN_START_FRAME = 179;
 	const int DAMAGED_MEGAMAN_END_FRAME = 182;
-	const float DAMAGED_MEGAMAN_ANIMATION_DELAY = 0.10f;
+	const float DAMAGED_MEGAMAN_ANIMATION_DELAY = 0.1f;
 }
 
 // inherits from Entity class

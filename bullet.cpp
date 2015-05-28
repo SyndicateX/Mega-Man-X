@@ -60,21 +60,25 @@ bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
 
-void Bullet::setInitialY(double initialY, bool wallSliding)
+void Bullet::setInitialY(double initialY, bool wallSliding, bool dashing)
 {
 	if (spriteData.shotType == REGULAR_SHOT)
 	{
-		initialY_ = initialY + 22;
+		initialY_ = initialY + 23;
 	}
 	else if (spriteData.shotType == SMALL_CHARGE)
 	{
-		initialY_ = initialY + 14;
+		initialY_ = initialY + 15;
 	}
 	else
 	{
 		initialY_ = initialY;
 	}
 	if (wallSliding)
+	{
+		initialY_ += 30;
+	}
+	if (dashing)
 	{
 		initialY_ += 30;
 	}

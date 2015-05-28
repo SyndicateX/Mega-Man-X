@@ -22,9 +22,9 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
-	// enemy texture
-	if (!enemyTexture.initialize(graphics, ENEMY001))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
+	// mecha sonic texture
+	if (!mechaSonicTexture.initialize(graphics, MECHA_SONIC))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic texture"));
 
 	// bee enemy texture
 	if (!beeTexture.initialize(graphics, BEE))
@@ -66,11 +66,19 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 			}
 			else if (tileMap[i][j] >= 100)
 			{
-				enemy.push_back(new MechaSonic());
+				if (tileMap[i][j] == 100)
+				{
+					enemy.push_back(new MechaSonic());
+					if (!enemy[enemy.size() - 1]->initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &mechaSonicTexture))
+						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
+				}
+				else if (tileMap[i][j] == 101)
+				{
+					enemy.push_back(new Bee());	
+					if (!enemy[enemy.size() - 1]->initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &beeTexture))
+						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 
-				// enemy
-				if (!enemy[enemy.size() - 1]->initialize(game, enemyNS::WIDTH, enemyNS::HEIGHT, 0, &enemyTexture))
-					throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
+				}
 
 				enemy[enemy.size() - 1]->setStartX(j*TEXTURE_SIZE);
 				enemy[enemy.size() - 1]->setStartY(i*TEXTURE_SIZE);
@@ -81,10 +89,13 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 
 void Level1::update(float frameTime, Input* input, Game* game)
 {
+	oldY_ = megaman.getY();
+	oldX_ = megaman.getX();
+
 	// Handles megaman's input and actions
 	if (megaman.getState() != DAMAGED)
 	{
-	updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
+		updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
 	}
 	else
 	{
@@ -131,7 +142,6 @@ void Level1::collisions(float frameTime)
 			tileCoordinates[tileCoordinates.size() - 1].bottom = floor[i].getY() + floor[i].getHeight();
 			tileCoordinates[tileCoordinates.size() - 1].right = floor[i].getX() + floor[i].getWidth();
 			megamanCollided = true;
-			//megaman.stop(floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
 		}
 		if (bee.collidesWith(floor[i], cv))
 		{
@@ -160,9 +170,10 @@ void Level1::collisions(float frameTime)
 	{
 		if (bullet[j].collidesWith(bee, cv))
 		{
-			// bee explodes 
 			bee.setActive(false);
 			bee.setState(DEAD);
+			bullet[j].setActive(false);
+			bullet[j].setVisible(false);
 		}
 	}
 
@@ -304,7 +315,7 @@ void Level1::releaseAll()
 	mechaSonicTexture.onLostDevice();
 	megamanTexture.onLostDevice();          // megaman texture
 	bulletTexture.onLostDevice();			// bullet texture
-	enemyTexture.onLostDevice();			// bullet texture
+	mechaSonicTexture.onLostDevice();			// bullet texture
 	chargingSpritesTexture.onLostDevice();
 	backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
@@ -322,7 +333,7 @@ void Level1::resetAll()
 	megamanTexture.onResetDevice();
 	chargingSpritesTexture.onResetDevice();
 	bulletTexture.onResetDevice();
-	enemyTexture.onResetDevice();
+	mechaSonicTexture.onResetDevice();
 	beeTexture.onResetDevice();
 
 	//Game::resetAll();

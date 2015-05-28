@@ -9,14 +9,12 @@
 //                  Constants
 //=============================================================================
 // graphic images
-//const char BACKDROP_IMAGE[]			= "pictures\\backdrop.png";
 const char TILE_TEXTURES[]				= "pictures\\brick001.png"; // tiles
 const char BACKDROP_IMAGE[]				= "pictures\\082.png";
-//const char BULLET_IMAGE[]				= "pictures\\bullets.png";
 const char BULLET_IMAGE[]				= "pictures\\BusterBusterEdit.png";
 const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CHARGING_SPRITES_IMAGE[]		= "pictures\\BusterBuster.png";
-const char ENEMY001[]					= "pictures\\Mecha_Sonic.Forte.32.png";
+const char MECHA_SONIC[]				= "pictures\\Mecha_Sonic.Forte.32.png";
 const char EXPLOSION[]					= "pictures\\explosion.png";
 const char BEE[]						= "pictures\\baddies.png";
 

@@ -161,6 +161,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
+
 //=============================================================================
 // update
 // typically called once per frame
