@@ -58,7 +58,6 @@ bool chargingSprites::initialize(Game *gamePtr, int width, int height, int ncols
 void chargingSprites::update(float frameTime)
 {
 	Entity::update(frameTime);
-
 	megamanCharge1.update(frameTime);
 }
 
@@ -67,6 +66,7 @@ void chargingSprites::draw()
 	if (charge1_ == true)
 	{
 		megamanCharge1.draw(spriteData);
+		audio->playCue(LOAD);
 	}
 }
 

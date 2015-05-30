@@ -46,11 +46,16 @@ const int MAX_BULLETS = 3;
 
 // audio files required by audio.cpp
 // WAVE_BANK must be location of .xwb file.
-const char WAVE_BANK[]  = "";
+const char WAVE_BANK[] = "audio\\Win\\Wave Bank.xwb";
 // SOUND_BANK must be location of .xsb file.
-const char SOUND_BANK[] = "";
+const char SOUND_BANK[] = "audio\\Win\\Sound Bank.xsb";
 
 // audio cues
+const char EXPLODE[] = "Explode";
+const char FIRE[] = "Fire";
+const char LOAD[] = "Load";
+const char MAX[] = "Max";
+const char MAXFIRE[] = "MaxFire";
 
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used

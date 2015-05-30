@@ -39,6 +39,7 @@ protected:
 	bool directionChange_;
 	bool levelComplete_;
 	int bulletNumber_;
+	Audio* audio;
 
 public:
 	// Constructor
