@@ -111,8 +111,8 @@ void MechaSonic::draw()
 	}
 	else
 	{
-		audio->playCue(EXPLODE);
 		mechaSonicDying.draw(spriteData);
+		audio->playCue(EXPLODE);
 	}
 }
 
