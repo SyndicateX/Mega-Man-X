@@ -8,11 +8,11 @@
 
 namespace megamanNS
 {
-    const int WIDTH = 75;                  // image width
-    const int HEIGHT = 100;                  // image height
-	const int X = GAME_WIDTH / 2;// GAME_WIDTH / 2 - WIDTH * 3;     // location on screen
+    const int WIDTH = 75;						// image width
+    const int HEIGHT = 100;						// image height
+	const int X = GAME_WIDTH / 2;			    // location on screen
     const int Y = GAME_HEIGHT - 4 * HEIGHT;
-    const float SPEED = 125;                // pixels per second
+    const float SPEED = 125;					// pixels per second
 	const float MASS = 1.0e6f;
 
 	const int IDLE_MEGAMAN_START_FRAME = 17;
@@ -51,6 +51,10 @@ namespace megamanNS
 	const int SHOOTING_FALLING_MEGAMAN_END_FRAME = 88;
 	const float SHOOTING_FALLING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
+	//const int SHOOTING_WALKING_MEGAMAN_START_FRAME = 100;
+	//const int SHOOTING_WALKING_MEGAMAN_END_FRAME = 128;
+	//const float SHOOTING_WALKING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+
 	const int DASHING_MEGAMAN_START_FRAME = 71;
 	const int DASHING_MEGAMAN_END_FRAME = 71;
 	const float DASHING_MEGAMAN_ANIMATION_DELAY = 0.07f;
@@ -85,11 +89,11 @@ public:
 	// Calls the other stop() function to deal with single block collision scenarios
 	void stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoordinates);
 	// Determines where to place megaman if he collides with a single block
-	void stop(int wallX, int wallY, int wallWidth, int wallHeight);
-	void topCollision(int wallY);
-	void leftCollision(int wallX);
-	void rightCollision(int wallX, int wallWidth);
-	void bottomCollision(int wallY, int wallHeight);
+	void stop(double wallX, double wallY, double wallWidth, double wallHeight);
+	void topCollision(double wallY);
+	void leftCollision(double wallX);
+	void rightCollision(double wallX, double wallWidth);
+	void bottomCollision(double wallY, double wallHeight);
 
 	// Set Functions
 	void setDoWallJump(bool doWallJump) { doWallJump_ = doWallJump; }
@@ -127,6 +131,8 @@ private:
 	Image megamanShootingDashing;
 	Image megamanWallSliding;
 	Image megamanDamaged;
+	//Image megamanShootingWalking;		// Needs to modify sprite sheet for this to work
+										// Could possible work by modifying currentFrame when updating frames
 
 	bool standingOnSurface_ = true;
 	bool floorCollision_ = false;

@@ -17,6 +17,7 @@ const char CHARGING_SPRITES_IMAGE[]		= "pictures\\BusterBuster.png";
 const char MECHA_SONIC[]				= "pictures\\Mecha_Sonic.Forte.32.png";
 const char EXPLOSION[]					= "pictures\\explosion.png";
 const char BEE[]						= "pictures\\baddies.png";
+const char BOWSER[]						= "pictures\\bowser.png"; 
 
 // window
 const char CLASS_NAME[] = "Mega Man X";
@@ -35,13 +36,13 @@ const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calcul
 const float GRAVITY = 500.0f;                   // acceleration of gravity pixels/sec
 //const UINT MAP_WIDTH = 2000;
 const UINT MAP_HEIGHT = 1500;
-const int JUMP_VELOCITY = -180;
+const int JUMP_VELOCITY = -200;// -180;
 const int TERMINAL_VELOCITY = -JUMP_VELOCITY;
 
 const double WALK_SPEED = 1;
 const double DASH_SPEED = 2.2;
 const float DAMAGE_TIME = 0.4f;
-const float INVINCIBILITY_TIME = 1.2f;
+const float INVINCIBILITY_TIME = 1.6f;
 const int MAX_BULLETS = 3;
 
 // audio files required by audio.cpp

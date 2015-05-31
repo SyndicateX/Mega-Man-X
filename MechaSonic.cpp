@@ -13,16 +13,11 @@ MechaSonic::MechaSonic()
 	spriteData.state = STANDING;
 	velocity.x = 0;						        // velocity X
 	velocity.y = -20;							    // velocity Y
-	frameDelay = 1.0;// 0.07;
-	startFrame = 0;                             // first frame of animation
-	endFrame = 0;                           // last frame of animation
-	currentFrame = startFrame;
 	edge.top = -mechaSonicNS::HEIGHT / 2;              // set collision edges
 	edge.bottom = mechaSonicNS::HEIGHT / 2;
-	edge.left = -mechaSonicNS::WIDTH / 2;
-	edge.right = mechaSonicNS::WIDTH / 2;
+	edge.left = -mechaSonicNS::WIDTH / 3;
+	edge.right = mechaSonicNS::WIDTH / 3;
 	collisionType = entityNS::BOX;
-	mass = mechaSonicNS::MASS;
 	visible = true;
 	active = true;
 	dx = 0;
@@ -94,9 +89,9 @@ void MechaSonic::update(float frameTime)
 	}
 }
 
-void MechaSonic::handleCollisions(int wallX, int wallY, int wallLength, int wallHeight)
+void MechaSonic::handleCollisions(double wallX, double wallY, double wallWidth, double wallHeight)
 {
-	stop(wallX, wallY, wallLength, wallHeight);
+	stop(wallX, wallY, wallWidth, wallHeight);
 }
 
 //=============================================================================

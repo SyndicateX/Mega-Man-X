@@ -20,6 +20,7 @@ Enemy::Enemy() : Entity()
 	active = true;
 	dx = 0;
 	dy = 0;
+	boss = false;
 }
 
 //=============================================================================
@@ -131,7 +132,7 @@ void Enemy::stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoo
 	}
 }
 
-void Enemy::stop(int wallX, int wallY, int wallWidth, int wallHeight)
+void Enemy::stop(double wallX, double wallY, double wallWidth, double wallHeight)
 {
 	// Case: Below surface
  	if ((spriteData.x + spriteData.width > wallX) && (spriteData.x < wallX + wallWidth) && spriteData.y >= wallY + wallHeight - 10)
@@ -176,30 +177,20 @@ void Enemy::stop(double wallX, double wallWidth)
 // Helper functions for stop() functions. Resolve Megaman's collisions
 // for each direction when Mega Man collides with a wall or floor.
 //=============================================================================
-void Enemy::topCollision(int wallY)
+void Enemy::topCollision(double wallY)
 {
 	spriteData.y = wallY - spriteData.height + 1;			// position at the top of the wall
 	velocity.y = 0; 										// stop y acceleration
 }
-void Enemy::leftCollision(int wallX)
+void Enemy::leftCollision(double wallX)
 {
 	spriteData.x = wallX - spriteData.width;			// position at the left of the wall
-	//velocity.x = 0;
-	//if (velocity.y > 0 && !input->isKeyDown(UP_KEY) && !input->getGamepadA(0))
-	//{
-	//		canWallJump_ = true;
-	//}
 }
-void Enemy::rightCollision(int wallX, int wallWidth)
+void Enemy::rightCollision(double wallX, double wallWidth)
 {
 	spriteData.x = wallX + wallWidth + 1; //+1;			// position at the right of the wall
-	//velocity.x = 0;
-	//if (velocity.y > 0 && !input->isKeyDown(UP_KEY) && !input->getGamepadA(0))
-	//{
-	//		canWallJump_ = true;
-	//}
 }
-void Enemy::bottomCollision(int wallY, int wallHeight)
+void Enemy::bottomCollision(double wallY, double wallHeight)
 {
 	spriteData.y = wallY + wallHeight + 1;				// position underneath the wall
 	velocity.y = 1;										// set velocity to make megaman fall

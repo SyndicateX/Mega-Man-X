@@ -19,5 +19,6 @@ public:
 
 private:
 	std::vector<std::vector<int>> coords_;			//Stores the coordinates of all the sprites in a sprite sheet
+	//std::vector<RECT> coords_;
 };
 

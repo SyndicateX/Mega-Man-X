@@ -27,8 +27,17 @@ public:
 	bool initialize(Game * gamePtr, int width, int height, int ncols,
 		TextureManager * textureM);
 	void update(float frameTime);
-	void handleCollisions(int wallX, int wallY, int wallLength, int wallHeight);
+	void handleCollisions(double wallX, double wallY, double wallWidth, double wallHeight);
 	void draw();
+
+	void setStartX(double startX)
+	{
+		startX_ = startX;
+	}
+	void setStartY(double startY)
+	{
+		startY_ = startY;
+	}
 private:
 	Image mechaSonicIdle;
 	Image mechaSonicDying;

@@ -14,16 +14,11 @@ Bee::Bee() : Enemy()
 	spriteData.direction = RIGHT;
 	velocity.x = beeNS::SPEED;                 // velocity X
 	velocity.y = beeNS::SPEED;                 // velocity Y
-	frameDelay = 1;
-	startFrame = 0;                             // first frame of animation
-	endFrame = 0;								// last frame of animation
-	currentFrame = startFrame;
 	edge.top = -beeNS::HEIGHT / 2;			// set collision edges
 	edge.bottom = beeNS::HEIGHT / 2;
-	edge.left = -beeNS::WIDTH / 2;
-	edge.right = beeNS::WIDTH / 2;
+	edge.left = -beeNS::WIDTH / 3;
+	edge.right = beeNS::WIDTH / 3;
 	collisionType = entityNS::BOX;
-	mass = beeNS::MASS;
 	active = true;
 	visible = true;
 }
@@ -90,9 +85,9 @@ void Bee::update(float frameTime)
 	}
 }
 
-void Bee::handleCollisions(int wallX, int wallY, int wallLength, int wallHeight)
+void Bee::handleCollisions(double wallX, double wallY, double wallWidth, double wallHeight)
 {
-	stop(wallX, wallLength);
+	stop(wallX, wallWidth);
 }
 
 void Bee::draw()

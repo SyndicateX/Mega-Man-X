@@ -1,5 +1,5 @@
-#ifndef bee_h               // Prevent multiple definitions if this 
-#define bee_h               // file is included in more than one place
+#ifndef bowser_h               // Prevent multiple definitions if this 
+#define bowser_h               // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN
 
 #include "entity.h"
@@ -7,10 +7,10 @@
 #include "constants.h"
 #include "sprites.h"
 
-namespace beeNS
+namespace bowserNS
 {
-	const int WIDTH = 87;                   // image width
-	const int HEIGHT = 114;                  // image height
+	const int WIDTH = 200;                   // image width
+	const int HEIGHT = 200;                  // image height
 	const int X = GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = GAME_HEIGHT / 2 - HEIGHT / 2;
 	const float SPEED = 250;                // pixels per second
@@ -18,21 +18,21 @@ namespace beeNS
 	const float MIN_VY = 1;                 // minumum Y velocity
 	const float MASS = 1.0f;
 
-	const int FLYING_BEE_START_FRAME = 49;
-	const int FLYING_BEE_END_FRAME = 50;
-	const float FLYING_BEE_ANIMATION_DELAY = 0.05f;
+	const int IDLE_START_FRAME = 40;
+	const int IDLE_END_FRAME = 45;
+	const float IDLE_ANIMATION_DELAY = 0.15f;
 
-	const int DYING_BEE_START_FRAME = 152;
-	const int DYING_BEE_END_FRAME = 155;
-	const float DYING_BEE_ANIMATION_DELAY = 0.10f;
+	const int DYING_START_FRAME = 54;
+	const int DYING_END_FRAME = 55;
+	const float DYING_ANIMATION_DELAY = 0.10f;
 }
 
 // inherits from Entity class
-class Bee : public Enemy
+class Bowser : public Enemy
 {
 public:
 	// constructor
-	Bee();
+	Bowser();
 
 	// inherited member functions
 	void update(float frameTime);
@@ -43,16 +43,16 @@ public:
 
 	void setStartX(double startX)
 	{
-		startX_ = startX;
+		startX_ = startX - 100;
 	}
 	void setStartY(double startY)
 	{
-		startY_ = startY;
+		startY_ = startY - 200;
 	}
 
 private:
-	SpriteCoordinates beeSpriteCoordinates;
-	Image beeFlying;
-	Image beeDying;
+	SpriteCoordinates bowserSpriteCoordinates;
+	Image bowserIdle;
+	Image bowserDying;
 };
 #endif

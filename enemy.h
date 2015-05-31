@@ -25,19 +25,13 @@ public:
 	virtual void update(float frameTime) = 0;
 	void gravity(float frameTime);
 	virtual void draw() = 0;
-	void stop(int wallX, int wallY, int wallLength, int wallHeight);
+	void stop(double wallX, double wallY, double wallWidth, double wallHeight);
 	void stop(double wallX, double wallWidth);
 	void stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoordinates);
-	virtual void handleCollisions(int wallX, int wallY, int wallLength, int wallHeight) = 0;
+	virtual void handleCollisions(double wallX, double wallY, double wallWidth, double wallHeight) = 0;
 
-	void setStartX(double startX)
-	{
-		startX_ = startX;
-	}
-	void setStartY(double startY)
-	{
-		startY_ = startY;
-	}
+	virtual void setStartX(double startX) = 0;
+	virtual void setStartY(double startY) = 0;
 
 	double getStartX()
 	{
@@ -63,13 +57,14 @@ protected:
 	double startY_;
 	double dx;
 	double dy;
+	bool boss;
 
 	bool gravity_;
 
-	void topCollision(int wallY);
-	void leftCollision(int wallX);
-	void rightCollision(int wallX, int wallWidth);
-	void bottomCollision(int wallY, int wallHeight);
+	void topCollision(double wallY);
+	void leftCollision(double wallX);
+	void rightCollision(double wallX, double wallWidth);
+	void bottomCollision(double wallY, double wallHeight);
 	
 };
 

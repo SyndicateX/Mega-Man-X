@@ -38,6 +38,7 @@ protected:
 	double oldY_;
 	bool directionChange_;
 	bool levelComplete_;
+	bool fightingBoss;
 	int bulletNumber_;
 
 public:
@@ -60,6 +61,7 @@ public:
 
 	virtual void ai() = 0;          // "
 	virtual void collisions(float frameTime) = 0;  // "
+	virtual void updateMap() = 0;
 	virtual void render(Graphics* graphics) = 0;      // "
 	virtual void releaseAll();
 	virtual void resetAll();

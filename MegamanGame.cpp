@@ -65,6 +65,12 @@ void MegamanGame::ai()
 void MegamanGame::collisions()
 {
 	level->collisions(frameTime);
+	updateMap();
+}
+
+void MegamanGame::updateMap()
+{
+	level->updateMap();
 }
 
 void MegamanGame::render()

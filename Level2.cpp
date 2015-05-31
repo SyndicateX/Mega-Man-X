@@ -9,6 +9,7 @@ Level2::Level2()
 	oldX_ = 0;
 	oldY_ = 0;
 	directionChange_ = false;
+	fightingBoss = false;
 }
 
 Level2::~Level2()
@@ -29,6 +30,10 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	// bee enemy texture
 	if (!beeTexture.initialize(graphics, BEE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee texture"));
+
+	// bowser enemy texture
+	if (!bowserTexture.initialize(graphics, BOWSER))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser texture"));
 
 	// map textures
 	if (!tileTextures.initialize(graphics, TILE_TEXTURES))
@@ -74,6 +79,12 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 					if (!enemy[enemy.size() - 1]->initialize(game, beeNS::WIDTH, beeNS::HEIGHT, 0, &beeTexture))
 						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 				}
+				else if (tileMap[i][j] == 200)
+				{
+					enemy.push_back(new Bowser());
+					if (!enemy[enemy.size() - 1]->initialize(game, bowserNS::WIDTH, bowserNS::HEIGHT, 0, &bowserTexture))
+						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
+				}
 				enemy[enemy.size() - 1]->setStartX(j*TEXTURE_SIZE);
 				enemy[enemy.size() - 1]->setStartY(i*TEXTURE_SIZE);
 			}
@@ -87,19 +98,23 @@ void Level2::update(float frameTime, Input* input, Game* game)
 	oldX_ = megaman.getX();
 
 	// Handles megaman's input and actions
-	if (megaman.getState() != DAMAGED)
-	{
-		updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
-	}
-	else
-	{
-		megaman.update(frameTime);
-	}
+	//if (megaman.getState() != DAMAGED)
+	//{
+	updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
+	//}
+	//else
+	//{
+	//	//megaman.update(frameTime);
+	//}
 	for (int i = 0; i < enemy.size(); i++)
 	{
 		enemy[i]->update(frameTime);
 	}
 
+	if (mapX > MAP_WIDTH - 5 * TEXTURE_SIZE)
+	{
+		fightingBoss = true;
+	}
 	// Level specific code goes here
 }
 
@@ -147,6 +162,7 @@ void Level2::collisions(float frameTime)
 			{
 				megaman.setState(DAMAGED);
 				megaman.setDamageTimer(DAMAGE_TIME);
+				megaman.setVelocity(VECTOR2(megaman.getVelocity().x, 0));
 			}
 		}
 	}
@@ -171,15 +187,22 @@ void Level2::collisions(float frameTime)
 	}
 }
 
-void Level2::render(Graphics* graphics)
+void Level2::updateMap()
 {
-	graphics->spriteBegin();                // begin drawing sprites
+	if (fightingBoss)
+	{
+		mapY = TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE;
+		mapX = MAP_WIDTH - TEXTURE_SIZE / 2;
+	}
+	else
+	{
+		mapY += megaman.getY() - oldY_;			// update map coordinates
+		mapX += megaman.getX() - oldX_;			//
+		megaman.setY(oldY_);					// reset Mega Man's y-coordinate to his previous y-coordinate (keeps him centered on the screen)
+	}
 
-	mapY += megaman.getY() - oldY_;			// update map coordinates
-	mapX += megaman.getX() - oldX_;			//
+	backdrop.setY(-mapY / 2 + megamanNS::Y - 200);
 
-	megaman.setY(oldY_);					// reset Mega Man's y-coordinate to his previous y-coordinate (keeps him centered on the screen)
-	backdrop.setY(-mapY + megamanNS::Y);
 	for (int i = 0; i < enemy.size(); i++)
 	{
 		enemy[i]->setY(enemy[i]->getStartY() + megamanNS::Y - mapY + enemy[i]->getDy());
@@ -187,7 +210,7 @@ void Level2::render(Graphics* graphics)
 
 	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near an edge of the map on either end
 	{
-		backdrop.setX(-mapX);
+		backdrop.setX(-mapX / 2);
 		megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
 		for (int i = 0; i < enemy.size(); i++)
 		{
@@ -208,6 +231,7 @@ void Level2::render(Graphics* graphics)
 			enemy[i]->setX(enemy[i]->getStartX() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
 		}
 	}
+
 
 	int counter = 0;
 	for (int i = 0; i < TILE_ROWS; i++)					// Moving tiles based on the map's movements
@@ -233,8 +257,6 @@ void Level2::render(Graphics* graphics)
 			}
 		}
 	}
-
-	backdrop.draw();                        // add the backdrop to the scene
 
 	for (int i = 0; i < bullet.size(); i++)			// Moving bullets based on the map's movements
 	{
@@ -263,6 +285,117 @@ void Level2::render(Graphics* graphics)
 
 				tile.setY((float)(row*TEXTURE_SIZE) - mapY + megamanNS::Y);	// set tile Y
 				// if tile on screen
+				//if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) &&
+				//	(tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))
+				//	tile.draw();                // draw tile
+			}
+		}
+	}
+}
+
+void Level2::render(Graphics* graphics)
+{
+	graphics->spriteBegin();                // begin drawing sprites
+
+	//if (fightingBoss)
+	//{
+	//	mapY = TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE;
+	//	mapX = MAP_WIDTH - TEXTURE_SIZE / 2;
+	//}
+	//else
+	//{
+	//	mapY += megaman.getY() - oldY_;			// update map coordinates
+	//	mapX += megaman.getX() - oldX_;			//
+	//	megaman.setY(oldY_);					// reset Mega Man's y-coordinate to his previous y-coordinate (keeps him centered on the screen)
+	//}
+
+	//{
+	//	backdrop.setY(-mapY / 2 + megamanNS::Y - 200);
+
+	//	for (int i = 0; i < enemy.size(); i++)
+	//	{
+	//		enemy[i]->setY(enemy[i]->getStartY() + megamanNS::Y - mapY + enemy[i]->getDy());
+	//	}
+
+	//	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near an edge of the map on either end
+	//	{
+	//		backdrop.setX(-mapX / 2);
+	//		megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
+	//		for (int i = 0; i < enemy.size(); i++)
+	//		{
+	//			enemy[i]->setX(enemy[i]->getStartX() + enemy[i]->getDx() - mapX);
+	//		}
+	//	}
+	//	else if (mapX < 0)													// if Mega Man is near the left edge of the map
+	//	{
+	//		for (int i = 0; i < enemy.size(); i++)
+	//		{
+	//			enemy[i]->setX(enemy[i]->getStartX() + enemy[i]->getDx());
+	//		}
+	//	}
+	//	else																// if Mega Man is near the right edge of the map
+	//	{
+	//		for (int i = 0; i < enemy.size(); i++)
+	//		{
+	//			enemy[i]->setX(enemy[i]->getStartX() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
+	//		}
+	//	}
+	//}
+
+	//int counter = 0;
+	//for (int i = 0; i < TILE_ROWS; i++)					// Moving tiles based on the map's movements
+	//{
+	//	for (int j = 0; j < TILE_COLUMNS; j++)
+	//	{
+	//		if (tileMap[i][j] >= 0 && tileMap[i][j] < 100)
+	//		{
+	//			if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
+	//			{
+	//				floor[counter].setX(j*TEXTURE_SIZE - mapX);
+	//			}
+	//			else if (mapX < 0)
+	//			{
+	//				floor[counter].setX(j*TEXTURE_SIZE);
+	//			}
+	//			else if (mapX > TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
+	//			{
+	//				floor[counter].setX(j*TEXTURE_SIZE - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)); // + TEXTURE_SIZE * TILE_ROWS + GAME_WIDTH);
+	//			}
+	//			floor[counter].setY(i*TEXTURE_SIZE - mapY + megamanNS::Y);
+	//			counter++;
+	//		}
+	//	}
+	//}
+
+	backdrop.draw();                        // add the backdrop to the scene
+
+	//for (int i = 0; i < bullet.size(); i++)			// Moving bullets based on the map's movements
+	//{
+	//	bullet[i].setY(bullet[i].getInitialY() - mapY + megamanNS::Y);
+	//}
+
+	for (int row = 0; row<TILE_ROWS; row++)       // for each row of map
+	{
+		tile.setY((float)(row*TEXTURE_SIZE - mapY + megamanNS::Y)); // set tile Y
+		for (int col = 0; col<TILE_COLUMNS; col++)    // for each column of map
+		{
+			if (tileMap[row][col] >= 0 && tileMap[row][col] < 100)          // if tile present
+			{
+				//if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
+				//{
+				//	tile.setX((float)(col*TEXTURE_SIZE) - mapX);	// set tile X
+				//}
+				//else if (mapX < 0)
+				//{
+				//	tile.setX((float)(col*TEXTURE_SIZE));	// set tile X
+				//}
+				//else if (mapX > TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
+				//{
+				//	tile.setX((float)(col*TEXTURE_SIZE) - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));// +TEXTURE_SIZE * TILE_ROWS + GAME_WIDTH));	// set tile X
+				//}
+
+				//tile.setY((float)(row*TEXTURE_SIZE) - mapY + megamanNS::Y);	// set tile Y
+				// if tile on screen
 				if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) &&
 					(tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))
 					tile.draw();                // draw tile
@@ -275,10 +408,6 @@ void Level2::render(Graphics* graphics)
 		if (enemy[i]->getVisible())
 		{
 			enemy[i]->draw();
-		}
-		else
-		{
-			int x = 0;
 		}
 	}
 
@@ -303,6 +432,7 @@ void Level2::releaseAll()
 	backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
 	beeTexture.onLostDevice();
+	bowserTexture.onLostDevice();
 
 	//Game::releaseAll();
 	return;
@@ -318,6 +448,7 @@ void Level2::resetAll()
 	bulletTexture.onResetDevice();
 	mechaSonicTexture.onResetDevice();
 	beeTexture.onResetDevice();
+	bowserTexture.onResetDevice();
 
 	//Game::resetAll();
 	return;

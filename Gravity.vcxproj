@@ -88,6 +88,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bee.cpp" />
+    <ClCompile Include="Bowser.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="chargingSprites.cpp" />
     <ClCompile Include="enemy.cpp" />
@@ -108,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bee.h" />
+    <ClInclude Include="Bowser.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="chargingSprites.h" />
     <ClInclude Include="enemy.h" />
