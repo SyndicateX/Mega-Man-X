@@ -95,6 +95,7 @@ void Bee::draw()
 	if (spriteData.state == DEAD)
 	{
 		beeDying.draw(spriteData);
+		audio->playCue(EXPLODE);
 	}
 	else
 	{

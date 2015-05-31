@@ -5,6 +5,7 @@
 #include "entity.h"
 #include "constants.h"
 #include "sprites.h"
+#include "audio.h"
 
 namespace megamanNS
 {
@@ -150,6 +151,8 @@ private:
 	float invincibleTimer;                  // time remaining until Mega Man can take damage again
 
 	int flicker;
+
+	Audio* audio;
 };
 #endif
 

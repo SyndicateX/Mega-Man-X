@@ -41,6 +41,7 @@ class Entity : public Image
     float   force;          // Force of gravity
     float   gravity;        // gravitational constant of the game universe
     Input   *input;         // pointer to the input system
+	Audio   *audio;         // pointer to audio system
     HRESULT hr;             // standard return type
     bool    active;         // only active entities may collide
     bool    rotatedBoxReady;    // true when rotated collision box is ready

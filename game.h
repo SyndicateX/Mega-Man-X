@@ -10,6 +10,7 @@ class Game;
 #include "input.h"
 #include "constants.h"
 #include "gameError.h"
+#include "audio.h"
 
 class Game
 {
@@ -17,6 +18,7 @@ protected:
     // common game properties
     Graphics *graphics;             // pointer to Graphics
     Input   *input;                 // pointer to Input
+	Audio	*audio;					// Pointer to Audio
     HWND    hwnd;                   // window handle
     HRESULT hr;                     // standard return type
     LARGE_INTEGER timeStart;        // Performance Counter start value
@@ -73,6 +75,9 @@ public:
 
     // Exit the game
     void exitGame()         {PostMessage(hwnd, WM_DESTROY, 0, 0);}
+
+	// Return pointer to Audio.
+	Audio* getAudio()       { return audio; }
 
     // Pure virtual function declarations
     // These functions MUST be written in any class that inherits from Game

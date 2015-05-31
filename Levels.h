@@ -40,6 +40,7 @@ protected:
 	bool levelComplete_;
 	bool fightingBoss;
 	int bulletNumber_;
+	Audio* audio;
 
 public:
 	// Constructor
