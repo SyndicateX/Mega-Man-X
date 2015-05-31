@@ -49,6 +49,10 @@ public:
 	{
 		return dy;
 	}
+	bool isBoss()
+	{
+		return boss;
+	}
 
 protected:
 	SpriteCoordinates spriteCoordinates;

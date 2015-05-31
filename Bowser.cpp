@@ -19,8 +19,8 @@ Bowser::Bowser() : Enemy()
 	edge.left = -bowserNS::WIDTH / 3;
 	edge.right = bowserNS::WIDTH / 3;
 	collisionType = entityNS::BOX;
-	active = true;
-	visible = true;
+	active = false;
+	visible = false;
 	boss = true;
 }
 

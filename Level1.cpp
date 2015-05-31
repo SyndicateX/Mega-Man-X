@@ -1,5 +1,4 @@
 #include "Level1.h"
-#include "MechaSonic.h"
 using namespace level1NS;
 
 Level1::Level1()
@@ -87,6 +86,7 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 				}
 				enemy[enemy.size() - 1]->setStartX(j*TEXTURE_SIZE);
 				enemy[enemy.size() - 1]->setStartY(i*TEXTURE_SIZE);
+				bossIndex = enemy.size() - 1;
 			}
 		}
 	}
@@ -101,17 +101,39 @@ void Level1::update(float frameTime, Input* input, Game* game)
 	updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
 	for (int i = 0; i < enemy.size(); i++)
 	{
-		enemy[i]->update(frameTime);
+		if (enemy[i]->getVisible())
+		{
+			enemy[i]->update(frameTime);
+		}
 	}
 
-	if (mapX > MAP_WIDTH - 5 * TEXTURE_SIZE && mapY > TEXTURE_SIZE * TILE_ROWS - 2 * TEXTURE_SIZE)
+	if (mapX > TEXTURE_SIZE * TILE_COLUMNS - 14 * TEXTURE_SIZE && mapY > TEXTURE_SIZE * TILE_ROWS - 2 * TEXTURE_SIZE && !fightingBoss)
 	{
    		fightingBoss = true;
-		if (mapX < MAP_WIDTH - TEXTURE_SIZE / 2 || mapY < TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE)
+		/*if (mapX < MAP_WIDTH - TEXTURE_SIZE / 2 || mapY < TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE)
 		{
 			mapX++;
 			mapY++;
+		}*/
+		megaman.setX(100);
+		megaman.setY(GAME_HEIGHT - 100);
+		for (int i = 0; i < enemy.size(); i++)
+		{
+			if (enemy[i]->isBoss())
+			{
+				enemy[i]->setActive(true);
+				enemy[i]->setVisible(true);
+			}
+			else
+			{
+				enemy[i]->setActive(false);
+				enemy[i]->setVisible(false);
+			}
 		}
+	}
+	if (fightingBoss && enemy[bossIndex]->getState() == DEAD && !enemy[bossIndex]->getVisible())
+	{
+		levelComplete_ = true;
 	}
 	// Level specific code goes here
 }

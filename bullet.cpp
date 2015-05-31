@@ -65,14 +65,17 @@ void Bullet::setInitialY(double initialY, bool wallSliding, bool dashing)
 	if (spriteData.shotType == REGULAR_SHOT)
 	{
 		initialY_ = initialY + 23;
+		audio->playCue(FIRE);
 	}
 	else if (spriteData.shotType == SMALL_CHARGE)
 	{
 		initialY_ = initialY + 15;
+		audio->playCue(FIRE);
 	}
 	else
 	{
 		initialY_ = initialY;
+		audio->playCue(FIRE);
 	}
 	if (wallSliding)
 	{
@@ -103,18 +106,18 @@ void Bullet::draw()
 	{
 		regularBullet.draw(spriteData);
 		audio->stopCue(LOAD);
-		audio->playCue(FIRE);
+		//audio->playCue(FIRE);
 	}
 	else if (spriteData.shotType == SMALL_CHARGE)
 	{
 		bulletSmall.draw(spriteData);
 		audio->stopCue(LOAD);
-		audio->playCue(FIRE);
+		//audio->playCue(FIRE);
 	}
 	else if (spriteData.shotType == MEDIUM_CHARGE)
 	{
 		bulletLarge.draw(spriteData);
 		audio->stopCue(LOAD);
-		audio->playCue(MAXFIRE);
+		//audio->playCue(MAXFIRE);
 	}
 }

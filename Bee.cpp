@@ -80,6 +80,7 @@ void Bee::update(float frameTime)
 		if (beeDying.getCurrentFrame() == beeNS::DYING_BEE_END_FRAME)
 		{
 			visible = false;
+			audio->playCue(EXPLODE);
 		}
 		beeDying.update(frameTime);
 	}
@@ -95,7 +96,6 @@ void Bee::draw()
 	if (spriteData.state == DEAD)
 	{
 		beeDying.draw(spriteData);
-		audio->playCue(EXPLODE);
 	}
 	else
 	{

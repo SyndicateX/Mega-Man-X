@@ -1,6 +1,5 @@
 #include "MechaSonic.h"
 
-
 MechaSonic::MechaSonic()
 {
 	spriteData.width = mechaSonicNS::WIDTH;          // size of mechaSonic
@@ -84,6 +83,7 @@ void MechaSonic::update(float frameTime)
 		if (mechaSonicDying.getCurrentFrame() == mechaSonicNS::DYING_END_FRAME)
 		{
 			visible = false;
+			audio->playCue(EXPLODE);
 		}
 		mechaSonicDying.update(frameTime);
 	}
@@ -107,7 +107,6 @@ void MechaSonic::draw()
 	else
 	{
 		mechaSonicDying.draw(spriteData);
-		audio->playCue(EXPLODE);
 	}
 }
 

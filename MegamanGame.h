@@ -10,6 +10,7 @@
 #include "bullet.h"
 #include "chargingSprites.h"
 #include <vector>
+#include "sprites.h"
 #include "Levels.h"
 #include "Level1.h"
 #include "Level2.h"

@@ -1,5 +1,4 @@
 #include "Level2.h"
-#include "MechaSonic.h"
 using namespace level2NS;
 
 Level2::Level2()
@@ -67,19 +66,19 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 			}
 			else if (tileMap[i][j] >= 100)
 			{
-				if (tileMap[i][j] == 100)
+				if (tileMap[i][j] == E1)
 				{
 					enemy.push_back(new MechaSonic());
 					if (!enemy[enemy.size() - 1]->initialize(game, mechaSonicNS::WIDTH, mechaSonicNS::HEIGHT, 0, &mechaSonicTexture))
 						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing mecha sonic"));
 				}
-				else if (tileMap[i][j] == 101)
+				else if (tileMap[i][j] == E2)
 				{
 					enemy.push_back(new Bee());
 					if (!enemy[enemy.size() - 1]->initialize(game, beeNS::WIDTH, beeNS::HEIGHT, 0, &beeTexture))
 						throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 				}
-				else if (tileMap[i][j] == 200)
+				else if (tileMap[i][j] == B1)
 				{
 					enemy.push_back(new Bowser());
 					if (!enemy[enemy.size() - 1]->initialize(game, bowserNS::WIDTH, bowserNS::HEIGHT, 0, &bowserTexture))
@@ -87,6 +86,7 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 				}
 				enemy[enemy.size() - 1]->setStartX(j*TEXTURE_SIZE);
 				enemy[enemy.size() - 1]->setStartY(i*TEXTURE_SIZE);
+				bossIndex = enemy.size() - 1;
 			}
 		}
 	}
@@ -98,22 +98,40 @@ void Level2::update(float frameTime, Input* input, Game* game)
 	oldX_ = megaman.getX();
 
 	// Handles megaman's input and actions
-	//if (megaman.getState() != DAMAGED)
-	//{
 	updateMegaman(MAP_WIDTH, MAP_HEIGHT, frameTime, input, game);
-	//}
-	//else
-	//{
-	//	//megaman.update(frameTime);
-	//}
 	for (int i = 0; i < enemy.size(); i++)
 	{
-		enemy[i]->update(frameTime);
+		if (enemy[i]->getVisible())
+		{
+			enemy[i]->update(frameTime);
+		}
 	}
 
-	if (mapX > MAP_WIDTH - 5 * TEXTURE_SIZE)
+	if (mapX > MAP_WIDTH - 5 * TEXTURE_SIZE && mapY > TEXTURE_SIZE * TILE_ROWS - 2 * TEXTURE_SIZE && !fightingBoss)
 	{
 		fightingBoss = true;
+		/*if (mapX < MAP_WIDTH - TEXTURE_SIZE / 2 || mapY < TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE)
+		{
+		mapX++;
+		mapY++;
+		}*/
+		for (int i = 0; i < enemy.size(); i++)
+		{
+			if (enemy[i]->isBoss())
+			{
+				enemy[i]->setActive(true);
+				enemy[i]->setVisible(true);
+			}
+			else
+			{
+				enemy[i]->setActive(false);
+				enemy[i]->setVisible(false);
+			}
+		}
+	}
+	if (fightingBoss && enemy[bossIndex]->getState() == DEAD)
+	{
+		levelComplete_ = true;
 	}
 	// Level specific code goes here
 }
@@ -191,17 +209,33 @@ void Level2::updateMap()
 {
 	if (fightingBoss)
 	{
-		mapY = TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE;
 		mapX = MAP_WIDTH - TEXTURE_SIZE / 2;
+		mapY = TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE;
 	}
 	else
 	{
 		mapY += megaman.getY() - oldY_;			// update map coordinates
 		mapX += megaman.getX() - oldX_;			//
 		megaman.setY(oldY_);					// reset Mega Man's y-coordinate to his previous y-coordinate (keeps him centered on the screen)
+
+		for (int i = 0; i < bullet.size(); i++)			// Moving bullets based on the map's movements
+		{
+			bullet[i].setY(bullet[i].getInitialY() - mapY + megamanNS::Y);
+		}
+
+		for (int i = 0; i < enemy.size(); i++)
+		{
+			enemy[i]->setY(enemy[i]->getStartY() + megamanNS::Y - mapY + enemy[i]->getDy());
+		}
+
+		if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near an edge of the map on either end
+		{
+			backdrop.setX(-mapX / 20);
+			megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
+		}
 	}
 
-	backdrop.setY(-mapY / 2 + megamanNS::Y - 200);
+	backdrop.setY(-mapY / 10 + megamanNS::Y - 200);
 
 	for (int i = 0; i < enemy.size(); i++)
 	{
@@ -210,8 +244,6 @@ void Level2::updateMap()
 
 	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near an edge of the map on either end
 	{
-		backdrop.setX(-mapX / 2);
-		megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
 		for (int i = 0; i < enemy.size(); i++)
 		{
 			enemy[i]->setX(enemy[i]->getStartX() + enemy[i]->getDx() - mapX);
@@ -231,7 +263,6 @@ void Level2::updateMap()
 			enemy[i]->setX(enemy[i]->getStartX() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
 		}
 	}
-
 
 	int counter = 0;
 	for (int i = 0; i < TILE_ROWS; i++)					// Moving tiles based on the map's movements
@@ -257,11 +288,13 @@ void Level2::updateMap()
 			}
 		}
 	}
+}
 
-	for (int i = 0; i < bullet.size(); i++)			// Moving bullets based on the map's movements
-	{
-		bullet[i].setY(bullet[i].getInitialY() - mapY + megamanNS::Y);
-	}
+void Level2::render(Graphics* graphics)
+{
+	graphics->spriteBegin();                // begin drawing sprites
+
+	backdrop.draw();                        // add the backdrop to the scene
 
 	for (int row = 0; row<TILE_ROWS; row++)       // for each row of map
 	{
@@ -285,124 +318,12 @@ void Level2::updateMap()
 
 				tile.setY((float)(row*TEXTURE_SIZE) - mapY + megamanNS::Y);	// set tile Y
 				// if tile on screen
-				//if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) &&
-				//	(tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))
-				//	tile.draw();                // draw tile
-			}
-		}
-	}
-}
-
-void Level2::render(Graphics* graphics)
-{
-	graphics->spriteBegin();                // begin drawing sprites
-
-	//if (fightingBoss)
-	//{
-	//	mapY = TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE;
-	//	mapX = MAP_WIDTH - TEXTURE_SIZE / 2;
-	//}
-	//else
-	//{
-	//	mapY += megaman.getY() - oldY_;			// update map coordinates
-	//	mapX += megaman.getX() - oldX_;			//
-	//	megaman.setY(oldY_);					// reset Mega Man's y-coordinate to his previous y-coordinate (keeps him centered on the screen)
-	//}
-
-	//{
-	//	backdrop.setY(-mapY / 2 + megamanNS::Y - 200);
-
-	//	for (int i = 0; i < enemy.size(); i++)
-	//	{
-	//		enemy[i]->setY(enemy[i]->getStartY() + megamanNS::Y - mapY + enemy[i]->getDy());
-	//	}
-
-	//	if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near an edge of the map on either end
-	//	{
-	//		backdrop.setX(-mapX / 2);
-	//		megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
-	//		for (int i = 0; i < enemy.size(); i++)
-	//		{
-	//			enemy[i]->setX(enemy[i]->getStartX() + enemy[i]->getDx() - mapX);
-	//		}
-	//	}
-	//	else if (mapX < 0)													// if Mega Man is near the left edge of the map
-	//	{
-	//		for (int i = 0; i < enemy.size(); i++)
-	//		{
-	//			enemy[i]->setX(enemy[i]->getStartX() + enemy[i]->getDx());
-	//		}
-	//	}
-	//	else																// if Mega Man is near the right edge of the map
-	//	{
-	//		for (int i = 0; i < enemy.size(); i++)
-	//		{
-	//			enemy[i]->setX(enemy[i]->getStartX() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
-	//		}
-	//	}
-	//}
-
-	//int counter = 0;
-	//for (int i = 0; i < TILE_ROWS; i++)					// Moving tiles based on the map's movements
-	//{
-	//	for (int j = 0; j < TILE_COLUMNS; j++)
-	//	{
-	//		if (tileMap[i][j] >= 0 && tileMap[i][j] < 100)
-	//		{
-	//			if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
-	//			{
-	//				floor[counter].setX(j*TEXTURE_SIZE - mapX);
-	//			}
-	//			else if (mapX < 0)
-	//			{
-	//				floor[counter].setX(j*TEXTURE_SIZE);
-	//			}
-	//			else if (mapX > TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
-	//			{
-	//				floor[counter].setX(j*TEXTURE_SIZE - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)); // + TEXTURE_SIZE * TILE_ROWS + GAME_WIDTH);
-	//			}
-	//			floor[counter].setY(i*TEXTURE_SIZE - mapY + megamanNS::Y);
-	//			counter++;
-	//		}
-	//	}
-	//}
-
-	backdrop.draw();                        // add the backdrop to the scene
-
-	//for (int i = 0; i < bullet.size(); i++)			// Moving bullets based on the map's movements
-	//{
-	//	bullet[i].setY(bullet[i].getInitialY() - mapY + megamanNS::Y);
-	//}
-
-	for (int row = 0; row<TILE_ROWS; row++)       // for each row of map
-	{
-		tile.setY((float)(row*TEXTURE_SIZE - mapY + megamanNS::Y)); // set tile Y
-		for (int col = 0; col<TILE_COLUMNS; col++)    // for each column of map
-		{
-			if (tileMap[row][col] >= 0 && tileMap[row][col] < 100)          // if tile present
-			{
-				//if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
-				//{
-				//	tile.setX((float)(col*TEXTURE_SIZE) - mapX);	// set tile X
-				//}
-				//else if (mapX < 0)
-				//{
-				//	tile.setX((float)(col*TEXTURE_SIZE));	// set tile X
-				//}
-				//else if (mapX > TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)
-				//{
-				//	tile.setX((float)(col*TEXTURE_SIZE) - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));// +TEXTURE_SIZE * TILE_ROWS + GAME_WIDTH));	// set tile X
-				//}
-
-				//tile.setY((float)(row*TEXTURE_SIZE) - mapY + megamanNS::Y);	// set tile Y
-				// if tile on screen
 				if ((tile.getX() > -TEXTURE_SIZE && tile.getX() < GAME_WIDTH) &&
 					(tile.getY() > -TEXTURE_SIZE && tile.getY() < GAME_HEIGHT))
 					tile.draw();                // draw tile
 			}
 		}
 	}
-
 	for (int i = 0; i < enemy.size(); i++)
 	{
 		if (enemy[i]->getVisible())
@@ -419,6 +340,7 @@ void Level2::render(Graphics* graphics)
 		if (bullet[i].getVisible() && bullet[i].getActive())
 			bullet[i].draw();					// add bullets to the scene
 	}
+
 	graphics->spriteEnd();                  // end drawing sprites
 }
 

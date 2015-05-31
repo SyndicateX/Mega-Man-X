@@ -1,5 +1,4 @@
 #include "MegamanGame.h"
-#include "sprites.h"
 
 //=============================================================================
 // Constructor
