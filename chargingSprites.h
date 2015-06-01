@@ -10,14 +10,10 @@ namespace chargingSpritesNS
 {
 	const int WIDTH = 100;                  // image width
 	const int HEIGHT = 100;                  // image height
-	const int X = GAME_WIDTH / 4 - WIDTH;     // location on screen
-	const int Y = GAME_HEIGHT - HEIGHT * 2;
-	const float SPEED = 300;                // pixels per second
-	const float MASS = 1.0e6f;
 
 	const int CHARGE1_MEGAMAN_START_FRAME = 0;
 	const int CHARGE1_MEGAMAN_END_FRAME = 7;
-	const float CHARGE1_MEGAMAN_ANIMATION_DELAY = 0.07f;
+	const float CHARGE1_MEGAMAN_ANIMATION_DELAY = 0.04f;
 }
 
 // inherits from Entity class

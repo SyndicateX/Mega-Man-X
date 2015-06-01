@@ -7,25 +7,6 @@ chargingSprites::chargingSprites() : Entity()
 {
 	spriteData.width = chargingSpritesNS::WIDTH;          // size of Ship1
 	spriteData.height = chargingSpritesNS::HEIGHT;
-	spriteData.x = chargingSpritesNS::X;                  // location on screen
-	spriteData.y = chargingSpritesNS::Y;
-	spriteData.rect.bottom = chargingSpritesNS::HEIGHT;   // rectangle to select parts of an image
-	spriteData.rect.right = chargingSpritesNS::WIDTH;
-	spriteData.direction = RIGHT;				  // chargingSprites always faces right at the start of any level
-	spriteData.state = STANDING;
-	velocity.x = 0;						        // velocity X
-	velocity.y = 0;							    // velocity Y
-	frameDelay = 1.0;
-	startFrame = 0;                             // first frame of animation
-	endFrame = 0;                           // last frame of animation
-	currentFrame = startFrame;
-	edge.top = -chargingSpritesNS::HEIGHT / 2;              // set collision edges
-	edge.bottom = chargingSpritesNS::HEIGHT / 2;
-	edge.left = -chargingSpritesNS::WIDTH / 2;
-	edge.right = chargingSpritesNS::WIDTH / 2;
-	collisionType = entityNS::ROTATED_BOX;
-	mass = chargingSpritesNS::MASS;
-
 }
 
 //=============================================================================
@@ -66,7 +47,6 @@ void chargingSprites::draw()
 	if (charge1_ == true)
 	{
 		megamanCharge1.draw(spriteData);
-		audio->playCue(LOAD);
 	}
 }
 

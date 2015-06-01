@@ -18,6 +18,7 @@ Enemy::Enemy() : Entity()
 	collisionType = entityNS::BOX;
 	visible = true;
 	active = true;
+	health = 100;
 	dx = 0;
 	dy = 0;
 	boss = false;
@@ -36,6 +37,37 @@ void Enemy::gravity(float frameTime)
 	if (velocity.y >= TERMINAL_VELOCITY)
 	{
 		velocity.y = TERMINAL_VELOCITY;
+	}
+}
+
+//=============================================================================
+// damage
+//=============================================================================
+void Enemy::damage(WEAPON weapon)
+{
+	spriteData.state = DAMAGED;
+	//damageTimer = DAMAGE_TIME;
+	velocity.y = 0;
+
+	switch (weapon)
+	{
+	case UNCHARGED_BULLET:
+		audio->playCue(EXPLODE);	//play sound
+		health -= enemyNS::REGULAR_SHOT_DAMAGE;
+		break;
+	case SMALL_CHARGE_BULLET:
+		audio->playCue(EXPLODE);    // play sound
+		health -= enemyNS::SMALL_CHARGE_DAMAGE;
+		break;
+	case MEDIUM_CHARGE_BULLET:
+		audio->playCue(EXPLODE);    // play sound
+		health -= enemyNS::MEDIUM_CHARGE_DAMAGE;
+		break;
+	}
+	if (health <= 0)
+	{
+		spriteData.state = DEAD;
+		active = false;
 	}
 }
 

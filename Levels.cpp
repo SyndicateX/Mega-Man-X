@@ -34,6 +34,8 @@ Levels::~Levels()
 //=============================================================================
 void Levels::initialize(HWND& hwnd, Graphics* graphics, Input* input, Game* game)
 {
+	audio = game->getAudio();                // the audio system
+
 	// megaman texture
 	if (!megamanTexture.initialize(graphics, MEGAMAN_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman texture"));
@@ -50,19 +52,26 @@ void Levels::initialize(HWND& hwnd, Graphics* graphics, Input* input, Game* game
 	if (!megaman.initialize(game, megamanNS::WIDTH, megamanNS::HEIGHT, 0, &megamanTexture))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
 
+	// main game textures
+	if (!gameTextures.initialize(graphics, TEXTURES_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing game textures"));
+
+	// health bar
+	healthBar.initialize(graphics, &gameTextures, 0, levelsNS::HEALTHBAR_Y, 5.0f, graphicsNS::WHITE);
+
 	// megaman charging sprites
 	if (!chargingSprites.initialize(game, chargingSpritesNS::WIDTH, chargingSpritesNS::HEIGHT, 0, &chargingSpritesTexture))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing charging sprites"));
+	throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing charging sprites"));
 
 	//bullet
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
 		bullet.push_back(Bullet());
 		if (!bullet[i].initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
+			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullet"));
 	}
 
-	return;
+return;
 }
 
 //=============================================================================
@@ -149,7 +158,15 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 			}
 			else							// If button is held down more than a frame, charge timer increments
 			{
-				if (chargeTime < 80)
+				if (chargeTime == 40)
+				{
+					audio->playCue(LOAD);
+				}
+				if (chargeTime > 80)
+				{
+					audio->playCue(MAX);
+				}
+				if (chargeTime <= 80)
 					chargeTime++;
 				if (chargeTime >= 40)
 				{

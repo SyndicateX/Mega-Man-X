@@ -24,6 +24,7 @@ Megaman::Megaman() : Entity()
 	invincibleTimer = 0.0f;
 	isInvincible_ = false;
 	flicker = 0;
+	health = 100;
 }
 
 //=============================================================================
@@ -164,6 +165,15 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanDamaged.setCurrentFrame(megamanNS::DAMAGED_MEGAMAN_START_FRAME);
 	megamanDamaged.setFrameDelay(megamanNS::DAMAGED_MEGAMAN_ANIMATION_DELAY);
 
+	//Taking damage
+	megamanDying.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
+		megamanNS::HEIGHT, 0, textureM);
+	if (!megamanDying.initialize(megamanSpriteCoordinates))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
+	megamanDying.setFrames(megamanNS::DYING_MEGAMAN_START_FRAME, megamanNS::DYING_MEGAMAN_END_FRAME);
+	megamanDying.setCurrentFrame(megamanNS::DYING_MEGAMAN_START_FRAME);
+	megamanDying.setFrameDelay(megamanNS::DYING_MEGAMAN_ANIMATION_DELAY);
+
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
 
@@ -205,9 +215,16 @@ void Megaman::update(float frameTime)
 			velocity.y += frameTime * GRAVITY;              // gravity
 		}
 	}
-	//----------------------------------------------------------------------
-	//----------------- IF MEGA MAN IS NOT TAKING DAMAGE -------------------
-	//----------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	//--------------------------- IF MEGA MAN IS DEAD -----------------------------
+	//-----------------------------------------------------------------------------
+	else if (spriteData.state == DEAD)
+	{
+		megamanDying.update(frameTime);
+	}
+	//-----------------------------------------------------------------------------
+	//-------------------- IF MEGA MAN IS NOT TAKING DAMAGE -----------------------
+	//-----------------------------------------------------------------------------
 	else
 	{
 		invincibleTimer -= frameTime;
@@ -383,6 +400,42 @@ void Megaman::update(float frameTime)
 
 		floorCollision_ = false;
 		canWallJump_ = false;
+	}
+}
+
+//=============================================================================
+// damage
+//=============================================================================
+void Megaman::damage(WEAPON weapon)
+{
+	spriteData.state = DAMAGED;
+	damageTimer = DAMAGE_TIME;
+	velocity.y = 0;
+
+	switch (weapon)
+	{
+	case ENEMY_COLLISION:
+		audio->playCue(EXPLODE);	//play sound
+		health -= megamanNS::ENEMY_DAMAGE;
+		break;
+	case ENEMY_PROJECTILE:
+		audio->playCue(EXPLODE);    // play sound
+		health -= megamanNS::ENEMY_DAMAGE;
+		break;
+	case BOSS_COLLISION:
+		audio->playCue(EXPLODE);    // play sound
+		health -= megamanNS::BOSS_DAMAGE;
+		break;
+	case BOSS_PROJECTILE:
+		audio->playCue(EXPLODE);    // play sound
+		health -= megamanNS::BOSS_DAMAGE;
+		break;
+	}
+	if (health <= 0)
+	{
+		spriteData.state = DEAD;
+		health = 100;
+		//explode();
 	}
 }
 
@@ -619,6 +672,10 @@ void Megaman::draw()
 		else if (spriteData.state == DAMAGED)
 		{
 			megamanDamaged.draw(spriteData);
+		}
+		else if (spriteData.state == DEAD)
+		{
+			megamanDying.draw(spriteData);
 		}
 		else if (spriteData.shotType != NONE)
 		{

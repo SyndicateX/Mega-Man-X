@@ -18,6 +18,7 @@ const char MECHA_SONIC[]				= "pictures\\Mecha_Sonic.Forte.32.png";
 const char EXPLOSION[]					= "pictures\\explosion.png";
 const char BEE[]						= "pictures\\baddies.png";
 const char BOWSER[]						= "pictures\\bowser.png"; 
+const char TEXTURES_IMAGE[]				= "pictures\\textures.png";  // game textures
 
 // window
 const char CLASS_NAME[] = "Mega Man X";
@@ -96,6 +97,18 @@ enum Direction
 {
 	LEFT,
 	RIGHT
+};
+
+// weapon types
+enum WEAPON 
+{ 
+	ENEMY_COLLISION,
+	ENEMY_PROJECTILE,
+	BOSS_COLLISION,
+	BOSS_PROJECTILE,
+	UNCHARGED_BULLET,
+	SMALL_CHARGE_BULLET,
+	MEDIUM_CHARGE_BULLET
 };
 
 //=============================================================================

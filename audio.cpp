@@ -1,8 +1,3 @@
-// Programming 2D Games
-// Copyright (c) 2011 by: 
-// Charles Kelly
-// audio.cpp v1.0
-
 #include "audio.h"
 
 //=============================================================================

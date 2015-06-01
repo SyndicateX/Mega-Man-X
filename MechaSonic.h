@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _MECHASONIC_h               // Prevent multiple definitions if this 
+#define _MECHASONIC_h               // file is included in more than one place
+#define WIN32_LEAN_AND_MEAN
 #include "enemy.h"
 
 namespace mechaSonicNS
@@ -42,4 +44,4 @@ private:
 	Image mechaSonicIdle;
 	Image mechaSonicDying;
 };
-
+#endif

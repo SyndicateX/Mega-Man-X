@@ -180,9 +180,14 @@ void Level1::collisions(float frameTime)
 			}
 			if (enemy[j]->collidesWith(megaman, cv) && !megaman.isInvincible() && megaman.getState() != DAMAGED)
 			{
-				megaman.setState(DAMAGED);
-				megaman.setDamageTimer(DAMAGE_TIME);
-				megaman.setVelocity(VECTOR2(megaman.getVelocity().x, 0));
+				if (j == bossIndex)
+				{
+					megaman.damage(BOSS_COLLISION);
+				}
+				else
+				{
+					megaman.damage(ENEMY_COLLISION);
+				}
 			}
 		}
 	}
@@ -193,10 +198,12 @@ void Level1::collisions(float frameTime)
 		{
 			if (bullet[i].collidesWith(*enemy[j], cv))
 			{
-				enemy[j]->setActive(false);
-				enemy[j]->setState(DEAD);
+				enemy[j]->damage(static_cast<WEAPON>(bullet[i].getShotType() + 3));
+				//enemy[j]->setActive(false);
+				//enemy[j]->setState(DEAD);
 				bullet[i].setActive(false);
 				bullet[i].setVisible(false);
+				audio->playCue(EXPLODE);
 			}
 		}
 	}
@@ -342,6 +349,11 @@ void Level1::render(Graphics* graphics)
 		if (bullet[i].getVisible() && bullet[i].getActive())
 			bullet[i].draw();					// add bullets to the scene
 	}
+
+	// display health bar
+	healthBar.setX((float)levelsNS::HEALTHBAR_X);
+	healthBar.set(megaman.getHealth());
+	healthBar.draw(levelsNS::MEGAMAN_HEALTHBAR_COLOR);
 
 	graphics->spriteEnd();                  // end drawing sprites
 }

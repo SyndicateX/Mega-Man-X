@@ -1,8 +1,3 @@
-// Programming 2D Games
-// Copyright (c) 2011 by: 
-// Charles Kelly
-// audio.h v1.1
-
 #ifndef _AUDIO_H                // Prevent multiple definitions if this 
 #define _AUDIO_H                // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN

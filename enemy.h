@@ -8,7 +8,9 @@
 
 namespace enemyNS
 {
-
+	const int REGULAR_SHOT_DAMAGE = 10;
+	const int SMALL_CHARGE_DAMAGE = 15;
+	const int MEDIUM_CHARGE_DAMAGE = 35;
 }
 
 // inherits from Entity class
@@ -25,6 +27,10 @@ public:
 	virtual void update(float frameTime) = 0;
 	void gravity(float frameTime);
 	virtual void draw() = 0;
+
+	// damage Mega Man with WEAPON
+	void damage(WEAPON);
+
 	void stop(double wallX, double wallY, double wallWidth, double wallHeight);
 	void stop(double wallX, double wallWidth);
 	void stop(std::vector<VECTOR2> collisionVector, std::vector<RECT> tileCoordinates);

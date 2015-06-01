@@ -2,7 +2,6 @@
 #define bee_h               // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN
 
-#include "entity.h"
 #include "enemy.h"
 #include "constants.h"
 #include "sprites.h"
@@ -10,13 +9,10 @@
 namespace beeNS
 {
 	const int WIDTH = 87;                   // image width
-	const int HEIGHT = 114;                  // image height
+	const int HEIGHT = 120;                  // image height
 	const int X = GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = GAME_HEIGHT / 2 - HEIGHT / 2;
 	const float SPEED = 250;                // pixels per second
-	const float ENERGY_LOSS = 100;          // energy loss on bounce (pixels/sec)
-	const float MIN_VY = 1;                 // minumum Y velocity
-	const float MASS = 1.0f;
 
 	const int FLYING_BEE_START_FRAME = 49;
 	const int FLYING_BEE_END_FRAME = 50;

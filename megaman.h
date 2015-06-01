@@ -1,5 +1,5 @@
-#ifndef megaman_h             // Prevent multiple definitions if this 
-#define megaman_h             // file is included in more than one place
+#ifndef _MEGAMAN_h             // Prevent multiple definitions if this 
+#define _MEGAMAN_h             // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN
 
 #include "entity.h"
@@ -13,7 +13,8 @@ namespace megamanNS
 	const int X = GAME_WIDTH / 2;			    // location on screen
     const int Y = GAME_HEIGHT - 4 * HEIGHT;
     const float SPEED = 125;					// pixels per second
-	const float MASS = 1.0e6f;
+	const float ENEMY_DAMAGE = 10;			 // damage caused by collision with an enemy
+	const float BOSS_DAMAGE = 40;            // damage caused by collision with a boss
 
 	const int IDLE_MEGAMAN_START_FRAME = 17;
 	const int IDLE_MEGAMAN_END_FRAME = 17;
@@ -70,6 +71,10 @@ namespace megamanNS
 	const int DAMAGED_MEGAMAN_START_FRAME = 179;
 	const int DAMAGED_MEGAMAN_END_FRAME = 182;
 	const float DAMAGED_MEGAMAN_ANIMATION_DELAY = 0.1f;
+
+	const int DYING_MEGAMAN_START_FRAME = 179;
+	const int DYING_MEGAMAN_END_FRAME = 182;
+	const float DYING_MEGAMAN_ANIMATION_DELAY = 0.1f;
 }
 
 // inherits from Entity class
@@ -84,6 +89,9 @@ public:
 		TextureManager *textureM);
 	void update(float frameTime);
 	virtual void draw();
+
+	// damage Mega Man with WEAPON
+	void damage(WEAPON);
 
 	// Determines where to place megaman if he collides with several blocks at once. 
 	// Calls the other stop() function to deal with single block collision scenarios
@@ -131,6 +139,7 @@ private:
 	Image megamanShootingDashing;
 	Image megamanWallSliding;
 	Image megamanDamaged;
+	Image megamanDying;
 	//Image megamanShootingWalking;		// Needs to modify sprite sheet for this to work
 										// Could possible work by modifying currentFrame when updating frames
 
@@ -150,8 +159,6 @@ private:
 	float invincibleTimer;                  // time remaining until Mega Man can take damage again
 
 	int flicker;
-
-	Audio* audio;
 };
 #endif
 

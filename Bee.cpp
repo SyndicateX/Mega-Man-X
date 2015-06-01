@@ -19,6 +19,7 @@ Bee::Bee() : Enemy()
 	edge.left = -beeNS::WIDTH / 3;
 	edge.right = beeNS::WIDTH / 3;
 	collisionType = entityNS::BOX;
+	health = 30;
 	active = true;
 	visible = true;
 }
@@ -34,7 +35,6 @@ bool Bee::initialize(Game *gamePtr, int width, int height, int ncols,
 	//Idle
 	beeFlying.initialize(gamePtr->getGraphics(), beeNS::WIDTH,
 		beeNS::HEIGHT, 0, textureM);
-
 	if (!beeFlying.initialize(beeSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 	beeFlying.setFrames(beeNS::FLYING_BEE_START_FRAME, beeNS::FLYING_BEE_END_FRAME);
@@ -44,12 +44,12 @@ bool Bee::initialize(Game *gamePtr, int width, int height, int ncols,
 	//Dying
 	beeDying.initialize(gamePtr->getGraphics(), beeNS::WIDTH,
 		beeNS::HEIGHT, 0, textureM);
-
 	if (!beeDying.initialize(beeSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 	beeDying.setFrames(beeNS::DYING_BEE_START_FRAME, beeNS::DYING_BEE_END_FRAME);
 	beeDying.setCurrentFrame(beeNS::DYING_BEE_START_FRAME);
 	beeDying.setFrameDelay(beeNS::DYING_BEE_ANIMATION_DELAY);
+	beeDying.setLoop(false);
 
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
@@ -77,10 +77,10 @@ void Bee::update(float frameTime)
 	}
 	else
 	{
-		if (beeDying.getCurrentFrame() == beeNS::DYING_BEE_END_FRAME)
+		if (beeDying.getAnimationComplete())
 		{
 			visible = false;
-			audio->playCue(EXPLODE);
+			//audio->playCue(EXPLODE);
 		}
 		beeDying.update(frameTime);
 	}

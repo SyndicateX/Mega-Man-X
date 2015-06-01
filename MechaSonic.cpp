@@ -17,6 +17,7 @@ MechaSonic::MechaSonic()
 	edge.left = -mechaSonicNS::WIDTH / 3;
 	edge.right = mechaSonicNS::WIDTH / 3;
 	collisionType = entityNS::BOX;
+	health = 60;
 	visible = true;
 	active = true;
 	dx = 0;
@@ -60,6 +61,7 @@ bool MechaSonic::initialize(Game *gamePtr, int width, int height, int ncols,
 	mechaSonicDying.setFrames(mechaSonicNS::DYING_START_FRAME, mechaSonicNS::DYING_END_FRAME);
 	mechaSonicDying.setCurrentFrame(mechaSonicNS::DYING_START_FRAME);
 	mechaSonicDying.setFrameDelay(mechaSonicNS::DYING_ANIMATION_DELAY);
+	mechaSonicDying.setLoop(false);
 
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
@@ -80,10 +82,10 @@ void MechaSonic::update(float frameTime)
 	}
 	else
 	{
-		if (mechaSonicDying.getCurrentFrame() == mechaSonicNS::DYING_END_FRAME)
+		if (mechaSonicDying.getAnimationComplete())
 		{
 			visible = false;
-			audio->playCue(EXPLODE);
+			//audio->playCue(EXPLODE);
 		}
 		mechaSonicDying.update(frameTime);
 	}

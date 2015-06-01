@@ -9,7 +9,15 @@
 #include "enemy.h"
 #include "bullet.h"
 #include "chargingSprites.h"
+#include "HealthBar.h"
 #include <vector>
+
+namespace levelsNS
+{
+	const int HEALTHBAR_Y = 30;
+	const int HEALTHBAR_X = 40;
+	const COLOR_ARGB MEGAMAN_HEALTHBAR_COLOR = graphicsNS::YELLOW;
+}
 
 //=============================================================================
 // This class is the core of all the levels
@@ -24,7 +32,9 @@ protected:
 	TextureManager mechaSonicTexture;	// Mecha_Sonic.Forte.32 texture
 	TextureManager bulletTexture;		// bullet texture
 	TextureManager chargingSpritesTexture; // megaman charging sprites texture
+	TextureManager gameTextures;
 
+	HealthBar healthBar;				// health bar for Mega Man
 	Megaman	megaman;					// megaman
 
 	chargingSprites chargingSprites;	// charging Sprites
@@ -41,7 +51,7 @@ protected:
 	bool fightingBoss;
 	int bulletNumber_;
 	int bossIndex;
-	Audio* audio;
+	Audio *audio;
 
 public:
 	// Constructor
