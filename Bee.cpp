@@ -19,7 +19,7 @@ Bee::Bee() : Enemy()
 	edge.left = -beeNS::WIDTH / 3;
 	edge.right = beeNS::WIDTH / 3;
 	collisionType = entityNS::BOX;
-	health = 30;
+	health = 8;
 	active = true;
 	visible = true;
 }

@@ -57,8 +57,11 @@ void Levels::initialize(HWND& hwnd, Graphics* graphics, Input* input, Game* game
 	if (!gameTextures.initialize(graphics, TEXTURES_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing game textures"));
 
-	// health bar
-	healthBar.initialize(graphics, &gameTextures, 0, levelsNS::HEALTHBAR_Y, 5.0f, graphicsNS::WHITE);
+	// X health bar
+	healthBarX.initialize(graphics, &gameTextures, 0, levelsNS::HEALTHBAR_X_Y, 5.0f, graphicsNS::WHITE);
+
+	// Boss health bar
+	healthBarBoss.initialize(graphics, &gameTextures, 0, levelsNS::HEALTHBAR_BOSS_Y, 5.0f, graphicsNS::WHITE);
 
 	// megaman charging sprites
 	if (!chargingSprites.initialize(game, chargingSpritesNS::WIDTH, chargingSpritesNS::HEIGHT, 0, &chargingSpritesTexture))
@@ -388,7 +391,6 @@ void Levels::releaseAll()
 	mechaSonicTexture.onLostDevice();
 	megamanTexture.onLostDevice();          // megaman texture
 	bulletTexture.onLostDevice();			// bullet texture
-	bulletTexture.onLostDevice();			// bullet texture
 	chargingSpritesTexture.onLostDevice();
 	backdropTexture.onLostDevice();         // backdrop texture
 	tileTextures.onLostDevice();
@@ -407,7 +409,6 @@ void Levels::resetAll()
 	tileTextures.onResetDevice();
 	megamanTexture.onResetDevice();
 	chargingSpritesTexture.onResetDevice();
-	bulletTexture.onResetDevice();
 	bulletTexture.onResetDevice();
 
 	return;

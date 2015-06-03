@@ -17,7 +17,7 @@ MechaSonic::MechaSonic()
 	edge.left = -mechaSonicNS::WIDTH / 3;
 	edge.right = mechaSonicNS::WIDTH / 3;
 	collisionType = entityNS::BOX;
-	health = 60;
+	health = 20;
 	visible = true;
 	active = true;
 	dx = 0;

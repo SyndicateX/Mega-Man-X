@@ -399,10 +399,16 @@ void Level1::render(Graphics* graphics)
 			bullet[i].draw();					// add bullets to the scene
 	}
 
-	// display health bar
-	healthBar.setX((float)levelsNS::HEALTHBAR_X);
-	healthBar.set(megaman.getHealth());
-	healthBar.draw(levelsNS::MEGAMAN_HEALTHBAR_COLOR);
+	// display health bars
+	healthBarX.setX((float)levelsNS::HEALTHBAR_X_X);
+	healthBarX.set(megaman.getHealth());
+	healthBarX.draw(levelsNS::MEGAMAN_HEALTHBAR_COLOR);
+	if (enemy[bossIndex]->getActive())
+	{
+		healthBarBoss.setX((float)levelsNS::HEALTHBAR_BOSS_X);
+		healthBarBoss.set(enemy[bossIndex]->getHealth());
+		healthBarBoss.draw(levelsNS::BOSS_HEALTHBAR_COLOR);
+	}
 	
 	graphics->spriteEnd();                  // end drawing sprites
 }

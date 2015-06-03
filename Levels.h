@@ -14,9 +14,12 @@
 
 namespace levelsNS
 {
-	const int HEALTHBAR_Y = 30;
-	const int HEALTHBAR_X = 40;
+	const int HEALTHBAR_X_Y = 30;
+	const int HEALTHBAR_X_X = 40;
+	const int HEALTHBAR_BOSS_Y = 30;
+	const int HEALTHBAR_BOSS_X = 640;
 	const COLOR_ARGB MEGAMAN_HEALTHBAR_COLOR = graphicsNS::YELLOW;
+	const COLOR_ARGB BOSS_HEALTHBAR_COLOR = graphicsNS::GREEN;
 }
 
 //=============================================================================
@@ -34,7 +37,8 @@ protected:
 	TextureManager chargingSpritesTexture; // megaman charging sprites texture
 	TextureManager gameTextures;
 
-	HealthBar healthBar;				// health bar for Mega Man
+	HealthBar healthBarX;				// health bar for Mega Man
+	HealthBar healthBarBoss;			// health bar for bosses
 	Megaman	megaman;					// megaman
 	chargingSprites chargingSprites;	// charging Sprites
 	std::vector<Bullet> bullet;			// bullets
