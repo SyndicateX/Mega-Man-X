@@ -213,6 +213,7 @@ void Enemy::topCollision(double wallY)
 {
 	spriteData.y = wallY - spriteData.height + 1;			// position at the top of the wall
 	velocity.y = 0; 										// stop y acceleration
+	floorCollision_ = true;
 }
 void Enemy::leftCollision(double wallX)
 {
@@ -226,7 +227,6 @@ void Enemy::bottomCollision(double wallY, double wallHeight)
 {
 	spriteData.y = wallY + wallHeight + 1;				// position underneath the wall
 	velocity.y = 1;										// set velocity to make megaman fall
-	floorCollision_ = true;
 }
 
 

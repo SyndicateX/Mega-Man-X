@@ -140,10 +140,9 @@ void Level1::update(float frameTime, Input* input, Game* game)
 
 void Level1::ai()
 {
-	if (enemy[bossIndex]->getActive() 
-		&& enemy[bossIndex]->getFloorCollision())
+	if (enemy[bossIndex]->getActive() && enemy[bossIndex]->getFloorCollision())
 	{
-		enemy[bossIndex]->setVelocity(VECTOR2(0, -100));
+		enemy[bossIndex]->setVelocity(VECTOR2(0, -400));
 		enemy[bossIndex]->setFloorCollision(false);
 	}
 }
