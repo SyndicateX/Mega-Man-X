@@ -24,7 +24,7 @@ namespace megamanNS
 	const int WALKING_MEGAMAN_END_FRAME = 67;
 	const float WALKING_MEGAMAN_ANIMATION_DELAY = 0.06f;
 
-	const int JUMPING_MEGAMAN_START_FRAME = 26;
+	const int JUMPING_MEGAMAN_START_FRAME = 24;
 	const int JUMPING_MEGAMAN_END_FRAME = 26;
 	const float JUMPING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
@@ -41,20 +41,20 @@ namespace megamanNS
 	const float SHOOTING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
 	const int SHOOTING_JUMP_MEGAMAN_START_FRAME = 84;
-	const int SHOOTING_JUMP_MEGAMAN_END_FRAME = 84;
+	const int SHOOTING_JUMP_MEGAMAN_END_FRAME = 86;
 	const float SHOOTING_JUMP_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
 	const int SHOOTING_JUMP_PEAK_MEGAMAN_START_FRAME = 86;
 	const int SHOOTING_JUMP_PEAK_MEGAMAN_END_FRAME = 86;
 	const float SHOOTING_JUMP_PEAK_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
-	const int SHOOTING_FALLING_MEGAMAN_START_FRAME = 88;
+	const int SHOOTING_FALLING_MEGAMAN_START_FRAME = 87;
 	const int SHOOTING_FALLING_MEGAMAN_END_FRAME = 88;
 	const float SHOOTING_FALLING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
-	//const int SHOOTING_WALKING_MEGAMAN_START_FRAME = 100;
-	//const int SHOOTING_WALKING_MEGAMAN_END_FRAME = 128;
-	//const float SHOOTING_WALKING_MEGAMAN_ANIMATION_DELAY = 0.07f;
+	const int SHOOTING_WALKING_MEGAMAN_START_FRAME = 212;
+	const int SHOOTING_WALKING_MEGAMAN_END_FRAME = 219;
+	const float SHOOTING_WALKING_MEGAMAN_ANIMATION_DELAY = 0.07f;
 
 	const int DASHING_MEGAMAN_START_FRAME = 71;
 	const int DASHING_MEGAMAN_END_FRAME = 71;
@@ -140,7 +140,7 @@ private:
 	Image megamanWallSliding;
 	Image megamanDamaged;
 	Image megamanDying;
-	//Image megamanShootingWalking;		// Needs to modify sprite sheet for this to work
+	Image megamanShootingWalking;		// Needs to modify sprite sheet for this to work
 										// Could possible work by modifying currentFrame when updating frames
 
 	bool standingOnSurface_ = true;

@@ -35,7 +35,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	TextureManager *textureM)
 {
 	// megaman sprite initialize
-	megamanSpriteCoordinates.populateVector("xcoords.txt");
+	megamanSpriteCoordinates.populateVector("pictures\\mmx4.xml");
 	if (!initializeCoords(megamanSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
 	
@@ -65,6 +65,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanJumping.setFrames(megamanNS::JUMPING_MEGAMAN_START_FRAME, megamanNS::JUMPING_MEGAMAN_END_FRAME);
 	megamanJumping.setCurrentFrame(megamanNS::JUMPING_MEGAMAN_START_FRAME);
 	megamanJumping.setFrameDelay(megamanNS::JUMPING_MEGAMAN_ANIMATION_DELAY);
+	megamanJumping.setLoop(false);
 	
 	//Jump Peak
 	megamanJumpPeak.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
@@ -101,6 +102,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanShootingJump.setFrames(megamanNS::SHOOTING_JUMP_MEGAMAN_START_FRAME, megamanNS::SHOOTING_JUMP_MEGAMAN_END_FRAME);
 	megamanShootingJump.setCurrentFrame(megamanNS::SHOOTING_JUMP_MEGAMAN_START_FRAME);
 	megamanShootingJump.setFrameDelay(megamanNS::SHOOTING_JUMP_MEGAMAN_ANIMATION_DELAY);
+	megamanShootingJump.setLoop(false);
 
 	//Shooting & Jump Peak
 	megamanShootingJumpPeak.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
@@ -119,6 +121,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanShootingFalling.setFrames(megamanNS::SHOOTING_FALLING_MEGAMAN_START_FRAME, megamanNS::SHOOTING_FALLING_MEGAMAN_END_FRAME);
 	megamanShootingFalling.setCurrentFrame(megamanNS::SHOOTING_FALLING_MEGAMAN_START_FRAME);
 	megamanShootingFalling.setFrameDelay(megamanNS::SHOOTING_FALLING_MEGAMAN_ANIMATION_DELAY);
+	megamanShootingFalling.setLoop(false);
 
 	//Dashing
 	megamanDashing.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
@@ -129,14 +132,14 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanDashing.setCurrentFrame(megamanNS::DASHING_MEGAMAN_START_FRAME);
 	megamanDashing.setFrameDelay(megamanNS::DASHING_MEGAMAN_ANIMATION_DELAY);
 
-	////////////Walking and shooting																				// Needs to modify sprite sheet for this to work
-	//////////megamanShootingWalking.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,							// Could possible work by modifying currentFrame when updating frames
-	//////////	megamanNS::HEIGHT, 0, textureM);
-	//////////if (!megamanShootingWalking.initialize(megamanSpriteCoordinates))
-	//////////	throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
-	//////////megamanShootingWalking.setFrames(megamanNS::SHOOTING_WALKING_MEGAMAN_START_FRAME, megamanNS::SHOOTING_WALKING_MEGAMAN_END_FRAME);
-	//////////megamanShootingWalking.setCurrentFrame(megamanNS::SHOOTING_WALKING_MEGAMAN_START_FRAME);
-	//////////megamanShootingWalking.setFrameDelay(megamanNS::SHOOTING_WALKING_MEGAMAN_ANIMATION_DELAY);
+	//Walking and shooting																				// Needs to modify sprite sheet for this to work
+	megamanShootingWalking.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,							// Could possible work by modifying currentFrame when updating frames
+		megamanNS::HEIGHT, 0, textureM);
+	if (!megamanShootingWalking.initialize(megamanSpriteCoordinates))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
+	megamanShootingWalking.setFrames(megamanNS::SHOOTING_WALKING_MEGAMAN_START_FRAME, megamanNS::SHOOTING_WALKING_MEGAMAN_END_FRAME);
+	megamanShootingWalking.setCurrentFrame(megamanNS::SHOOTING_WALKING_MEGAMAN_START_FRAME);
+	megamanShootingWalking.setFrameDelay(megamanNS::SHOOTING_WALKING_MEGAMAN_ANIMATION_DELAY);
 
 	//Dashing and shooting
 	megamanShootingDashing.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
@@ -241,26 +244,26 @@ void Megaman::update(float frameTime)
 		if (spriteData.direction == LEFT)
 		{
 			spriteData.flipHorizontal = true;
-			//if (spriteData.shotType != NONE)
-			//{
-			//	megamanShootingWalking.update(frameTime);
-			//}
-			//else
-			//{
+			if (spriteData.shotType != NONE)
+			{
+				megamanShootingWalking.update(frameTime);
+			}
+			else
+			{
 				megamanWalking.update(frameTime);
-			//}
+			}
 		}
 		else
 		{
 			spriteData.flipHorizontal = false;
-			//if (spriteData.shotType != NONE)
-			//{
-			//	megamanShootingWalking.update(frameTime);
-			//}
-			//else
-			//{
+			if (spriteData.shotType != NONE)
+			{
+				megamanShootingWalking.update(frameTime);
+			}
+			else
+			{
 				megamanWalking.update(frameTime);
-			//}
+			}
 		}
 
 		if (canWallJump_)
@@ -344,7 +347,6 @@ void Megaman::update(float frameTime)
 			{
 				canJump_ = false;
 			}
-
 		}
 		if (velocity.y >= 0)
 		{
@@ -384,6 +386,11 @@ void Megaman::update(float frameTime)
 		{
 			megamanDashing.update(frameTime);
 		}
+
+		megamanShootingJump.update(frameTime);
+		megamanShootingFalling.update(frameTime);
+		megamanJumping.update(frameTime);
+		megamanFalling.update(frameTime);
 
 		if (canWallJump_ && !standingOnSurface_)
 		{
@@ -623,14 +630,14 @@ void Megaman::draw()
 	{
 		if (spriteData.state == WALKING)
 		{
-			//if (spriteData.shotType == NONE)
-			//{
+			if (spriteData.shotType == NONE)
+			{
 				megamanWalking.draw(spriteData);
-			//}
-			//else
-			//{
-			//	megamanShootingWalking.draw(spriteData);
-			//}
+			}
+			else
+			{
+				megamanShootingWalking.draw(spriteData);
+			}
 		}
 		else if (spriteData.state == WALL_SLIDING)
 		{

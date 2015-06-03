@@ -319,9 +319,9 @@
       <Sprite Name="Sprite39" Id="39">
          <Coordinates>
             <X>823</X>
-            <Y>656</Y>
+            <Y>652</Y>
             <Width>90</Width>
-            <Height>96</Height>
+            <Height>101</Height>
          </Coordinates>
       </Sprite>
       <Sprite Name="Sprite40" Id="40">
@@ -575,9 +575,9 @@
       <Sprite Name="Sprite71" Id="71">
          <Coordinates>
             <X>541</X>
-            <Y>1217</Y>
+            <Y>1185</Y>
             <Width>126</Width>
-            <Height>68</Height>
+            <Height>101</Height>
          </Coordinates>
       </Sprite>
       <Sprite Name="Sprite72" Id="72">
@@ -1095,9 +1095,9 @@
       <Sprite Name="Sprite136" Id="136">
          <Coordinates>
             <X>887</X>
-            <Y>2066</Y>
+            <Y>2035</Y>
             <Width>145</Width>
-            <Height>68</Height>
+            <Height>102</Height>
          </Coordinates>
       </Sprite>
       <Sprite Name="Sprite137" Id="137">
@@ -1700,10 +1700,75 @@
             <Height>140</Height>
          </Coordinates>
       </Sprite>
+      <Sprite Name="Sprite212" Id="212">
+         <Coordinates>
+            <X>80</X>
+            <Y>3254</Y>
+            <Width>118</Width>
+            <Height>95</Height>
+         </Coordinates>
+      </Sprite>
+      <Sprite Name="Sprite213" Id="213">
+         <Coordinates>
+            <X>224</X>
+            <Y>3253</Y>
+            <Width>116</Width>
+            <Height>95</Height>
+         </Coordinates>
+      </Sprite>
+      <Sprite Name="Sprite214" Id="214">
+         <Coordinates>
+            <X>363</X>
+            <Y>3251</Y>
+            <Width>106</Width>
+            <Height>97</Height>
+         </Coordinates>
+      </Sprite>
+      <Sprite Name="Sprite215" Id="215">
+         <Coordinates>
+            <X>488</X>
+            <Y>3252</Y>
+            <Width>94</Width>
+            <Height>99</Height>
+         </Coordinates>
+      </Sprite>
+      <Sprite Name="Sprite216" Id="216">
+         <Coordinates>
+            <X>595</X>
+            <Y>3252</Y>
+            <Width>86</Width>
+            <Height>101</Height>
+         </Coordinates>
+      </Sprite>
+      <Sprite Name="Sprite217" Id="217">
+         <Coordinates>
+            <X>694</X>
+            <Y>3257</Y>
+            <Width>101</Width>
+            <Height>99</Height>
+         </Coordinates>
+      </Sprite>
+      <Sprite Name="Sprite218" Id="218">
+         <Coordinates>
+            <X>804</X>
+            <Y>3262</Y>
+            <Width>108</Width>
+            <Height>99</Height>
+         </Coordinates>
+      </Sprite>
+      <Sprite Name="Sprite219" Id="219">
+         <Coordinates>
+            <X>920</X>
+            <Y>3257</Y>
+            <Width>116</Width>
+            <Height>97</Height>
+         </Coordinates>
+      </Sprite>
    </Sprites>
    <Animations>
       <Animation Name="Animation0" FrameRate="20" Loop="True" PingPong="False">
          <Frames>
+            <Frame SpriteId="110" OriginX="53" OriginY="48.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="0" OriginX="6.5" OriginY="88" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="1" OriginX="23.5" OriginY="70.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="2" OriginX="44" OriginY="35.5" OffSetX="0" OffSetY="0" Duration="0.05" />
@@ -1814,7 +1879,6 @@
             <Frame SpriteId="107" OriginX="59.5" OriginY="47.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="108" OriginX="58" OriginY="47.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="109" OriginX="58" OriginY="47.5" OffSetX="0" OffSetY="0" Duration="0.05" />
-            <Frame SpriteId="110" OriginX="53" OriginY="48.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="111" OriginX="52.5" OriginY="48.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="112" OriginX="47" OriginY="49.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="113" OriginX="47.5" OriginY="49.5" OffSetX="0" OffSetY="0" Duration="0.05" />
@@ -1916,6 +1980,14 @@
             <Frame SpriteId="209" OriginX="5.5" OriginY="5.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="210" OriginX="7.5" OriginY="6.5" OffSetX="0" OffSetY="0" Duration="0.05" />
             <Frame SpriteId="211" OriginX="6.5" OriginY="70" OffSetX="0" OffSetY="0" Duration="0.05" />
+            <Frame SpriteId="212" OriginX="59" OriginY="47.5" OffSetX="0" OffSetY="0" Duration="0.05" />
+            <Frame SpriteId="213" OriginX="58" OriginY="47.5" OffSetX="0" OffSetY="0" Duration="0.05" />
+            <Frame SpriteId="214" OriginX="53" OriginY="48.5" OffSetX="0" OffSetY="0" Duration="0.05" />
+            <Frame SpriteId="215" OriginX="47" OriginY="49.5" OffSetX="0" OffSetY="0" Duration="0.05" />
+            <Frame SpriteId="216" OriginX="43" OriginY="50.5" OffSetX="0" OffSetY="0" Duration="0.05" />
+            <Frame SpriteId="217" OriginX="50.5" OriginY="49.5" OffSetX="0" OffSetY="0" Duration="0.05" />
+            <Frame SpriteId="218" OriginX="54" OriginY="49.5" OffSetX="0" OffSetY="0" Duration="0.05" />
+            <Frame SpriteId="219" OriginX="58" OriginY="48.5" OffSetX="0" OffSetY="0" Duration="0.05" />
          </Frames>
       </Animation>
    </Animations>

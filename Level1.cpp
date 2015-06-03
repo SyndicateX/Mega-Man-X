@@ -198,9 +198,7 @@ void Level1::collisions(float frameTime)
 		{
 			if (bullet[i].collidesWith(*enemy[j], cv))
 			{
-				enemy[j]->damage(static_cast<WEAPON>(bullet[i].getShotType() + 3));
-				//enemy[j]->setActive(false);
-				//enemy[j]->setState(DEAD);
+				enemy[j]->damage(static_cast<WEAPON>(bullet[i].getShotType() + 3)); // off by 3 from shot type enum 
 				bullet[i].setActive(false);
 				bullet[i].setVisible(false);
 				audio->playCue(EXPLODE);
