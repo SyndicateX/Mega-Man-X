@@ -83,7 +83,8 @@ enum State
 	DASHING,
 	WALL_SLIDING,
 	DEAD,
-	DAMAGED
+	DAMAGED,
+	ATTACKING
 };
 
 enum ShotType

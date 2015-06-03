@@ -11,6 +11,10 @@ namespace enemyNS
 	const int REGULAR_SHOT_DAMAGE = 4;
 	const int SMALL_CHARGE_DAMAGE = 6;
 	const int MEDIUM_CHARGE_DAMAGE = 8;
+	const int REGULAR_SHOT_DAMAGE = 10;
+	const int SMALL_CHARGE_DAMAGE = 15;
+	const int MEDIUM_CHARGE_DAMAGE = 35;
+	const float SPEED_BOWSER = 250.0F;
 }
 
 // inherits from Entity class

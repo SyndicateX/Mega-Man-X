@@ -35,6 +35,16 @@ bool Bowser::initialize(Game *gamePtr, int width, int height, int ncols,
 	if (!initializeCoords(bowserSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
 
+	//Spin Attack
+	bowserSpin.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
+		bowserNS::HEIGHT, 0, textureM);
+
+	if (!bowserSpin.initialize(bowserSpriteCoordinates))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
+	bowserSpin.setFrames(bowserNS::IDLE_START_FRAME, bowserNS::IDLE_END_FRAME);
+	bowserSpin.setCurrentFrame(bowserNS::IDLE_START_FRAME);
+	bowserSpin.setFrameDelay(bowserNS::IDLE_ANIMATION_DELAY);
+
 	//Idle
 	bowserIdle.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
 		bowserNS::HEIGHT, 0, textureM);
@@ -67,7 +77,11 @@ void Bowser::update(float frameTime)
 {
 	Entity::update(frameTime);
 
-	if (spriteData.state != DEAD)
+	if (spriteData.state == ATTACKING)
+	{
+		spinAttack(frameTime);
+	}
+	else if (spriteData.state != DEAD)
 	{
 		gravity(frameTime);
 		if (spriteData.direction == RIGHT)
@@ -99,7 +113,11 @@ void Bowser::handleCollisions(double wallX, double wallY, double wallWidth, doub
 
 void Bowser::draw()
 {
-	if (spriteData.state == DEAD)
+	if (spriteData.state == ATTACKING)
+	{
+		bowserSpin.draw(spriteData);
+	}
+	else if (spriteData.state == DEAD)
 	{
 		bowserDying.draw(spriteData);
 	}
@@ -107,4 +125,25 @@ void Bowser::draw()
 	{
 		bowserIdle.draw(spriteData);
 	}
+}
+
+void Bowser::spinAttack(float frameTime)
+{
+	//figure out what kind of attack he is doing
+	//...
+
+	//for now spinAttack
+	if (spriteData.direction == RIGHT)
+	{
+		dx += frameTime * bowserNS::SPEED;
+	}
+	else
+	{
+		dx -= frameTime * bowserNS::SPEED;
+	}
+
+	
+
+	bowserSpin.update(frameTime);
+
 }

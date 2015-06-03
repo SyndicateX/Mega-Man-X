@@ -183,6 +183,9 @@ void Level1::ai()
 
 			enemy[bossIndex]->setAttackDelay(3.0f);
 		}
+		//enemy[bossIndex]->setVelocity(VECTOR2(0,-400));
+		//enemy[bossIndex]->setFloorCollision(false);
+		enemy[bossIndex]->setState(ATTACKING);
 	}
 }
 
@@ -226,6 +229,7 @@ void Level1::collisions(float frameTime)
 				if (j == bossIndex)
 				{
 					megaman.damage(BOSS_COLLISION);
+					enemy[bossIndex]->setState(STANDING);
 				}
 				else
 				{
@@ -256,6 +260,23 @@ void Level1::collisions(float frameTime)
 	{
 		megaman.stop(collisionVector, tileCoordinates);		// Sets Mega Man's position and status after a collision
 	}
+
+
+	for (int i = 0; i < floor.size(); i++)
+	{
+		if (enemy[bossIndex]->collidesWith(floor[i], cv))
+		{
+			enemy[bossIndex]->
+				handleCollisions(
+				floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+		}
+		//if (enemy[bossIndex]->collidesWith(megaman, cv) && !megaman.isInvincible())
+		//{
+		//	enemy[bossIndex]->setState(STANDING);
+		//}
+	}
+
+
 }
 
 void Level1::updateMap()

@@ -17,6 +17,10 @@ namespace bowserNS
 	const float MIN_VY = 1;                 // minumum Y velocity
 	const float MASS = 1.0f;
 
+	const int SPIN_START_FRAME = 40;
+	const int SPIN_END_FRAME = 41;
+	const float SPIN_ANIMATION_DELAY = 0.15f;
+	
 	const int IDLE_START_FRAME = 40;
 	const int IDLE_END_FRAME = 41;
 	const float IDLE_ANIMATION_DELAY = 0.15f;
@@ -49,12 +53,13 @@ public:
 		startY_ = startY;
 	}
 
-
+	void spinAttack(float frameTime);
 
 private:
 	SpriteCoordinates bowserSpriteCoordinates;
 	Image bowserIdle;
 	Image bowserDying;
+	Image bowserSpin;
 
 	
 };
