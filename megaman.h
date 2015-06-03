@@ -13,8 +13,9 @@ namespace megamanNS
 	const int X = GAME_WIDTH / 2;			    // location on screen
     const int Y = GAME_HEIGHT - 4 * HEIGHT;
     const float SPEED = 125;					// pixels per second
-	const float ENEMY_DAMAGE = 10;			 // damage caused by collision with an enemy
-	const float BOSS_DAMAGE = 40;            // damage caused by collision with a boss
+	const float ENEMY_DAMAGE = 5;			 // damage caused by collision with an enemy
+	const float BOSS_DAMAGE = 7.5;            // damage caused by collision with a boss
+	const float BOSS_PROJECTILE_DAMAGE = 15;
 
 	const int IDLE_MEGAMAN_START_FRAME = 17;
 	const int IDLE_MEGAMAN_END_FRAME = 17;
@@ -123,6 +124,7 @@ public:
 	bool canShoot() const { return canShoot_; }
 	bool isDashJumping() const { return isDashJumping_; }
 	bool isInvincible() const { return isInvincible_; }
+	bool isDead() const { return isDead_; }
 
 private:
 	SpriteCoordinates megamanSpriteCoordinates;
@@ -154,6 +156,7 @@ private:
 	bool canShoot_ = true;
 	bool isDashJumping_ = false;
 	bool isInvincible_ = false;
+	bool isDead_ = false;
 
 	float damageTimer;                  // time remaining until user can control Mega Man
 	float invincibleTimer;                  // time remaining until Mega Man can take damage again

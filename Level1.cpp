@@ -48,6 +48,10 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	tile.setFrames(0, 0);
 	tile.setCurrentFrame(0);
 
+	//bullet
+	if (!fireball.initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing fireball"));
+
 	// floors
 	for (int i = 0; i < TILE_ROWS; i++)
 	{
@@ -135,6 +139,27 @@ void Level1::update(float frameTime, Input* input, Game* game)
 	{
 		levelComplete_ = true;
 	}
+
+	if (fireball.getVisible() && fireball.getActive())
+	{
+		if (fireball.getDirection() == RIGHT)
+		{
+			fireball.setX(fireball.getX() + bulletNS::SPEED*frameTime);
+			fireball.flipHorizontal(false);
+		}
+		else
+		{
+			fireball.flipHorizontal(true);
+			fireball.setX(fireball.getX() - bulletNS::SPEED*frameTime);
+		}
+		fireball.update(frameTime);
+		if (fireball.getX() > GAME_WIDTH || fireball.getX() < 0)
+		{
+			fireball.setVisible(false);
+			fireball.setActive(false);
+		}
+	}
+
 	// Level specific code goes here
 }
 
@@ -142,6 +167,22 @@ void Level1::ai()
 {
 	if (enemy[bossIndex]->getActive() && enemy[bossIndex]->getFloorCollision())
 	{
+		static float delayTimer = 0;
+
+		if (enemy[bossIndex]->attackReady())
+		{
+			enemy[bossIndex]->setVelocity(VECTOR2(0, -400));
+			enemy[bossIndex]->setFloorCollision(false);
+			fireball.setShotType(FIREBALL);
+			fireball.setActive(true);
+			fireball.setVisible(true);
+			fireball.setDirection(enemy[bossIndex]->getDirection());
+			fireball.setX(enemy[bossIndex]->getX());
+			fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
+			fireball.setY(enemy[bossIndex]->getY());
+
+			enemy[bossIndex]->setAttackDelay(3.0f);
+		}
 		//enemy[bossIndex]->setVelocity(VECTOR2(0,-400));
 		//enemy[bossIndex]->setFloorCollision(false);
 		enemy[bossIndex]->setState(ATTACKING);
@@ -211,7 +252,10 @@ void Level1::collisions(float frameTime)
 			}
 		}
 	}
-
+	if (megaman.collidesWith(fireball, cv) && !megaman.isInvincible() && megaman.getState() != DAMAGED)
+	{
+		megaman.damage(BOSS_PROJECTILE);
+	}
 	if (megamanCollided)
 	{
 		megaman.stop(collisionVector, tileCoordinates);		// Sets Mega Man's position and status after a collision
@@ -265,7 +309,7 @@ void Level1::updateMap()
 		}
 	}
 
-	backdrop.setY(-mapY / 10 + megamanNS::Y - 200);
+	backdrop.setY(-mapY / 5 + megamanNS::Y - 200);
 
 	for (int i = 0; i < enemy.size(); i++)
 	{
@@ -290,7 +334,7 @@ void Level1::updateMap()
 	{
 		for (int i = 0; i < enemy.size(); i++)
 		{
-			enemy[i]->setX(enemy[i]->getStartX() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
+			enemy[i]->setX(enemy[i]->getStartX() + enemy[i]->getDx() - mapX + (megaman.getX() - megamanNS::X));
 		}
 	}
 
@@ -364,6 +408,11 @@ void Level1::render(Graphics* graphics)
 
 	megaman.draw();							// add Mega Man to the scene
 	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
+
+	if (fireball.getVisible())
+	{
+		fireball.draw();
+	}
 
 	for (int i = 0; i < bullet.size(); i++)
 	{

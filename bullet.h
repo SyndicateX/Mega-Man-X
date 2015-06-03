@@ -27,6 +27,10 @@ namespace bulletNS
 	const int LARGE_CHARGE_END_FRAME = 25;
 	const float LARGE_CHARGE_ANIMATION_DELAY = 0.07f;
 
+	const int FIREBALL_START_FRAME = 85;
+	const int FIREBALL_END_FRAME = 87;
+	const float FIREBALL_ANIMATION_DELAY = 0.07f;
+
 }
 
 // inherits from Entity class
@@ -52,6 +56,7 @@ public:
 	Image regularBullet;
 	Image bulletSmall;
 	Image bulletLarge;
+	Image fireball;
 
 private:
 	double initialY_;

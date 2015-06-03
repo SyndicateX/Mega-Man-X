@@ -13,6 +13,7 @@ Levels::Levels()
 	oldY_ = 0;
 	directionChange_ = false;
 	levelComplete_ = false;
+	levelFailed_ = false;
 	bulletNumber_ = 0;
 }
 
@@ -92,6 +93,11 @@ void Levels::updateMegaman(double MAP_WIDTH, double MAP_HEIGHT, float frameTime,
 	if (megaman.getX() >= GAME_WIDTH - megaman.getWidth())
 	{
 		levelComplete_ = true;
+	}
+
+	if (megaman.isDead())
+	{
+		levelFailed_ = true;
 	}
 
 	if (megaman.isDashing() && megaman.getState() == JUMPING)
@@ -410,4 +416,9 @@ void Levels::resetAll()
 bool Levels::isLevelComplete()
 {
 	return levelComplete_;
+}
+
+bool Levels::levelFailed()
+{
+	return levelFailed_;
 }

@@ -28,6 +28,8 @@ Bowser::Bowser() : Enemy()
 bool Bowser::initialize(Game *gamePtr, int width, int height, int ncols,
 	TextureManager *textureM)
 {
+	attackTimer = 1.0f;
+
 	// Bowser sprite initialize
 	bowserSpriteCoordinates.populateVector("pictures\\bowser.xml");
 	if (!initializeCoords(bowserSpriteCoordinates))

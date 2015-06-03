@@ -21,6 +21,7 @@ Enemy::Enemy() : Entity()
 	health = 100;
 	dx = 0;
 	dy = 0;
+	attackTimer = 0;
 	boss = false;
 }
 
@@ -37,6 +38,11 @@ void Enemy::gravity(float frameTime)
 	if (velocity.y >= TERMINAL_VELOCITY)
 	{
 		velocity.y = TERMINAL_VELOCITY;
+	}
+
+	if (attackTimer > 0)
+	{
+		attackTimer -= frameTime;
 	}
 }
 

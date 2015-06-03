@@ -10,7 +10,8 @@
 //=============================================================================
 // graphic images
 const char TILE_TEXTURES[]				= "pictures\\brick001.png"; // tiles
-const char BACKDROP_IMAGE[]				= "pictures\\082.png";
+//const char BACKDROP_IMAGE[]				= "pictures\\082.png";
+const char BACKDROP_IMAGE[]				= "pictures\\BlackBackground.png";
 const char BULLET_IMAGE[]				= "pictures\\BusterBusterEdit.png";
 const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CHARGING_SPRITES_IMAGE[]		= "pictures\\BusterBuster.png";
@@ -37,7 +38,7 @@ const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calcul
 const float GRAVITY = 500.0f;                   // acceleration of gravity pixels/sec
 //const UINT MAP_WIDTH = 2000;
 const UINT MAP_HEIGHT = 1500;
-const int JUMP_VELOCITY = -200;// -180;
+const int JUMP_VELOCITY = -180;
 const int TERMINAL_VELOCITY = -JUMP_VELOCITY;
 
 const double WALK_SPEED = 1;
@@ -91,7 +92,8 @@ enum ShotType
 	NONE,
 	REGULAR_SHOT,
 	SMALL_CHARGE,
-	MEDIUM_CHARGE
+	MEDIUM_CHARGE,
+	FIREBALL
 };
 
 enum Direction

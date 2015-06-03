@@ -8,7 +8,7 @@ MechaSonic::MechaSonic()
 	spriteData.y = startY_;
 	spriteData.rect.bottom = mechaSonicNS::HEIGHT;   // rectangle to select parts of an image
 	spriteData.rect.right = mechaSonicNS::WIDTH;
-	spriteData.direction = RIGHT;				  // mechaSonic always faces right at the start of any level
+	spriteData.direction = LEFT;				  // mechaSonic always faces right at the start of any level
 	spriteData.state = STANDING;
 	velocity.x = 0;						        // velocity X
 	velocity.y = -20;							    // velocity Y

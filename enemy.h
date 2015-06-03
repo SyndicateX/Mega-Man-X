@@ -60,6 +60,14 @@ public:
 	{
 		return boss;
 	}
+	bool attackReady()
+	{
+		return attackTimer <= 0;
+	}
+	void setAttackDelay(float delayTime)
+	{
+		attackTimer = delayTime;
+	}
 
 	void setFloorCollision(bool floorCollisionStatus) { floorCollision_ = floorCollisionStatus; }
 	bool getFloorCollision() { return floorCollision_; }
