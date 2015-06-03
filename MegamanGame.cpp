@@ -53,6 +53,14 @@ void MegamanGame::update()
 		level->initializeAdditional(hwnd, graphics, input, this);
 		lCount++;
 	}
+	else if (level->levelFailed())
+	{
+		delete level;
+		level = new Level1();
+		
+		level->initialize(hwnd, graphics, input, this);
+		level->initializeAdditional(hwnd, graphics, input, this);
+	}
 	level->update(frameTime, input, this);
 }
 

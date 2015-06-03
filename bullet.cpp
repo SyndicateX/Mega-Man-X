@@ -50,6 +50,14 @@ bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
 	bulletSmall.setFrameDelay(bulletNS::SMALL_CHARGE_ANIMATION_DELAY);
 
 	//Large Charge
+	bulletLarge.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
+		bulletNS::HEIGHT, 1, textureM);
+	bulletLarge.initialize(bulletSpriteCoordinates);
+	bulletLarge.setFrames(bulletNS::LARGE_CHARGE_START_FRAME, bulletNS::LARGE_CHARGE_END_FRAME);
+	bulletLarge.setCurrentFrame(bulletNS::LARGE_CHARGE_START_FRAME);
+	bulletLarge.setFrameDelay(bulletNS::LARGE_CHARGE_ANIMATION_DELAY);
+
+	//Large Charge
 	fireball.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
 		bulletNS::HEIGHT, 1, textureM);
 	fireball.initialize(bulletSpriteCoordinates);

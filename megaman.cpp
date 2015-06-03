@@ -168,7 +168,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanDamaged.setCurrentFrame(megamanNS::DAMAGED_MEGAMAN_START_FRAME);
 	megamanDamaged.setFrameDelay(megamanNS::DAMAGED_MEGAMAN_ANIMATION_DELAY);
 
-	//Taking damage
+	//Dying
 	megamanDying.initialize(gamePtr->getGraphics(), megamanNS::WIDTH,
 		megamanNS::HEIGHT, 0, textureM);
 	if (!megamanDying.initialize(megamanSpriteCoordinates))
@@ -176,6 +176,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	megamanDying.setFrames(megamanNS::DYING_MEGAMAN_START_FRAME, megamanNS::DYING_MEGAMAN_END_FRAME);
 	megamanDying.setCurrentFrame(megamanNS::DYING_MEGAMAN_START_FRAME);
 	megamanDying.setFrameDelay(megamanNS::DYING_MEGAMAN_ANIMATION_DELAY);
+	megamanDying.setLoop(false);
 
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
@@ -212,11 +213,7 @@ void Megaman::update(float frameTime)
 			invincibleTimer = INVINCIBILITY_TIME;
 		}
 
-		if (spriteData.y + spriteData.height < GAME_HEIGHT 
-			&& !standingOnSurface_ 
-			|| !floorCollision_ 
-			&& velocity.y >= 0)
-			//If in the air -- fall
+		if (spriteData.y + spriteData.height < GAME_HEIGHT && !standingOnSurface_ || !floorCollision_ && velocity.y >= 0) //If in the air -- fall
 		{
 			spriteData.y += frameTime * velocity.y * 5;     // Determines speed and height of Mega Man's jump -- can be adjusted
 			velocity.y += frameTime * GRAVITY;              // gravity
@@ -227,6 +224,10 @@ void Megaman::update(float frameTime)
 	//-----------------------------------------------------------------------------
 	else if (spriteData.state == DEAD)
 	{
+		if (megamanDying.getAnimationComplete())
+		{
+			isDead_ = true;
+		}
 		megamanDying.update(frameTime);
 	}
 	//-----------------------------------------------------------------------------
@@ -439,13 +440,13 @@ void Megaman::damage(WEAPON weapon)
 		break;
 	case BOSS_PROJECTILE:
 		audio->playCue(EXPLODE);    // play sound
-		health -= megamanNS::BOSS_DAMAGE;
+		health -= megamanNS::BOSS_PROJECTILE_DAMAGE;
 		break;
 	}
 	if (health <= 0)
 	{
 		spriteData.state = DEAD;
-		health = 100;
+		health = 0;
 		//explode();
 	}
 }

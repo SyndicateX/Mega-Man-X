@@ -167,16 +167,22 @@ void Level1::ai()
 {
 	if (enemy[bossIndex]->getActive() && enemy[bossIndex]->getFloorCollision())
 	{
-		enemy[bossIndex]->setVelocity(VECTOR2(0, -400));
-		enemy[bossIndex]->setFloorCollision(false);
-		fireball.setShotType(FIREBALL);
-		fireball.setActive(true);
-		fireball.setVisible(true);
-		fireball.setDirection(enemy[bossIndex]->getDirection());
-		fireball.setX(enemy[bossIndex]->getX());
-		fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
-		fireball.setY(enemy[bossIndex]->getY());
-		
+		static float delayTimer = 0;
+
+		if (enemy[bossIndex]->attackReady())
+		{
+			enemy[bossIndex]->setVelocity(VECTOR2(0, -400));
+			enemy[bossIndex]->setFloorCollision(false);
+			fireball.setShotType(FIREBALL);
+			fireball.setActive(true);
+			fireball.setVisible(true);
+			fireball.setDirection(enemy[bossIndex]->getDirection());
+			fireball.setX(enemy[bossIndex]->getX());
+			fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
+			fireball.setY(enemy[bossIndex]->getY());
+
+			enemy[bossIndex]->setAttackDelay(3.0f);
+		}
 	}
 }
 
@@ -282,7 +288,7 @@ void Level1::updateMap()
 		}
 	}
 
-	backdrop.setY(-mapY / 10 + megamanNS::Y - 200);
+	backdrop.setY(-mapY / 5 + megamanNS::Y - 200);
 
 	for (int i = 0; i < enemy.size(); i++)
 	{

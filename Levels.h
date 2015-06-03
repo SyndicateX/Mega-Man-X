@@ -36,22 +36,25 @@ protected:
 
 	HealthBar healthBar;				// health bar for Mega Man
 	Megaman	megaman;					// megaman
-
 	chargingSprites chargingSprites;	// charging Sprites
 	std::vector<Bullet> bullet;			// bullets
-	Image   backdrop;					// backdrop image
-	Image	tile;
 	std::vector<Entity>	floor;
 	std::vector<Enemy*> enemy;
+
+	Audio *audio;
+
+	Image   backdrop;					// backdrop image
+	Image	tile;
+
 	double  mapX, mapY, tileMapX, tileMapY;
 	double oldX_;
 	double oldY_;
 	bool directionChange_;
 	bool levelComplete_;
+	bool levelFailed_;
 	bool fightingBoss;
 	int bulletNumber_;
 	int bossIndex;
-	Audio *audio;
 
 public:
 	// Constructor
@@ -70,6 +73,7 @@ public:
 	void moveMegaman(double moveRatedouble, double MAP_WIDTH, double MAP_HEIGHT); // handles megaman's and the map's movements after input
 	void shoot(int index);		// shoots megaman's x-buster bullets
 	bool isLevelComplete();
+	bool levelFailed();
 
 	virtual void ai() = 0;          // "
 	virtual void collisions(float frameTime) = 0;  // "

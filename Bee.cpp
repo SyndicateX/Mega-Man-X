@@ -68,6 +68,7 @@ void Bee::update(float frameTime)
 		if (spriteData.direction == RIGHT)
 		{
 			dx += frameTime * beeNS::SPEED;
+			flipHorizontal(false);
 		}
 		else
 		{
@@ -80,7 +81,7 @@ void Bee::update(float frameTime)
 		if (beeDying.getAnimationComplete())
 		{
 			visible = false;
-			//audio->playCue(EXPLODE);
+			flipHorizontal(true);
 		}
 		beeDying.update(frameTime);
 	}
