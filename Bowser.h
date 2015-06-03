@@ -49,9 +49,13 @@ public:
 		startY_ = startY;
 	}
 
+
+
 private:
 	SpriteCoordinates bowserSpriteCoordinates;
 	Image bowserIdle;
 	Image bowserDying;
+
+	
 };
 #endif

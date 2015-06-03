@@ -209,7 +209,11 @@ void Megaman::update(float frameTime)
 			invincibleTimer = INVINCIBILITY_TIME;
 		}
 
-		if (spriteData.y + spriteData.height < GAME_HEIGHT && !standingOnSurface_ || !floorCollision_ && velocity.y >= 0)	//If in the air -- fall
+		if (spriteData.y + spriteData.height < GAME_HEIGHT 
+			&& !standingOnSurface_ 
+			|| !floorCollision_ 
+			&& velocity.y >= 0)
+			//If in the air -- fall
 		{
 			spriteData.y += frameTime * velocity.y * 5;     // Determines speed and height of Mega Man's jump -- can be adjusted
 			velocity.y += frameTime * GRAVITY;              // gravity

@@ -60,6 +60,9 @@ public:
 		return boss;
 	}
 
+	void setFloorCollision(bool floorCollisionStatus) { floorCollision_ = floorCollisionStatus; }
+	bool getFloorCollision() { return floorCollision_; }
+
 protected:
 	SpriteCoordinates spriteCoordinates;
 
@@ -70,6 +73,17 @@ protected:
 	bool boss;
 
 	bool gravity_;
+
+
+	bool floorCollision_ = false;
+	bool doWallJump_ = false;
+	bool isInvincible_ = false;
+	bool canAttack_ = true;
+
+	float invincibleTimer;                  // time remaining until Mega Man can take damage again
+	float attackTimer;
+
+	int flicker;
 
 	void topCollision(double wallY);
 	void leftCollision(double wallX);
