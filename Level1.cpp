@@ -313,7 +313,7 @@ void Level1::updateMap()
 	{
 		for (int i = 0; i < enemy.size(); i++)
 		{
-			enemy[i]->setX(enemy[i]->getStartX() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
+			enemy[i]->setX(enemy[i]->getStartX() + enemy[i]->getDx() - mapX + (megaman.getX() - megamanNS::X));
 		}
 	}
 
