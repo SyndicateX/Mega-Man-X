@@ -48,6 +48,10 @@ void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 	tile.setFrames(0, 0);
 	tile.setCurrentFrame(0);
 
+	//bullet
+	if (!fireball.initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing fireball"));
+
 	// floors
 	for (int i = 0; i < TILE_ROWS; i++)
 	{
@@ -135,6 +139,27 @@ void Level1::update(float frameTime, Input* input, Game* game)
 	{
 		levelComplete_ = true;
 	}
+
+	if (fireball.getVisible() && fireball.getActive())
+	{
+		if (fireball.getDirection() == RIGHT)
+		{
+			fireball.setX(fireball.getX() + bulletNS::SPEED*frameTime);
+			fireball.flipHorizontal(false);
+		}
+		else
+		{
+			fireball.flipHorizontal(true);
+			fireball.setX(fireball.getX() - bulletNS::SPEED*frameTime);
+		}
+		fireball.update(frameTime);
+		if (fireball.getX() > GAME_WIDTH || fireball.getX() < 0)
+		{
+			fireball.setVisible(false);
+			fireball.setActive(false);
+		}
+	}
+
 	// Level specific code goes here
 }
 
@@ -144,6 +169,14 @@ void Level1::ai()
 	{
 		enemy[bossIndex]->setVelocity(VECTOR2(0, -400));
 		enemy[bossIndex]->setFloorCollision(false);
+		fireball.setShotType(FIREBALL);
+		fireball.setActive(true);
+		fireball.setVisible(true);
+		fireball.setDirection(enemy[bossIndex]->getDirection());
+		fireball.setX(enemy[bossIndex]->getX());
+		fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
+		fireball.setY(enemy[bossIndex]->getY());
+		
 	}
 }
 
@@ -209,7 +242,10 @@ void Level1::collisions(float frameTime)
 			}
 		}
 	}
-
+	if (megaman.collidesWith(fireball, cv) && !megaman.isInvincible() && megaman.getState() != DAMAGED)
+	{
+		megaman.damage(BOSS_PROJECTILE);
+	}
 	if (megamanCollided)
 	{
 		megaman.stop(collisionVector, tileCoordinates);		// Sets Mega Man's position and status after a collision
@@ -346,6 +382,11 @@ void Level1::render(Graphics* graphics)
 	megaman.draw();							// add Mega Man to the scene
 	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
 
+	if (fireball.getVisible())
+	{
+		fireball.draw();
+	}
+
 	for (int i = 0; i < bullet.size(); i++)
 	{
 		if (bullet[i].getVisible() && bullet[i].getActive())
@@ -356,7 +397,7 @@ void Level1::render(Graphics* graphics)
 	healthBar.setX((float)levelsNS::HEALTHBAR_X);
 	healthBar.set(megaman.getHealth());
 	healthBar.draw(levelsNS::MEGAMAN_HEALTHBAR_COLOR);
-
+	
 	graphics->spriteEnd();                  // end drawing sprites
 }
 

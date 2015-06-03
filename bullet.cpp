@@ -29,7 +29,7 @@ bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
 	TextureManager *textureM)
 {
 	// bullet sprite initialize
-	bulletSpriteCoordinates.populateVector("pictures\\bulletsprites.xml");
+	bulletSpriteCoordinates.populateVector("pictures\\bulletsprites2.xml");
 	if (!initializeCoords(bulletSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullets"));
 
@@ -50,12 +50,14 @@ bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
 	bulletSmall.setFrameDelay(bulletNS::SMALL_CHARGE_ANIMATION_DELAY);
 
 	//Large Charge
-	bulletLarge.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
+	fireball.initialize(gamePtr->getGraphics(), bulletNS::WIDTH,
 		bulletNS::HEIGHT, 1, textureM);
-	bulletLarge.initialize(bulletSpriteCoordinates);
-	bulletLarge.setFrames(bulletNS::LARGE_CHARGE_START_FRAME, bulletNS::LARGE_CHARGE_END_FRAME);
-	bulletLarge.setCurrentFrame(bulletNS::LARGE_CHARGE_START_FRAME);
-	bulletLarge.setFrameDelay(bulletNS::LARGE_CHARGE_ANIMATION_DELAY);
+	fireball.initialize(bulletSpriteCoordinates);
+	fireball.setFrames(bulletNS::FIREBALL_START_FRAME, bulletNS::FIREBALL_END_FRAME);
+	fireball.setCurrentFrame(bulletNS::FIREBALL_START_FRAME);
+	fireball.setFrameDelay(bulletNS::FIREBALL_ANIMATION_DELAY);
+
+	//Fireball
 
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
@@ -72,11 +74,23 @@ void Bullet::setInitialY(double initialY, bool wallSliding, bool dashing)
 		initialY_ = initialY + 15;
 		audio->playCue(FIRE);
 	}
-	else
+	else if (spriteData.shotType == MEDIUM_CHARGE)
 	{
 		initialY_ = initialY;
 		audio->playCue(FIRE);
 	}
+	else if (spriteData.shotType == FIREBALL)
+	{
+		initialY_ = initialY;
+		spriteData.width = 205;           // size of fireballs
+		spriteData.height = 120;
+		edge.top = -spriteData.height / 2;			// set collision edges
+		edge.bottom = spriteData.height / 2;
+		edge.left = -spriteData.width / 3;
+		edge.right = spriteData.width / 3;
+		audio->playCue(FIRE);
+	}
+
 	if (wallSliding)
 	{
 		initialY_ += 30;
@@ -98,6 +112,7 @@ void Bullet::update(float frameTime)
 	regularBullet.update(frameTime);
 	bulletSmall.update(frameTime);
 	bulletLarge.update(frameTime);
+	fireball.update(frameTime);
 }
 
 void Bullet::draw()
@@ -119,5 +134,9 @@ void Bullet::draw()
 		bulletLarge.draw(spriteData);
 		audio->stopCue(LOAD);
 		//audio->playCue(MAXFIRE);
+	}
+	else if (spriteData.shotType == FIREBALL)
+	{
+		fireball.draw(spriteData);
 	}
 }

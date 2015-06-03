@@ -90,7 +90,8 @@ enum ShotType
 	NONE,
 	REGULAR_SHOT,
 	SMALL_CHARGE,
-	MEDIUM_CHARGE
+	MEDIUM_CHARGE,
+	FIREBALL
 };
 
 enum Direction

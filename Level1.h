@@ -74,6 +74,7 @@ protected:
 	// level1 items
 	TextureManager beeTexture;			// bee texture
 	TextureManager bowserTexture;		// Bowser texture
+	Bullet fireball;
 
 public:
 	Level1();
