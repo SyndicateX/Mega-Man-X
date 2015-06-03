@@ -59,7 +59,7 @@ bool Bee::initialize(Game *gamePtr, int width, int height, int ncols,
 // typically called once per frame
 // frameTime is used to regulate the speed of movement and animation
 //=============================================================================
-void Bee::update(float frameTime)
+void Bee::update(float frameTime) 
 {
 	Entity::update(frameTime);
 	
