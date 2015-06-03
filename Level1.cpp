@@ -119,7 +119,7 @@ void Level1::update(float frameTime, Input* input, Game* game)
 			mapX++;
 			mapY++;
 		}*/
-		megaman.setX(100);
+		megaman.setX(120);
 		megaman.setY(GAME_HEIGHT - 100);
 		for (int i = 0; i < enemy.size(); i++)
 		{
@@ -159,8 +159,6 @@ void Level1::update(float frameTime, Input* input, Game* game)
 			fireball.setActive(false);
 		}
 	}
-
-	// Level specific code goes here
 }
 
 void Level1::ai()
@@ -168,10 +166,18 @@ void Level1::ai()
 	if (enemy[bossIndex]->getActive() && enemy[bossIndex]->getFloorCollision())
 	{
 		static float delayTimer = 0;
+		static bool canFire = false;
 
 		if (enemy[bossIndex]->attackReady())
 		{
-			enemy[bossIndex]->setVelocity(VECTOR2(0, -400));
+			enemy[bossIndex]->setVelocity(VECTOR2(0, -420));		// jump
+			canFire = true;
+			enemy[bossIndex]->setAttackDelay(3.0f);
+		}
+
+		if (enemy[bossIndex]->getY() <= megaman.getY() && canFire)
+		{
+			enemy[bossIndex]->setState(FIRE_BREATH);
 			enemy[bossIndex]->setFloorCollision(false);
 			fireball.setShotType(FIREBALL);
 			fireball.setActive(true);
@@ -180,12 +186,12 @@ void Level1::ai()
 			fireball.setX(enemy[bossIndex]->getX());
 			fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
 			fireball.setY(enemy[bossIndex]->getY());
-
-			enemy[bossIndex]->setAttackDelay(3.0f);
+			canFire = false;
 		}
+
 		//enemy[bossIndex]->setVelocity(VECTOR2(0,-400));
 		//enemy[bossIndex]->setFloorCollision(false);
-		enemy[bossIndex]->setState(ATTACKING);
+		//enemy[bossIndex]->setState(ATTACKING);
 	}
 }
 
@@ -243,7 +249,7 @@ void Level1::collisions(float frameTime)
 	{
 		for (int j = 0; j < enemy.size(); j++)
 		{
-			if (bullet[i].collidesWith(*enemy[j], cv))
+			if (bullet[i].collidesWith(*enemy[j], cv) && !enemy[j]->isInvincible())
 			{
 				enemy[j]->damage(static_cast<WEAPON>(bullet[i].getShotType() + 3)); // off by 3 from shot type enum 
 				bullet[i].setActive(false);
@@ -262,19 +268,19 @@ void Level1::collisions(float frameTime)
 	}
 
 
-	for (int i = 0; i < floor.size(); i++)
-	{
-		if (enemy[bossIndex]->collidesWith(floor[i], cv))
-		{
-			enemy[bossIndex]->
-				handleCollisions(
-				floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
-		}
-		//if (enemy[bossIndex]->collidesWith(megaman, cv) && !megaman.isInvincible())
-		//{
-		//	enemy[bossIndex]->setState(STANDING);
-		//}
-	}
+	//for (int i = 0; i < floor.size(); i++)
+	//{
+	//	if (enemy[bossIndex]->collidesWith(floor[i], cv))
+	//	{
+	//		enemy[bossIndex]->
+	//			handleCollisions(
+	//			floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+	//	}
+	//	//if (enemy[bossIndex]->collidesWith(megaman, cv) && !megaman.isInvincible())
+	//	//{
+	//	//	enemy[bossIndex]->setState(STANDING);
+	//	//}
+	//}
 
 
 }

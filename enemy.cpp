@@ -44,6 +44,16 @@ void Enemy::gravity(float frameTime)
 	{
 		attackTimer -= frameTime;
 	}
+
+	if (isInvincible_)
+	{
+		invincibleTimer -= frameTime;
+		if (invincibleTimer < 0)
+		{
+			isInvincible_ = false;
+			invincibleTimer = 0;
+		}
+	}
 }
 
 //=============================================================================
@@ -52,7 +62,11 @@ void Enemy::gravity(float frameTime)
 void Enemy::damage(WEAPON weapon)
 {
 	spriteData.state = DAMAGED;
-	//damageTimer = DAMAGE_TIME;
+	if (boss)
+	{
+		invincibleTimer = INVINCIBILITY_TIME;
+		isInvincible_ = true;
+	}
 	velocity.y = 0;
 
 	switch (weapon)

@@ -25,6 +25,10 @@ namespace bowserNS
 	const int IDLE_END_FRAME = 41;
 	const float IDLE_ANIMATION_DELAY = 0.15f;
 
+	const int FIRE_BREATH_START_FRAME = 16;
+	const int FIRE_BREATH_END_FRAME = 21;
+	const float FIRE_BREATH_ANIMATION_DELAY = 0.15f;
+
 	const int DYING_START_FRAME = 120;
 	const int DYING_END_FRAME = 121;
 	const float DYING_ANIMATION_DELAY = 0.40f;
@@ -60,6 +64,7 @@ private:
 	Image bowserIdle;
 	Image bowserDying;
 	Image bowserSpin;
+	Image bowserFireBreath;
 
 	
 };

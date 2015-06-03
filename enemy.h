@@ -8,12 +8,9 @@
 
 namespace enemyNS
 {
-	const int REGULAR_SHOT_DAMAGE = 4;
+	const int REGULAR_SHOT_DAMAGE = 3;
 	const int SMALL_CHARGE_DAMAGE = 6;
 	const int MEDIUM_CHARGE_DAMAGE = 8;
-	const int REGULAR_SHOT_DAMAGE = 10;
-	const int SMALL_CHARGE_DAMAGE = 15;
-	const int MEDIUM_CHARGE_DAMAGE = 35;
 	const float SPEED_BOWSER = 250.0F;
 }
 
@@ -71,6 +68,7 @@ public:
 	{
 		attackTimer = delayTime;
 	}
+	bool isInvincible() const { return isInvincible_; }
 
 	void setFloorCollision(bool floorCollisionStatus) { floorCollision_ = floorCollisionStatus; }
 	bool getFloorCollision() { return floorCollision_; }

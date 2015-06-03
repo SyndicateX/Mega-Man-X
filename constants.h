@@ -84,7 +84,8 @@ enum State
 	WALL_SLIDING,
 	DEAD,
 	DAMAGED,
-	ATTACKING
+	ATTACKING,
+	FIRE_BREATH
 };
 
 enum ShotType

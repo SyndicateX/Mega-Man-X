@@ -23,6 +23,7 @@ Bowser::Bowser() : Enemy()
 	active = false;
 	visible = false;
 	boss = true;
+	flicker = 0;
 }
 
 bool Bowser::initialize(Game *gamePtr, int width, int height, int ncols,
@@ -34,6 +35,16 @@ bool Bowser::initialize(Game *gamePtr, int width, int height, int ncols,
 	bowserSpriteCoordinates.populateVector("pictures\\bowser.xml");
 	if (!initializeCoords(bowserSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
+
+	// Fire Ball Attack
+	bowserFireBreath.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
+		bowserNS::HEIGHT, 0, textureM);
+
+	if (!bowserFireBreath.initialize(bowserSpriteCoordinates))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
+	bowserFireBreath.setFrames(bowserNS::FIRE_BREATH_START_FRAME, bowserNS::FIRE_BREATH_END_FRAME);
+	bowserFireBreath.setCurrentFrame(bowserNS::FIRE_BREATH_START_FRAME);
+	bowserFireBreath.setFrameDelay(bowserNS::FIRE_BREATH_ANIMATION_DELAY);
 
 	//Spin Attack
 	bowserSpin.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
@@ -96,6 +107,15 @@ void Bowser::update(float frameTime)
 		}
 		bowserIdle.update(frameTime);
 	}
+	else if (spriteData.state == FIRE_BREATH)
+	{
+		bowserFireBreath.update(frameTime);
+		if (bowserFireBreath.getAnimationComplete())
+		{
+			spriteData.state = STANDING;
+			bowserIdle.update(frameTime);
+		}
+	}
 	else
 	{
 		if (bowserDying.getCurrentFrame() == bowserNS::DYING_END_FRAME)
@@ -113,17 +133,29 @@ void Bowser::handleCollisions(double wallX, double wallY, double wallWidth, doub
 
 void Bowser::draw()
 {
-	if (spriteData.state == ATTACKING)
+	if (isInvincible_)
 	{
-		bowserSpin.draw(spriteData);
+		flicker++;
 	}
-	else if (spriteData.state == DEAD)
+	if (!isInvincible_ || (isInvincible_ && flicker % 2 == 0))
 	{
-		bowserDying.draw(spriteData);
-	}
-	else
-	{
-		bowserIdle.draw(spriteData);
+		if (spriteData.state == ATTACKING)
+		{
+			bowserSpin.draw(spriteData);
+		}
+		else if (spriteData.state == DEAD)
+		{
+			bowserDying.draw(spriteData);
+		}
+		else if (spriteData.state == FIRE_BREATH)
+		{
+			//bowserFireBreath.draw(spriteData);
+			bowserIdle.draw(spriteData);
+		}
+		else
+		{
+			bowserIdle.draw(spriteData);
+		}
 	}
 }
 
