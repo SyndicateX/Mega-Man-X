@@ -85,6 +85,8 @@ protected:
 	bool gravity_;
 
 	bool floorCollision_ = false;
+	bool leftOfWall_ = false;
+	bool rightOfWall_ = false;
 	bool isInvincible_ = false;
 	bool canAttack_ = true;
 

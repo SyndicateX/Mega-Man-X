@@ -12,18 +12,16 @@ namespace bowserNS
 	const int HEIGHT = 190;                  // image height
 	const int X = GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = GAME_HEIGHT / 2 - HEIGHT / 2;
-	const float SPEED = 250;                // pixels per second
+	const float SPEED = 500;                // pixels per second
 	const float ENERGY_LOSS = 100;          // energy loss on bounce (pixels/sec)
-	const float MIN_VY = 1;                 // minumum Y velocity
-	const float MASS = 1.0f;
-
-	const int SPIN_START_FRAME = 40;
-	const int SPIN_END_FRAME = 41;
-	const float SPIN_ANIMATION_DELAY = 0.15f;
 	
 	const int IDLE_START_FRAME = 40;
 	const int IDLE_END_FRAME = 41;
 	const float IDLE_ANIMATION_DELAY = 0.15f;
+
+	const int SPIN_START_FRAME = 73;
+	const int SPIN_END_FRAME = 75;
+	const float SPIN_ANIMATION_DELAY = 0.06f;
 
 	const int FIRE_BREATH_START_FRAME = 16;
 	const int FIRE_BREATH_END_FRAME = 21;

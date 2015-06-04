@@ -11,7 +11,8 @@
 // graphic images
 const char TILE_TEXTURES[]				= "pictures\\brick001.png"; // tiles
 //const char BACKDROP_IMAGE[]				= "pictures\\082.png";
-const char BACKDROP_IMAGE[]				= "pictures\\BlackBackground.png";
+const char BACKDROP_IMAGE_1[]			= "pictures\\CastleBackground.png";
+const char BACKDROP_IMAGE_2[]			= "pictures\\GreenBackground.png";
 const char BULLET_IMAGE[]				= "pictures\\BusterBusterEdit.png";
 const char MEGAMAN_IMAGE[]				= "pictures\\mmx_x4_x_sheet.png";
 const char CHARGING_SPRITES_IMAGE[]		= "pictures\\BusterBuster.png";

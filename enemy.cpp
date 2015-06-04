@@ -238,10 +238,14 @@ void Enemy::topCollision(double wallY)
 void Enemy::leftCollision(double wallX)
 {
 	spriteData.x = wallX - spriteData.width;			// position at the left of the wall
+	leftOfWall_ = true;
+	rightOfWall_ = false;
 }
 void Enemy::rightCollision(double wallX, double wallWidth)
 {
 	spriteData.x = wallX + wallWidth + 1; //+1;			// position at the right of the wall
+	rightOfWall_ = true;
+	leftOfWall_ = false;
 }
 void Enemy::bottomCollision(double wallY, double wallHeight)
 {

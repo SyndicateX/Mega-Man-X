@@ -19,7 +19,7 @@ Level2::~Level2()
 void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, Game* game)
 {
 	// backdrop texture
-	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE))
+	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE_1))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
 	// mecha sonic texture

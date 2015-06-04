@@ -1,4 +1,5 @@
 #include "Level1.h"
+#include "Random.h"
 using namespace level1NS;
 
 Level1::Level1()
@@ -19,7 +20,7 @@ Level1::~Level1()
 void Level1::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, Game* game)
 {
 	// backdrop texture
-	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE))
+	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE_1))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
 	// mecha sonic texture
@@ -167,31 +168,42 @@ void Level1::ai()
 	{
 		static float delayTimer = 0;
 		static bool canFire = false;
+		int rng = randomInteger(0, 1);
 
 		if (enemy[bossIndex]->attackReady())
 		{
-			enemy[bossIndex]->setVelocity(VECTOR2(0, -420));		// jump
 			canFire = true;
+			enemy[bossIndex]->setState(STANDING);
 			enemy[bossIndex]->setAttackDelay(3.0f);
-		}
 
-		if (enemy[bossIndex]->getY() <= megaman.getY() && canFire)
-		{
-			enemy[bossIndex]->setState(FIRE_BREATH);
-			enemy[bossIndex]->setFloorCollision(false);
-			fireball.setShotType(FIREBALL);
-			fireball.setActive(true);
-			fireball.setVisible(true);
-			fireball.setDirection(enemy[bossIndex]->getDirection());
-			fireball.setX(enemy[bossIndex]->getX());
-			fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
-			fireball.setY(enemy[bossIndex]->getY());
-			canFire = false;
+			if (rng == 0)
+			{
+				if (enemy[bossIndex]->getY() <= megaman.getY() && canFire)
+				{
+					enemy[bossIndex]->setVelocity(VECTOR2(0, -420));
+					enemy[bossIndex]->setState(FIRE_BREATH);
+					enemy[bossIndex]->setFloorCollision(false);
+					//enemy[bossIndex]->setAttackDelay(3.0f);
+
+					fireball.setShotType(FIREBALL);
+					fireball.setActive(true);
+					fireball.setVisible(true);
+					fireball.setDirection(enemy[bossIndex]->getDirection());
+					fireball.setX(enemy[bossIndex]->getX());
+					fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
+					fireball.setY(enemy[bossIndex]->getY());
+
+					canFire = false;
+				}
+			}
+			else
+			{
+				enemy[bossIndex]->setState(ATTACKING);
+				//enemy[bossIndex]->setAttackDelay(3.0f);
+			}
 		}
 
 		//enemy[bossIndex]->setVelocity(VECTOR2(0,-400));
-		//enemy[bossIndex]->setFloorCollision(false);
-		//enemy[bossIndex]->setState(ATTACKING);
 	}
 }
 

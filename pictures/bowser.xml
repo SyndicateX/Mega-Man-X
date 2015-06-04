@@ -591,25 +591,25 @@
       <Sprite Name="Sprite73" Id="73">
          <Coordinates>
             <X>1010</X>
-            <Y>1490</Y>
+            <Y>1460</Y>
             <Width>143</Width>
-            <Height>131</Height>
+            <Height>160</Height>
          </Coordinates>
       </Sprite>
       <Sprite Name="Sprite74" Id="74">
          <Coordinates>
             <X>1196</X>
-            <Y>1493</Y>
+            <Y>1463</Y>
             <Width>143</Width>
-            <Height>131</Height>
+            <Height>160</Height>
          </Coordinates>
       </Sprite>
       <Sprite Name="Sprite75" Id="75">
          <Coordinates>
             <X>1382</X>
-            <Y>1493</Y>
+            <Y>1463</Y>
             <Width>140</Width>
-            <Height>131</Height>
+            <Height>160</Height>
          </Coordinates>
       </Sprite>
       <Sprite Name="Sprite76" Id="76">

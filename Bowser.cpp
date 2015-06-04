@@ -36,40 +36,36 @@ bool Bowser::initialize(Game *gamePtr, int width, int height, int ncols,
 	if (!initializeCoords(bowserSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
 
-	// Fire Ball Attack
-	bowserFireBreath.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
-		bowserNS::HEIGHT, 0, textureM);
-
-	if (!bowserFireBreath.initialize(bowserSpriteCoordinates))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
-	bowserFireBreath.setFrames(bowserNS::FIRE_BREATH_START_FRAME, bowserNS::FIRE_BREATH_END_FRAME);
-	bowserFireBreath.setCurrentFrame(bowserNS::FIRE_BREATH_START_FRAME);
-	bowserFireBreath.setFrameDelay(bowserNS::FIRE_BREATH_ANIMATION_DELAY);
-
-	//Spin Attack
-	bowserSpin.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
-		bowserNS::HEIGHT, 0, textureM);
-
-	if (!bowserSpin.initialize(bowserSpriteCoordinates))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
-	bowserSpin.setFrames(bowserNS::IDLE_START_FRAME, bowserNS::IDLE_END_FRAME);
-	bowserSpin.setCurrentFrame(bowserNS::IDLE_START_FRAME);
-	bowserSpin.setFrameDelay(bowserNS::IDLE_ANIMATION_DELAY);
-
 	//Idle
 	bowserIdle.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
 		bowserNS::HEIGHT, 0, textureM);
-
 	if (!bowserIdle.initialize(bowserSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
 	bowserIdle.setFrames(bowserNS::IDLE_START_FRAME, bowserNS::IDLE_END_FRAME);
 	bowserIdle.setCurrentFrame(bowserNS::IDLE_START_FRAME);
 	bowserIdle.setFrameDelay(bowserNS::IDLE_ANIMATION_DELAY);
 
+	//Spin Attack
+	bowserSpin.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
+		bowserNS::HEIGHT, 0, textureM);
+	if (!bowserSpin.initialize(bowserSpriteCoordinates))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
+	bowserSpin.setFrames(bowserNS::SPIN_START_FRAME, bowserNS::SPIN_END_FRAME);
+	bowserSpin.setCurrentFrame(bowserNS::SPIN_START_FRAME);
+	bowserSpin.setFrameDelay(bowserNS::SPIN_ANIMATION_DELAY);
+
+	// Fire Ball Attack
+	bowserFireBreath.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
+		bowserNS::HEIGHT, 0, textureM);
+	if (!bowserFireBreath.initialize(bowserSpriteCoordinates))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
+	bowserFireBreath.setFrames(bowserNS::FIRE_BREATH_START_FRAME, bowserNS::FIRE_BREATH_END_FRAME);
+	bowserFireBreath.setCurrentFrame(bowserNS::FIRE_BREATH_START_FRAME);
+	bowserFireBreath.setFrameDelay(bowserNS::FIRE_BREATH_ANIMATION_DELAY);
+
 	//Dying
 	bowserDying.initialize(gamePtr->getGraphics(), bowserNS::WIDTH,
 		bowserNS::HEIGHT, 0, textureM);
-
 	if (!bowserDying.initialize(bowserSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
 	bowserDying.setFrames(bowserNS::DYING_START_FRAME, bowserNS::DYING_END_FRAME);
@@ -88,21 +84,23 @@ void Bowser::update(float frameTime)
 {
 	Entity::update(frameTime);
 
+	//leftOfWall_ = false;
+	//rightOfWall_ = false;
+
 	if (spriteData.state == ATTACKING)
 	{
 		spinAttack(frameTime);
 	}
-	else if (spriteData.state != DEAD)
+
+	if (spriteData.state != DEAD)
 	{
 		gravity(frameTime);
 		if (spriteData.direction == RIGHT)
 		{
-			//dx += frameTime * bowserNS::SPEED;
 			flipHorizontal(false);
 		}
 		else
 		{
-			//dx -= frameTime * bowserNS::SPEED;
 			flipHorizontal(true);
 		}
 		bowserIdle.update(frameTime);
@@ -118,7 +116,7 @@ void Bowser::update(float frameTime)
 	}
 	else
 	{
-		if (bowserDying.getCurrentFrame() == bowserNS::DYING_END_FRAME)
+		if (bowserDying.getAnimationComplete())
 		{
 			visible = false;
 		}
@@ -131,6 +129,34 @@ void Bowser::handleCollisions(double wallX, double wallY, double wallWidth, doub
 	stop(wallX, wallY, wallWidth, wallHeight);
 }
 
+void Bowser::spinAttack(float frameTime)
+{
+	//figure out what kind of attack he is doing
+	//...
+
+	//for now spinAttack
+	edge.top = -bowserNS::HEIGHT / 4;
+	if (rightOfWall_)
+	{
+ 		spriteData.direction = RIGHT;
+	}
+	else if (leftOfWall_)
+	{
+		spriteData.direction = LEFT;
+	}
+
+	if (spriteData.direction == RIGHT)
+	{
+		dx += frameTime * bowserNS::SPEED;
+	}
+	else
+	{
+		dx -= frameTime * bowserNS::SPEED;
+	}
+
+
+	bowserSpin.update(frameTime);
+}
 void Bowser::draw()
 {
 	if (isInvincible_)
@@ -150,32 +176,13 @@ void Bowser::draw()
 		else if (spriteData.state == FIRE_BREATH)
 		{
 			//bowserFireBreath.draw(spriteData);
+			edge.top = -bowserNS::HEIGHT / 2;
 			bowserIdle.draw(spriteData);
 		}
 		else
 		{
+			edge.top = -bowserNS::HEIGHT / 2;
 			bowserIdle.draw(spriteData);
 		}
 	}
-}
-
-void Bowser::spinAttack(float frameTime)
-{
-	//figure out what kind of attack he is doing
-	//...
-
-	//for now spinAttack
-	if (spriteData.direction == RIGHT)
-	{
-		dx += frameTime * bowserNS::SPEED;
-	}
-	else
-	{
-		dx -= frameTime * bowserNS::SPEED;
-	}
-
-	
-
-	bowserSpin.update(frameTime);
-
 }
