@@ -32,7 +32,7 @@ bool Bowser::initialize(Game *gamePtr, int width, int height, int ncols,
 	attackTimer = 1.0f;
 
 	// Bowser sprite initialize
-	bowserSpriteCoordinates.populateVector("pictures\\bowser.xml");
+	bowserSpriteCoordinates.populateVector("sprite_data\\bowser.xml");
 	if (!initializeCoords(bowserSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bowser"));
 
@@ -71,6 +71,7 @@ bool Bowser::initialize(Game *gamePtr, int width, int height, int ncols,
 	bowserDying.setFrames(bowserNS::DYING_START_FRAME, bowserNS::DYING_END_FRAME);
 	bowserDying.setCurrentFrame(bowserNS::DYING_START_FRAME);
 	bowserDying.setFrameDelay(bowserNS::DYING_ANIMATION_DELAY);
+	bowserDying.setLoop(false);
 
 	return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }

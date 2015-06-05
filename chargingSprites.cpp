@@ -17,7 +17,7 @@ bool chargingSprites::initialize(Game *gamePtr, int width, int height, int ncols
 	TextureManager *textureM)
 {
 	// chargingSprites shooting sprite initialize
-	megamanShootingSpriteCoordinates.populateVector("xshootcoords.txt");
+	megamanShootingSpriteCoordinates.populateVector("sprite_data\\xshootcoords.txt");
 	if (!initializeCoords(megamanShootingSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing chargingSprites"));
 

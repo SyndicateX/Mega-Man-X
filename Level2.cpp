@@ -19,7 +19,7 @@ Level2::~Level2()
 void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, Game* game)
 {
 	// backdrop texture
-	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE_1))
+	if (!backdropTexture.initialize(graphics, BACKDROP_IMAGE_2))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background texture"));
 
 	// mecha sonic texture
@@ -47,6 +47,10 @@ void Level2::initializeAdditional(HWND& hwnd, Graphics* graphics, Input* input, 
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing tile"));
 	tile.setFrames(0, 0);
 	tile.setCurrentFrame(0);
+
+	//bullet
+	if (!fireball.initialize(game, bulletNS::WIDTH, bulletNS::HEIGHT, 0, &bulletTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing fireball"));
 
 	// floors
 	for (int i = 0; i < TILE_ROWS; i++)
@@ -107,7 +111,7 @@ void Level2::update(float frameTime, Input* input, Game* game)
 		}
 	}
 
-	if (mapX > MAP_WIDTH - 5 * TEXTURE_SIZE && mapY > TEXTURE_SIZE * TILE_ROWS - 2 * TEXTURE_SIZE && !fightingBoss)
+	if (mapX > TEXTURE_SIZE * TILE_COLUMNS - 14 * TEXTURE_SIZE && mapY > TEXTURE_SIZE * TILE_ROWS - 2 * TEXTURE_SIZE && !fightingBoss)
 	{
 		fightingBoss = true;
 		/*if (mapX < MAP_WIDTH - TEXTURE_SIZE / 2 || mapY < TEXTURE_SIZE * TILE_ROWS - GAME_HEIGHT / 2 - TEXTURE_SIZE)
@@ -115,6 +119,8 @@ void Level2::update(float frameTime, Input* input, Game* game)
 		mapX++;
 		mapY++;
 		}*/
+		megaman.setX(120);
+		megaman.setY(GAME_HEIGHT - 100);
 		for (int i = 0; i < enemy.size(); i++)
 		{
 			if (enemy[i]->isBoss())
@@ -129,16 +135,83 @@ void Level2::update(float frameTime, Input* input, Game* game)
 			}
 		}
 	}
-	if (fightingBoss && enemy[bossIndex]->getState() == DEAD)
+	if (fightingBoss && enemy[bossIndex]->getState() == DEAD && !enemy[bossIndex]->getVisible())
 	{
 		levelComplete_ = true;
 	}
-	// Level specific code goes here
+
+	if (fireball.getVisible() && fireball.getActive())
+	{
+		if (fireball.getDirection() == RIGHT)
+		{
+			fireball.setX(fireball.getX() + bulletNS::SPEED*frameTime);
+			fireball.flipHorizontal(false);
+		}
+		else
+		{
+			fireball.flipHorizontal(true);
+			fireball.setX(fireball.getX() - bulletNS::SPEED*frameTime);
+		}
+		fireball.update(frameTime);
+		if (fireball.getX() > GAME_WIDTH || fireball.getX() < 0)
+		{
+			fireball.setVisible(false);
+			fireball.setActive(false);
+		}
+	}
 }
 
 void Level2::ai()
 {
+	static bool canFire = false;
 
+	if (enemy[bossIndex]->getActive() && enemy[bossIndex]->getFloorCollision())
+	{
+		if (enemy[bossIndex]->getState() != ATTACKING)
+		{
+			if (enemy[bossIndex]->getX() > megaman.getX())
+			{
+				enemy[bossIndex]->setDirection(LEFT);
+			}
+			else
+			{
+				enemy[bossIndex]->setDirection(RIGHT);
+			}
+		}
+
+		if (enemy[bossIndex]->attackReady())
+		{
+			enemy[bossIndex]->setState(STANDING);
+			int rng = randomInteger(0, 1);
+
+			if (rng == 0)
+			{
+				enemy[bossIndex]->setVelocity(VECTOR2(0, -420));
+				enemy[bossIndex]->setState(FIRE_BREATH);
+				enemy[bossIndex]->setFloorCollision(false);
+				enemy[bossIndex]->setAttackDelay(3.0f);
+				canFire = true;
+			}
+			else if (rng == 1)
+			{
+				enemy[bossIndex]->setState(ATTACKING);
+				enemy[bossIndex]->setAttackDelay(4.0f);
+				canFire = false;
+			}
+		}
+	}
+
+	if (enemy[bossIndex]->getY() <= megaman.getY() && canFire)
+	{
+		fireball.setShotType(FIREBALL);
+		fireball.setActive(true);
+		fireball.setVisible(true);
+		fireball.setDirection(enemy[bossIndex]->getDirection());
+		fireball.setX(enemy[bossIndex]->getX());
+		fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
+		fireball.setY(enemy[bossIndex]->getY());
+		canFire = false;
+	}
 }
 
 void Level2::collisions(float frameTime)
@@ -178,9 +251,15 @@ void Level2::collisions(float frameTime)
 			}
 			if (enemy[j]->collidesWith(megaman, cv) && !megaman.isInvincible() && megaman.getState() != DAMAGED)
 			{
-				megaman.setState(DAMAGED);
-				megaman.setDamageTimer(DAMAGE_TIME);
-				megaman.setVelocity(VECTOR2(megaman.getVelocity().x, 0));
+				if (j == bossIndex)
+				{
+					megaman.damage(BOSS_COLLISION);
+					enemy[bossIndex]->setState(STANDING);
+				}
+				else
+				{
+					megaman.damage(ENEMY_COLLISION);
+				}
 			}
 		}
 	}
@@ -189,20 +268,40 @@ void Level2::collisions(float frameTime)
 	{
 		for (int j = 0; j < enemy.size(); j++)
 		{
-			if (bullet[i].collidesWith(*enemy[j], cv))
+			if (bullet[i].collidesWith(*enemy[j], cv) && !enemy[j]->isInvincible())
 			{
-				enemy[j]->setActive(false);
-				enemy[j]->setState(DEAD);
+				enemy[j]->damage(static_cast<WEAPON>(bullet[i].getShotType() + 3)); // off by 3 from shot type enum 
 				bullet[i].setActive(false);
 				bullet[i].setVisible(false);
+				audio->playCue(EXPLODE);
 			}
 		}
 	}
-
+	if (megaman.collidesWith(fireball, cv) && !megaman.isInvincible() && megaman.getState() != DAMAGED)
+	{
+		megaman.damage(BOSS_PROJECTILE);
+	}
 	if (megamanCollided)
 	{
 		megaman.stop(collisionVector, tileCoordinates);		// Sets Mega Man's position and status after a collision
 	}
+
+
+	//for (int i = 0; i < floor.size(); i++)
+	//{
+	//	if (enemy[bossIndex]->collidesWith(floor[i], cv))
+	//	{
+	//		enemy[bossIndex]->
+	//			handleCollisions(
+	//			floor[i].getX(), floor[i].getY(), floor[i].getWidth(), floor[i].getHeight());
+	//	}
+	//	//if (enemy[bossIndex]->collidesWith(megaman, cv) && !megaman.isInvincible())
+	//	//{
+	//	//	enemy[bossIndex]->setState(STANDING);
+	//	//}
+	//}
+
+
 }
 
 void Level2::updateMap()
@@ -230,12 +329,12 @@ void Level2::updateMap()
 
 		if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near an edge of the map on either end
 		{
-			backdrop.setX(-mapX / 20);
+			backdrop.setX(-mapX * MAP_X_SCROLL_RATE);
 			megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
 		}
 	}
 
-	backdrop.setY(-mapY / 10 + megamanNS::Y - 200);
+	backdrop.setY(-mapY * MAP_Y_SCROLL_RATE + megamanNS::Y - 200);
 
 	for (int i = 0; i < enemy.size(); i++)
 	{
@@ -260,7 +359,7 @@ void Level2::updateMap()
 	{
 		for (int i = 0; i < enemy.size(); i++)
 		{
-			enemy[i]->setX(enemy[i]->getStartX() - (TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH));
+			enemy[i]->setX(enemy[i]->getStartX() + enemy[i]->getDx() - mapX + (megaman.getX() - megamanNS::X));
 		}
 	}
 
@@ -335,10 +434,26 @@ void Level2::render(Graphics* graphics)
 	megaman.draw();							// add Mega Man to the scene
 	chargingSprites.draw();					// add Mega Man's charging sprites to the scene
 
+	if (fireball.getVisible())
+	{
+		fireball.draw();
+	}
+
 	for (int i = 0; i < bullet.size(); i++)
 	{
 		if (bullet[i].getVisible() && bullet[i].getActive())
 			bullet[i].draw();					// add bullets to the scene
+	}
+
+	// display health bars
+	healthBarX.setX((float)levelsNS::HEALTHBAR_X_X);
+	healthBarX.set(megaman.getHealth());
+	healthBarX.draw(levelsNS::MEGAMAN_HEALTHBAR_COLOR);
+	if (enemy[bossIndex]->getActive())
+	{
+		healthBarBoss.setX((float)levelsNS::HEALTHBAR_BOSS_X);
+		healthBarBoss.set(enemy[bossIndex]->getHealth());
+		healthBarBoss.draw(levelsNS::BOSS_HEALTHBAR_COLOR);
 	}
 
 	graphics->spriteEnd();                  // end drawing sprites

@@ -28,7 +28,7 @@ bool Bee::initialize(Game *gamePtr, int width, int height, int ncols,
 	TextureManager *textureM)
 {
 	// BEE sprite initialize
-	beeSpriteCoordinates.populateVector("pictures\\baddies.xml");
+	beeSpriteCoordinates.populateVector("sprite_data\\baddies.xml");
 	if (!initializeCoords(beeSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bee"));
 

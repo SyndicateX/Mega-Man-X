@@ -12,7 +12,7 @@ namespace bowserNS
 	const int HEIGHT = 190;                  // image height
 	const int X = GAME_WIDTH / 2 - WIDTH / 2;   // location on screen
 	const int Y = GAME_HEIGHT / 2 - HEIGHT / 2;
-	const float SPEED = 500;                // pixels per second
+	const float SPEED = 750;                // pixels per second
 	const float ENERGY_LOSS = 100;          // energy loss on bounce (pixels/sec)
 	
 	const int IDLE_START_FRAME = 40;

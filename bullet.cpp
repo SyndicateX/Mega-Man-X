@@ -29,7 +29,7 @@ bool Bullet::initialize(Game *gamePtr, int width, int height, int ncols,
 	TextureManager *textureM)
 {
 	// bullet sprite initialize
-	bulletSpriteCoordinates.populateVector("pictures\\bulletsprites2.xml");
+	bulletSpriteCoordinates.populateVector("sprite_data\\bulletsprites2.xml");
 	if (!initializeCoords(bulletSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing bullets"));
 

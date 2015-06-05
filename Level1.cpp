@@ -1,5 +1,4 @@
 #include "Level1.h"
-#include "Random.h"
 using namespace level1NS;
 
 Level1::Level1()
@@ -164,46 +163,54 @@ void Level1::update(float frameTime, Input* input, Game* game)
 
 void Level1::ai()
 {
+	static bool canFire = false;
+
 	if (enemy[bossIndex]->getActive() && enemy[bossIndex]->getFloorCollision())
 	{
-		static float delayTimer = 0;
-		static bool canFire = false;
-		int rng = randomInteger(0, 1);
-
-		if (enemy[bossIndex]->attackReady())
+		if (enemy[bossIndex]->getState() != ATTACKING)
 		{
-			canFire = true;
-			enemy[bossIndex]->setState(STANDING);
-			enemy[bossIndex]->setAttackDelay(3.0f);
-
-			if (rng == 0)
+			if (enemy[bossIndex]->getX() > megaman.getX())
 			{
-				if (enemy[bossIndex]->getY() <= megaman.getY() && canFire)
-				{
-					enemy[bossIndex]->setVelocity(VECTOR2(0, -420));
-					enemy[bossIndex]->setState(FIRE_BREATH);
-					enemy[bossIndex]->setFloorCollision(false);
-					//enemy[bossIndex]->setAttackDelay(3.0f);
-
-					fireball.setShotType(FIREBALL);
-					fireball.setActive(true);
-					fireball.setVisible(true);
-					fireball.setDirection(enemy[bossIndex]->getDirection());
-					fireball.setX(enemy[bossIndex]->getX());
-					fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
-					fireball.setY(enemy[bossIndex]->getY());
-
-					canFire = false;
-				}
+				enemy[bossIndex]->setDirection(LEFT);
 			}
 			else
 			{
-				enemy[bossIndex]->setState(ATTACKING);
-				//enemy[bossIndex]->setAttackDelay(3.0f);
+				enemy[bossIndex]->setDirection(RIGHT);
 			}
 		}
 
-		//enemy[bossIndex]->setVelocity(VECTOR2(0,-400));
+		if (enemy[bossIndex]->attackReady())
+		{
+			enemy[bossIndex]->setState(STANDING);
+			int rng = randomInteger(0, 1);
+
+			if (rng == 0)
+			{
+				enemy[bossIndex]->setVelocity(VECTOR2(0, -420));
+				enemy[bossIndex]->setState(FIRE_BREATH);
+				enemy[bossIndex]->setFloorCollision(false);
+				enemy[bossIndex]->setAttackDelay(3.0f);
+				canFire = true;
+			}
+			else if (rng == 1)
+			{
+				enemy[bossIndex]->setState(ATTACKING);
+				enemy[bossIndex]->setAttackDelay(4.0f);
+				canFire = false;
+			}
+		}
+	}
+
+	if (enemy[bossIndex]->getY() <= megaman.getY() && canFire)
+	{
+		fireball.setShotType(FIREBALL);
+		fireball.setActive(true);
+		fireball.setVisible(true);
+		fireball.setDirection(enemy[bossIndex]->getDirection());
+		fireball.setX(enemy[bossIndex]->getX());
+		fireball.setInitialY(enemy[bossIndex]->getY(), false, false);
+		fireball.setY(enemy[bossIndex]->getY());
+		canFire = false;
 	}
 }
 
@@ -322,12 +329,12 @@ void Level1::updateMap()
 
 		if (mapX >= 0 && mapX <= TEXTURE_SIZE * TILE_COLUMNS - GAME_WIDTH)	// if Mega Man is not near an edge of the map on either end
 		{
-			backdrop.setX(-mapX / 20);
+			backdrop.setX(-mapX * MAP_X_SCROLL_RATE);
 			megaman.setX(oldX_);				// reset Mega Man's x-coordinate to his previous x-coordinate (keeps him centered on the screen)
 		}
 	}
 
-	backdrop.setY(-mapY / 5 + megamanNS::Y - 200);
+	backdrop.setY(-mapY * MAP_Y_SCROLL_RATE + megamanNS::Y - 200);
 
 	for (int i = 0; i < enemy.size(); i++)
 	{

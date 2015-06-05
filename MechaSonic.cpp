@@ -36,7 +36,7 @@ MechaSonic::~MechaSonic()
 bool MechaSonic::initialize(Game *gamePtr, int width, int height, int ncols,
 	TextureManager *textureM)
 {	
-	std::string spriteCoordinatesFileName = "sonicsprites.txt";
+	std::string spriteCoordinatesFileName = "sprite_data\\sonicsprites.txt";
 
 	spriteCoordinates.populateVector(spriteCoordinatesFileName);
 	if (!initializeCoords(spriteCoordinates))

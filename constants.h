@@ -10,7 +10,6 @@
 //=============================================================================
 // graphic images
 const char TILE_TEXTURES[]				= "pictures\\brick001.png"; // tiles
-//const char BACKDROP_IMAGE[]				= "pictures\\082.png";
 const char BACKDROP_IMAGE_1[]			= "pictures\\CastleBackground.png";
 const char BACKDROP_IMAGE_2[]			= "pictures\\GreenBackground.png";
 const char BULLET_IMAGE[]				= "pictures\\BusterBusterEdit.png";
@@ -41,6 +40,8 @@ const float GRAVITY = 500.0f;                   // acceleration of gravity pixel
 const UINT MAP_HEIGHT = 1500;
 const int JUMP_VELOCITY = -180;
 const int TERMINAL_VELOCITY = -JUMP_VELOCITY;
+const double MAP_X_SCROLL_RATE = 0.15;
+const double MAP_Y_SCROLL_RATE = 0.2;
 
 const double WALK_SPEED = 1;
 const double DASH_SPEED = 2.2;

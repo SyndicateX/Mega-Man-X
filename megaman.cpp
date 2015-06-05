@@ -35,7 +35,7 @@ bool Megaman::initialize(Game *gamePtr, int width, int height, int ncols,
 	TextureManager *textureM)
 {
 	// megaman sprite initialize
-	megamanSpriteCoordinates.populateVector("pictures\\mmx4.xml");
+	megamanSpriteCoordinates.populateVector("sprite_data\\mmx4.xml");
 	if (!initializeCoords(megamanSpriteCoordinates))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing megaman"));
 	
